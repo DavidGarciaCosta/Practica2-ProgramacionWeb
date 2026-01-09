@@ -6,7 +6,7 @@
 
 **Fecha:** Enero 2026 
 
-**Repositorio:** 
+**Repositorio:** https://github.com/DavidGarciaCosta/Practica2-ProgramacionWeb.git
 
 ## Descripción
 
@@ -24,7 +24,7 @@ Portal de productos evolucionado a E-commerce completo con GraphQL, gestión de 
 1. **Clonar el repositorio**
 ```bash
 git clone 
-cd Practica2
+cd Practica2-ProgramacionWeb
 ```
 
 2. **Instalar dependencias**
