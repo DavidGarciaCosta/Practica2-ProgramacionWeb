@@ -12,6 +12,9 @@
 
 Portal de productos evolucionado a E-commerce completo con GraphQL, gestión de carrito, pedidos y panel de administración.
 
+## Queries y Mutations
+https://github.com/DavidGarciaCosta/Practica2-ProgramacionWeb/blob/main/queriesMutations.md
+
 ## FOTOS
 ### Inicio
 <img width="1852" height="959" alt="imagen" src="https://github.com/user-attachments/assets/05184cda-7fa5-4686-a683-20f35b7dd0f4" />
