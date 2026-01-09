@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito - Portal de Productos</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="cart.js"></script>
+    <script src="graphql-client.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <nav class="navbar">
+                <div class="logo">Portal Productos Práctica 2</div>
+                <ul class="nav-links">
+                    <li><a href="/">Inicio</a></li>
+                    <li><a href="/products">Productos</a></li>
+                    <li><a href="/cart" class="active">Carrito <span id="cart-badge" class="badge" style="display: none;"></span></a></li>
+                    <li><a href="/my-orders">Mis Pedidos</a></li>
+                    <li><a href="/chat">Chat</a></li>
+                </ul>
+                <div class="user-section">
+                    <span id="userWelcome"></span>
+                    <button class="btn btn-danger" id="logoutBtn">Cerrar Sesión</button>
+                </div>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <h1>🛒 Mi Carrito</h1>
+            
+            <div class="cart-container">
+                <div class="cart-items" id="cartItems">
+                    <div class="loading">Cargando carrito...</div>
+                </div>
+
+                <div class="cart-summary">
+                    <h2>Resumen del Pedido</h2>
+                    
+                    <div class="summary-line">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">€0.00</span>
+                    </div>
+                    
+                    <div class="summary-line total">
+                        <span>Total:</span>
+                        <span id="total">€0.00</span>
+                    </div>
+
+                    <div class="shipping-form">
+                        <h3>Dirección de Envío</h3>
+                        <form id="checkoutForm">
+                            <div class="form-group">
+                                <input type="text" class="form-input" id="address" placeholder="Dirección" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-input" id="city" placeholder="Ciudad" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-input" id="postalCode" placeholder="Código Postal" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-input" id="country" placeholder="País" required>
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-input" id="notes" rows="3" placeholder="Notas adicionales (opcional)" maxlength="500"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block" id="checkoutBtn">
+                                Finalizar Compra
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const token = sessionStorage.getItem('token');
+        if (!token) {
+            window.location.href = '/login';
+        }
+
+        function renderCart() {
+            const cartItemsDiv = document.getElementById('cartItems');
+            const items = cart.items;
+
+            if (items.length === 0) {
+                cartItemsDiv.innerHTML = `
+                    <div class="empty-state">
+                        <h2>Tu carrito está vacío</h2>
+                        <p>Agrega productos para comenzar tu compra</p>
+                        <a href="/products" class="btn btn-primary">Explorar Productos</a>
+                    </div>
+                `;
+                document.getElementById('subtotal').textContent = '€0.00';
+                document.getElementById('total').textContent = '€0.00';
+                return;
+            }
+
+            const itemsHTML = items.map(item => `
+                <div class="cart-item">
+                    <img src="${item.image || 'https://via.placeholder.com/100'}" alt="${item.name}">
+                    <div class="item-details">
+                        <h3>${item.name}</h3>
+                        <p class="item-price">€${item.price.toFixed(2)}</p>
+                    </div>
+                    <div class="item-quantity">
+                        <button onclick="updateQuantity('${item.id}', ${item.quantity - 1})" class="btn-qty">-</button>
+                        <span>${item.quantity}</span>
+                        <button onclick="updateQuantity('${item.id}', ${item.quantity + 1})" class="btn-qty">+</button>
+                    </div>
+                    <div class="item-total">
+                        €${(item.price * item.quantity).toFixed(2)}
+                    </div>
+                    <button onclick="removeItem('${item.id}')" class="btn-remove">🗑️</button>
+                </div>
+            `).join('');
+
+            cartItemsDiv.innerHTML = itemsHTML;
+
+            const total = cart.getTotal();
+            document.getElementById('subtotal').textContent = `€${total.toFixed(2)}`;
+            document.getElementById('total').textContent = `€${total.toFixed(2)}`;
+        }
+
+        window.updateQuantity = function(productId, newQuantity) {
+            cart.updateQuantity(productId, newQuantity);
+            renderCart();
+        };
+
+        window.removeItem = function(productId) {
+            cart.removeItem(productId);
+            renderCart();
+        };
+
+        document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (cart.items.length === 0) {
+                alert('❌ Tu carrito está vacío');
+                return;
+            }
+
+            const shippingAddress = {
+                address: document.getElementById('address').value,
+                city: document.getElementById('city').value,
+                postalCode: document.getElementById('postalCode').value,
+                country: document.getElementById('country').value
+            };
+
+            const notes = document.getElementById('notes').value;
+
+            const orderData = cart.prepareOrderData(shippingAddress, notes);
+
+            try {
+                document.getElementById('checkoutBtn').disabled = true;
+                document.getElementById('checkoutBtn').textContent = 'Procesando...';
+
+                const result = await GraphQLAPI.createOrder(orderData);
+
+                if (result.success) {
+                    alert(`✅ ${result.message}\nPedido #${result.order.orderNumber}`);
+                    cart.clearCart();
+                    window.location.href = '/my-orders';
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('❌ Error: ' + error.message);
+                document.getElementById('checkoutBtn').disabled = false;
+                document.getElementById('checkoutBtn').textContent = 'Finalizar Compra';
+            }
+        });
+
+        async function loadUser() {
+            try {
+                const response = await fetch('/api/auth/verify', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('userWelcome').textContent = `Hola, ${data.user.username}`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            sessionStorage.removeItem('token');
+            window.location.href = '/';
+        });
+
+        window.addEventListener('cartUpdated', renderCart);
+
+        loadUser();
+        renderCart();
+        cart.updateCartUI();
+    </script>
+
+    <style>
+        .cart-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .cart-items {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-details h3 {
+            margin: 0 0 0.5rem 0;
+            color: #2c3e50;
+        }
+
+        .item-price {
+            color: #27ae60;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-qty {
+            width: 32px;
+            height: 32px;
+            border: 1px solid #3498db;
+            background: white;
+            color: #3498db;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .btn-qty:hover {
+            background: #3498db;
+            color: white;
+        }
+
+        .item-total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2c3e50;
+            min-width: 100px;
+            text-align: right;
+        }
+
+        .btn-remove {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+
+        .btn-remove:hover {
+            opacity: 1;
+        }
+
+        .cart-summary {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .cart-summary h2 {
+            margin-bottom: 1.5rem;
+            color: #2c3e50;
+        }
+
+        .summary-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .summary-line.total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2c3e50;
+            border-bottom: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .shipping-form {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .shipping-form h3 {
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+
+        @media (max-width: 992px) {
+            .cart-container {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-summary {
+                position: static;
+            }
+
+            .cart-item {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</body>
+</html>

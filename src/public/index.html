@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛒 Portal de Productos - E-commerce Moderno</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <nav class="navbar">
+                <div class="logo">
+                    <span>PortalProductos</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="/" class="active"><i class="fas fa-home"></i> Inicio</a></li>
+                    <li><a href="/products"><i class="fas fa-store"></i> Productos</a></li>
+                    <li><a href="/cart"><i class="fas fa-shopping-cart"></i> Carrito <span id="cart-badge" class="badge" style="display: none;">0</span></a></li>
+                    <li><a href="/my-orders"><i class="fas fa-box"></i> Mis Pedidos</a></li>
+                    <li><a href="/chat"><i class="fas fa-comments"></i> Chat</a></li>
+                </ul>
+                <div class="user-section">
+                    <span id="userWelcome">👋 Bienvenido</span>
+                    <div class="auth-buttons">
+                        <a href="/login" class="btn btn-primary" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
+                        <a href="/register" class="btn btn-outline" id="registerBtn"><i class="fas fa-user-plus"></i> Registrarse</a>
+                        <button class="btn btn-danger hidden" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <div class="hero-content">
+                    <h1 class="hero-title">🛒 Portal de E-commerce Moderno</h1>
+                    <p class="hero-subtitle">Una experiencia de compra completa con GraphQL, chat en tiempo real y gestión avanzada de pedidos.</p>
+                    
+                    <div class="cta-buttons">
+                        <a href="/products" class="btn btn-primary btn-lg">
+                            <i class="fas fa-shopping-bag"></i> Explorar Productos
+                        </a>
+                        <a href="/register" class="btn btn-outline btn-lg">
+                            <i class="fas fa-rocket"></i> Comenzar Gratis
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Grid -->
+            <section class="features-section">
+                <h2 class="section-title">✨ Características Principales</h2>
+                <p class="section-subtitle">Todo lo que necesitas para una experiencia de compra excepcional</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🛍️</div>
+                        <h3>Catálogo Inteligente</h3>
+                        <p>Explora productos con búsqueda avanzada, filtros por categoría y vistas detalladas.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🛒</div>
+                        <h3>Carrito Persistente</h3>
+                        <p>Tu carrito se guarda automáticamente y se sincroniza entre dispositivos.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>GraphQL API</h3>
+                        <p>Consultas optimizadas y mutations para una experiencia rápida y eficiente.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">💬</div>
+                        <h3>Chat en Tiempo Real</h3>
+                        <p>Comunícate con otros usuarios mediante Socket.IO con notificaciones en vivo.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">👨‍💼</div>
+                        <h3>Panel de Admin</h3>
+                        <p>Gestión completa de usuarios, productos y pedidos con estadísticas en tiempo real.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🔐</div>
+                        <h3>Seguridad Avanzada</h3>
+                        <p>Autenticación JWT con roles, validación de stock y protección de rutas.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Section -->
+            <section class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-bolt"></i></div>
+                        <div class="stat-number">⚡</div>
+                        <div class="stat-label">Rendimiento Óptimo</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-shield-alt"></i></div>
+                        <div class="stat-number">🔒</div>
+                        <div class="stat-label">Seguridad Máxima</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-mobile-alt"></i></div>
+                        <div class="stat-number">📱</div>
+                        <div class="stat-label">Totalmente Responsive</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-code"></i></div>
+                        <div class="stat-number">💻</div>
+                        <div class="stat-label">Código Moderno</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tech Stack -->
+            <section class="tech-section">
+                <h2 class="section-title">🚀 Tecnologías Utilizadas</h2>
+                <p class="section-subtitle">Stack tecnológico moderno y robusto</p>
+                
+                <div class="tech-grid">
+                    <div class="tech-item">Node.js</div>
+                    <div class="tech-item">Express</div>
+                    <div class="tech-item">GraphQL</div>
+                    <div class="tech-item">MongoDB</div>
+                    <div class="tech-item">Socket.IO</div>
+                    <div class="tech-item">JWT</div>
+                    <div class="tech-item">Apollo Server</div>
+                    <div class="tech-item">Mongoose</div>
+                </div>
+            </section>
+
+            <!-- Final CTA -->
+            <section class="final-cta">
+                <h2 class="cta-title">¿Listo para comenzar?</h2>
+                <p class="cta-subtitle">Únete a miles de usuarios que ya están disfrutando de la mejor experiencia de e-commerce.</p>
+                
+                <div class="cta-buttons">
+                    <a href="/register" class="btn btn-primary btn-lg">
+                        <i class="fas fa-user-plus"></i> Crear Cuenta Gratis
+                    </a>
+                    <a href="/products" class="btn btn-outline btn-lg">
+                        <i class="fas fa-eye"></i> Ver Productos
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo">PortalProductos</div>
+                    <p class="footer-tagline">Tu tienda online de confianza</p>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Explorar</h4>
+                        <a href="/products">Productos</a>
+                        <a href="/cart">Carrito</a>
+                        <a href="/my-orders">Mis Pedidos</a>
+                        <a href="/chat">Chat</a>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Recursos</h4>
+                        <a href="/admin">Panel Admin</a>
+                        <a href="#">Documentación</a>
+                        <a href="#">API GraphQL</a>
+                        <a href="#">Soporte</a>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <a href="#">Términos</a>
+                        <a href="#">Privacidad</a>
+                        <a href="#">Cookies</a>
+                        <a href="#">Licencias</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2024 Portal de Productos - Práctica 2. Todos los derechos reservados.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Check auth and update UI
+        async function checkAuth() {
+            const token = sessionStorage.getItem('token');
+            const userWelcome = document.getElementById('userWelcome');
+            const loginBtn = document.getElementById('loginBtn');
+            const registerBtn = document.getElementById('registerBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const cartBadge = document.getElementById('cart-badge');
+
+            if (token) {
+                try {
+                    const response = await fetch('/api/auth/verify', {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        userWelcome.textContent = `👋 Hola, ${data.user.username}`;
+                        userWelcome.style.color = '#4cc9f0';
+                        loginBtn.classList.add('hidden');
+                        registerBtn.classList.add('hidden');
+                        logoutBtn.classList.remove('hidden');
+                        
+                        // Add admin link if user is admin
+                        if (data.user.role === 'admin') {
+                            const navLinks = document.querySelector('.nav-links');
+                            const adminLink = document.createElement('li');
+                            adminLink.innerHTML = '<a href="/admin"><i class="fas fa-crown"></i> Admin</a>';
+                            navLinks.appendChild(adminLink);
+                        }
+                    } else {
+                        sessionStorage.removeItem('token');
+                        updateUIForGuest();
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    sessionStorage.removeItem('token');
+                    updateUIForGuest();
+                }
+            } else {
+                updateUIForGuest();
+            }
+
+            // Update cart badge
+            updateCartBadge();
+        }
+
+        function updateUIForGuest() {
+            document.getElementById('userWelcome').textContent = '👋 Bienvenido';
+            document.getElementById('loginBtn').classList.remove('hidden');
+            document.getElementById('registerBtn').classList.remove('hidden');
+            document.getElementById('logoutBtn').classList.add('hidden');
+        }
+
+        function updateCartBadge() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const badge = document.getElementById('cart-badge');
+            
+            if (totalItems > 0) {
+                badge.textContent = totalItems > 99 ? '99+' : totalItems;
+                badge.style.display = 'inline-block';
+                badge.style.background = 'linear-gradient(135deg, #f72585 0%, #ff6b9d 100%)';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        // Logout handler
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            sessionStorage.removeItem('token');
+            localStorage.removeItem('cart');
+            window.location.href = '/';
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            
+            // Add animation on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-in');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all feature cards
+            document.querySelectorAll('.feature-card, .stat-card').forEach(card => {
+                observer.observe(card);
+            });
+        });
+
+        // Add some interactive effects
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('mousedown', (e) => {
+                e.target.style.transform = 'scale(0.95)';
+            });
+            
+            button.addEventListener('mouseup', (e) => {
+                e.target.style.transform = '';
+            });
+            
+            button.addEventListener('mouseleave', (e) => {
+                e.target.style.transform = '';
+            });
+        });
+    </script>
+
+    <style>
+        /* Additional styles for index.html */
+        .section-title {
+            text-align: center;
+            margin-bottom: var(--space-sm);
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            color: var(--gray-400);
+            margin-bottom: var(--space-2xl);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .features-section {
+            margin: var(--space-3xl) 0;
+        }
+        
+        .stats-section {
+            margin: var(--space-3xl) 0;
+            padding: var(--space-3xl) 0;
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.05) 0%, rgba(114, 9, 183, 0.05) 100%);
+            border-radius: var(--radius-lg);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-lg);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .stat-icon {
+            font-size: 1.5rem;
+            margin-bottom: var(--space-sm);
+            color: var(--primary);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: var(--space-sm) 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-label {
+            color: var(--gray-400);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .tech-section {
+            margin: var(--space-3xl) 0;
+        }
+        
+        .final-cta {
+            text-align: center;
+            padding: var(--space-3xl);
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.1) 0%, rgba(114, 9, 183, 0.1) 100%);
+            border-radius: var(--radius-lg);
+            margin: var(--space-3xl) 0;
+        }
+        
+        .cta-title {
+            font-size: 2.5rem;
+            margin-bottom: var(--space-sm);
+        }
+        
+        .cta-subtitle {
+            color: var(--gray-400);
+            max-width: 500px;
+            margin: 0 auto var(--space-2xl);
+        }
+        
+        /* Footer Styles */
+        .footer {
+            background: rgba(26, 26, 46, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: auto;
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-2xl) var(--space-xl);
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: var(--space-2xl);
+        }
+        
+        .footer-logo .logo {
+            font-size: 1.5rem;
+            margin-bottom: var(--space-sm);
+        }
+        
+        .footer-tagline {
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+        
+        .footer-links {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-2xl);
+        }
+        
+        .footer-column h4 {
+            font-size: 1rem;
+            margin-bottom: var(--space-lg);
+            color: var(--light);
+        }
+        
+        .footer-column a {
+            display: block;
+            color: var(--gray-500);
+            margin-bottom: var(--space-sm);
+            transition: color var(--transition-fast);
+        }
+        
+        .footer-column a:hover {
+            color: var(--primary);
+        }
+        
+        .footer-bottom {
+            padding: var(--space-xl);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: var(--space-md);
+        }
+        
+        .social-links a {
+            color: var(--gray-500);
+            font-size: 1.25rem;
+            transition: color var(--transition-fast);
+        }
+        
+        .social-links a:hover {
+            color: var(--primary);
+        }
+        
+        /* Animations */
+        .animate-in {
+            animation: slideIn 0.6s ease forwards;
+        }
+        
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+        .feature-card:nth-child(4) { animation-delay: 0.4s; }
+        .feature-card:nth-child(5) { animation-delay: 0.5s; }
+        .feature-card:nth-child(6) { animation-delay: 0.6s; }
+        
+        /* Auth buttons container */
+        .auth-buttons {
+            display: flex;
+            gap: var(--space-sm);
+        }
+        
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .footer-links {
+                grid-template-columns: 1fr;
+                gap: var(--space-xl);
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                gap: var(--space-md);
+                text-align: center;
+            }
+            
+            .auth-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .cta-title {
+                font-size: 1.75rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</body>
+</html>
