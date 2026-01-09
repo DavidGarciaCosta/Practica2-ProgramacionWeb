@@ -12,6 +12,52 @@
 
 Portal de productos evolucionado a E-commerce completo con GraphQL, gestión de carrito, pedidos y panel de administración.
 
+## FOTOS
+### Inicio
+<img width="1852" height="959" alt="imagen" src="https://github.com/user-attachments/assets/05184cda-7fa5-4686-a683-20f35b7dd0f4" />
+
+### Registro
+<img width="1852" height="959" alt="imagen" src="https://github.com/user-attachments/assets/cf54e2bc-879c-469d-a78d-2e6a5d1ae873" />
+
+### Iniciar Sesión
+<img width="1852" height="959" alt="imagen" src="https://github.com/user-attachments/assets/6274dc8f-5b61-48ec-9f9c-fb1d5fb523ab" />
+
+### Productos
+<img width="1852" height="959" alt="imagen" src="https://github.com/user-attachments/assets/60cadac3-3fb9-4fd1-ba5c-d09d3698c9bb" />
+
+### Carrito
+<img width="1852" height="959" alt="imagen" src="https://github.com/user-attachments/assets/8312fcd6-5d87-4520-bc62-93db1593e9d0" />
+
+### Mis pedidos
+<img width="1852" height="959" alt="imagen" src="https://github.com/user-attachments/assets/ba251500-3a81-4119-a73d-41510ad9ebda" />
+
+### Chat
+<img width="1852" height="959" alt="imagen" src="https://github.com/user-attachments/assets/27ccf527-30ad-4e18-8a89-75f2defe9e65" />
+
+### Panel Administración
+<img width="1852" height="959" alt="imagen" src="https://github.com/user-attachments/assets/fae74acf-1b03-404f-bbcc-ab7c3a67e4a3" />
+
+### Detalles Del Pedido (Admin)
+<img width="1852" height="959" alt="imagen" src="https://github.com/user-attachments/assets/2ca2f535-6bb8-4f38-bd40-bd53a81e07a6" />
+
+### Pedidos Completados
+<img width="1852" height="959" alt="imagen" src="https://github.com/user-attachments/assets/f44a9da5-6a85-42d2-981d-39f0f37ad2b2" />
+
+### Gestión Usuarios
+<img width="1852" height="959" alt="imagen" src="https://github.com/user-attachments/assets/1ba8f3c1-b849-47e0-bb3e-57b77c9b8c6e" />
+
+### Gestión Productos
+<img width="1852" height="959" alt="imagen" src="https://github.com/user-attachments/assets/35fe5f7d-471d-4457-ad88-e1530fcf4236" />
+
+### Queries ApolloGraphQL
+<img width="1852" height="959" alt="imagen" src="https://github.com/user-attachments/assets/ecfb66b0-62e1-4be9-9834-21db92a9b851" />
+
+### Mutations ApolloGraphQL
+<img width="1852" height="959" alt="imagen" src="https://github.com/user-attachments/assets/57629b7b-8c2a-44cf-b63b-4feebeb7a1bc" />
+
+
+
+
 ## Instalación
 
 ### Requisitos previos
