@@ -5,7 +5,10 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "test:e2e": "cypress run"
   },
   "keywords": [
     "ecommerce",
@@ -28,6 +31,7 @@
     "socket.io": "^4.6.0"
   },
   "devDependencies": {
+    "cypress": "^15.10.0",
     "nodemon": "^3.0.2"
   }
 }
