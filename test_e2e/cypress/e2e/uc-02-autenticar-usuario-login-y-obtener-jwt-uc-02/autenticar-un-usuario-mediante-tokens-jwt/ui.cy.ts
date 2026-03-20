@@ -2,7 +2,7 @@
  * Feature: UC-02 Autenticar usuario (login) y obtener JWT (UC-02)
  * Scenario: Autenticar un usuario mediante tokens JWT
  * Type: UI
- * Evidence summary: pages=/login selectors=#email, #loginBtn, #loginForm, #messageForm, #password, #userList messages=Credenciales inválidas, Inicio de sesión exitoso, Token inválido, Token inválido o expirado, Token no proporcionado
+ * Evidence summary: pages=/login selectors=#email, #errorMessage, #loginBtn, #password, #rememberMe, #successMessage, #togglePassword messages=Token inválido, Token no proporcionado, Token inválido o expirado
  */
 
 describe("Autenticar un usuario mediante tokens JWT", () => {
@@ -23,15 +23,17 @@ describe("Autenticar un usuario mediante tokens JWT", () => {
 
     const runScenario = (user: { username: string; email: string; password: string }) => {
       cy.safeVisit("/login");
-      fillField("#email", user.email);
-    fillField("#password", user.password);
-    fillField("#userList", user.username);
-      cy.get("#loginBtn").should('be.visible').click();
-      cy.get("[data-cy=\"error-message\"]", { timeout: 10000 }).should('be.visible'); cy.contains("Credenciales inválidas", { matchCase: false, timeout: 10000 }).should('be.visible'); cy.contains("Inicio de sesión exitoso", { matchCase: false, timeout: 10000 }).should('be.visible');
+      const formData = {   username: user.username,   email: user.email,   password: user.password,   confirmPassword: user.password, };
+      fillField("#email", formData.email);
+      fillField("#password", formData.password);
+      cy.get("#loginForm").submit();
+      cy.location('pathname', { timeout: 10000 }).should('include', "/products"); cy.get("#successMessage", { timeout: 10000 }).should('be.visible'); cy.contains("Token inválido", { matchCase: false, timeout: 10000 }).should('be.visible');
     };
 
     cy.buildTestUser().then((user) => {
-      runScenario(user);
+      cy.seedUserByApi({ username: user.username, email: user.email, password: user.password }).then(() => {
+        runScenario(user);
+      });
     });
   });
 });

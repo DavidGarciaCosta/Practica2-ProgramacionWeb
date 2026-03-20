@@ -2,7 +2,7 @@
  * Feature: UC-01 Registrar usuario (UC-01)
  * Scenario: Rechazar registro cuando falta algún campo de entrada
  * Type: API
- * Evidence summary: endpoints=/api/auth/register messages=Usuario registrado exitosamente
+ * Evidence summary: endpoints=/api/auth/register messages=Rol inválido, Token inválido, Estado inválido
  */
 
 describe("Rechazar registro cuando falta algún campo de entrada", () => {

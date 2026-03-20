@@ -1,12 +1,12 @@
 /**
- * Feature: UC-02 Autenticar usuario (login) y obtener JWT (UC-02)
- * Scenario: Devolver un token válido con id y role del usuario en el login
+ * Feature: UC-03 Verificar token JWT y obtener perfil de usuario (UC-03)
+ * Scenario: Devolver el perfil de usuario sin password al verificar el token
  * Type: UI
- * Evidence summary: pages=/login selectors=#email, #errorMessage, #loginBtn, #password, #rememberMe, #successMessage, #togglePassword messages=Token inválido, Token no proporcionado, Token inválido o expirado
+ * Evidence summary: pages=/register selectors=#acceptTerms, #confirmPassword, #email, #errorMessage, #newsletter, #password, #sendMessage, #successMessage, #username, [name="role"] messages=Token inválido, Token no proporcionado, Token inválido o expirado
  */
 
-describe("Devolver un token válido con id y role del usuario en el login", () => {
-  it("Devolver un token válido con id y role del usuario en el login", () => {
+describe("Devolver el perfil de usuario sin password al verificar el token", () => {
+  it("Devolver el perfil de usuario sin password al verificar el token", () => {
     const fillField = (selector: string, value: string) => {
       cy.get(selector, { timeout: 10000 })
         .should('be.visible')
@@ -22,18 +22,20 @@ describe("Devolver un token válido con id y role del usuario en el login", () =
     };
 
     const runScenario = (user: { username: string; email: string; password: string }) => {
-      cy.safeVisit("/login");
+      cy.safeVisit("/register");
       const formData = {   username: user.username,   email: user.email,   password: user.password,   confirmPassword: user.password, };
+      fillField("#username", formData.username);
       fillField("#email", formData.email);
       fillField("#password", formData.password);
-      cy.get("#loginForm").submit();
+      fillField("#confirmPassword", formData.confirmPassword);
+      cy.get("[name=\"role\"]").check({ force: true });
+      cy.get("#acceptTerms").check({ force: true });
+      cy.get("#registerForm").submit();
       cy.location('pathname', { timeout: 10000 }).should('include', "/products"); cy.get("#successMessage", { timeout: 10000 }).should('be.visible'); cy.contains("Token inválido", { matchCase: false, timeout: 10000 }).should('be.visible');
     };
 
     cy.buildTestUser().then((user) => {
-      cy.seedUserByApi({ username: user.username, email: user.email, password: user.password }).then(() => {
-        runScenario(user);
-      });
+      runScenario(user);
     });
   });
 });

@@ -2,7 +2,7 @@
  * Feature: UC-02 Autenticar usuario (login) y obtener JWT (UC-02)
  * Scenario: Devolver un token válido con id y role del usuario en el login
  * Type: API
- * Evidence summary: endpoints=/api/auth/login messages=Credenciales inválidas, Inicio de sesión exitoso, Token inválido, Token inválido o expirado, Token no proporcionado
+ * Evidence summary: endpoints=/api/auth/login messages=Token inválido, Token no proporcionado, Token inválido o expirado
  */
 
 describe("Devolver un token válido con id y role del usuario en el login", () => {

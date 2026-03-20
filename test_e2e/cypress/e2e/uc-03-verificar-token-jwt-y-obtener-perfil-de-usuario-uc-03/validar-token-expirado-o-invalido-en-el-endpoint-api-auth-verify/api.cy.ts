@@ -2,7 +2,7 @@
  * Feature: UC-03 Verificar token JWT y obtener perfil de usuario (UC-03)
  * Scenario: Validar token expirado o inválido en el endpoint /api/auth/verify
  * Type: API
- * Evidence summary: endpoints=/api/auth/verify messages=Credenciales inválidas, Estado inválido, Rol inválido, Rol inválido. Use , Token inválido, Token inválido o expirado, Token no proporcionado
+ * Evidence summary: endpoints=/api/auth/verify messages=Token inválido o expirado, Token inválido, Token no proporcionado
  */
 
 describe("Validar token expirado o inválido en el endpoint /api/auth/verify", () => {

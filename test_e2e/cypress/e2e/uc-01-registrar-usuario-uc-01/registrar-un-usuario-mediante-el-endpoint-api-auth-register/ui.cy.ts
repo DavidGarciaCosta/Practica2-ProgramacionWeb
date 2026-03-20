@@ -2,7 +2,7 @@
  * Feature: UC-01 Registrar usuario (UC-01)
  * Scenario: Registrar un usuario mediante el endpoint /api/auth/register
  * Type: UI
- * Evidence summary: pages=/register selectors=#confirmPassword, #email, #loginBtn, #loginForm, #messageForm, #password, #registerBtn, #userList messages=Usuario registrado exitosamente
+ * Evidence summary: pages=/register selectors=#acceptTerms, #confirmPassword, #email, #errorMessage, #newsletter, #password, #registerBtn, #successMessage, #username, [name="role"] messages=Usuario registrado exitosamente, Pedido creado exitosamente, Producto creado exitosamente
  */
 
 describe("Registrar un usuario mediante el endpoint /api/auth/register", () => {
@@ -23,12 +23,15 @@ describe("Registrar un usuario mediante el endpoint /api/auth/register", () => {
 
     const runScenario = (user: { username: string; email: string; password: string }) => {
       cy.safeVisit("/register");
-      fillField("#email", user.email);
-    fillField("#password", user.password);
-    fillField("#confirmPassword", user.password);
-    fillField("#userList", user.username);
-      cy.get("#registerBtn").should('be.visible').click();
-      cy.get("[data-cy=\"error-message\"]", { timeout: 10000 }).should('be.visible'); cy.contains("Usuario registrado exitosamente", { matchCase: false, timeout: 10000 }).should('be.visible');
+      const formData = {   username: user.username,   email: user.email,   password: user.password,   confirmPassword: user.password, };
+      fillField("#username", formData.username);
+      fillField("#email", formData.email);
+      fillField("#password", formData.password);
+      fillField("#confirmPassword", formData.confirmPassword);
+      cy.get("[name=\"role\"]").check({ force: true });
+      cy.get("#acceptTerms").check({ force: true });
+      cy.get("#registerForm").submit();
+      cy.location('pathname', { timeout: 10000 }).should('include', "/products"); cy.get("#successMessage", { timeout: 10000 }).should('be.visible'); cy.contains("Usuario registrado exitosamente", { matchCase: false, timeout: 10000 }).should('be.visible');
     };
 
     cy.buildTestUser().then((user) => {

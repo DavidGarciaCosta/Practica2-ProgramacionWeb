@@ -2,7 +2,7 @@
  * Feature: UC-01 Registrar usuario (UC-01)
  * Scenario: Almacenar la contraseña con hash usando bcrypt al registrar
  * Type: API
- * Evidence summary: endpoints=/api/auth/register messages=Usuario registrado exitosamente
+ * Evidence summary: endpoints=/api/auth/register messages=Usuario registrado exitosamente, Pedido creado exitosamente, Producto creado exitosamente
  */
 
 describe("Almacenar la contraseña con hash usando bcrypt al registrar", () => {

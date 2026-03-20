@@ -2,7 +2,7 @@
  * Feature: UC-02 Autenticar usuario (login) y obtener JWT (UC-02)
  * Scenario: Autenticar un usuario mediante tokens JWT
  * Type: API
- * Evidence summary: endpoints=/api/auth/login messages=Credenciales inválidas, Inicio de sesión exitoso, Token inválido, Token inválido o expirado, Token no proporcionado
+ * Evidence summary: endpoints=/api/auth/login messages=Token inválido, Token no proporcionado, Token inválido o expirado
  */
 
 describe("Autenticar un usuario mediante tokens JWT", () => {

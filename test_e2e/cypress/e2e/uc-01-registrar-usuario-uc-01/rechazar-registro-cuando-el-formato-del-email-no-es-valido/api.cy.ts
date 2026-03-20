@@ -2,7 +2,7 @@
  * Feature: UC-01 Registrar usuario (UC-01)
  * Scenario: Rechazar registro cuando el formato del email no es válido
  * Type: API
- * Evidence summary: endpoints=/api/auth/register messages=Credenciales inválidas, Estado inválido, Rol inválido, Rol inválido. Use , Token inválido, Token inválido o expirado, Usuario registrado exitosamente
+ * Evidence summary: endpoints=/api/auth/register messages=Rol inválido, Token inválido, Estado inválido
  */
 
 describe("Rechazar registro cuando el formato del email no es válido", () => {

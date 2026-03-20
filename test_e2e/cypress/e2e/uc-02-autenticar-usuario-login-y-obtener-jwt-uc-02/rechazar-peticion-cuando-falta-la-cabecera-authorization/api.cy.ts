@@ -2,7 +2,7 @@
  * Feature: UC-02 Autenticar usuario (login) y obtener JWT (UC-02)
  * Scenario: Rechazar petición cuando falta la cabecera Authorization
  * Type: API
- * Evidence summary: endpoints=/api/auth/verify messages=Token inválido, Token inválido o expirado, Token no proporcionado
+ * Evidence summary: endpoints=/api/auth/verify messages=Token inválido, Token no proporcionado, Token inválido o expirado
  */
 
 describe("Rechazar petición cuando falta la cabecera Authorization", () => {

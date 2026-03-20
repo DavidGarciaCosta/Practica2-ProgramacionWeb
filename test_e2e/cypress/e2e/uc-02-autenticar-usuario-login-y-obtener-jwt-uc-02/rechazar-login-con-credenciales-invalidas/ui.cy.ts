@@ -2,7 +2,7 @@
  * Feature: UC-02 Autenticar usuario (login) y obtener JWT (UC-02)
  * Scenario: Rechazar login con credenciales inválidas
  * Type: UI
- * Evidence summary: pages=/login selectors=#email, #loginBtn, #loginForm, #messageForm, #password, #userList messages=Credenciales inválidas, Estado inválido, Inicio de sesión exitoso, Rol inválido, Rol inválido. Use , Token inválido, Token inválido o expirado
+ * Evidence summary: pages=/login selectors=#email, #errorMessage, #loginBtn, #password, #rememberMe, #successMessage, #togglePassword messages=Credenciales inválidas, Rol inválido, Token inválido
  */
 
 describe("Rechazar login con credenciales inválidas", () => {
@@ -23,11 +23,11 @@ describe("Rechazar login con credenciales inválidas", () => {
 
     const runScenario = (user: { username: string; email: string; password: string }) => {
       cy.safeVisit("/login");
-      fillField("#email", user.email);
-    fillField("#password", user.password);
-    fillField("#userList", user.username);
-      cy.get("#loginBtn").should('be.visible').click();
-      cy.location('pathname', { timeout: 10000 }).should('include', "/login"); cy.get("[data-cy=\"error-message\"]", { timeout: 10000 }).should('be.visible'); cy.contains("Credenciales inválidas", { matchCase: false, timeout: 10000 }).should('be.visible'); cy.contains("Estado inválido", { matchCase: false, timeout: 10000 }).should('be.visible');
+      const formData = {   username: user.username,   email: user.email,   password: user.password,   confirmPassword: user.password, }; formData.password = `${user.password}_incorrecta`;
+      fillField("#email", formData.email);
+      fillField("#password", formData.password);
+      cy.get("#loginForm").submit();
+      cy.location('pathname', { timeout: 10000 }).should('include', "/login"); cy.get("#errorMessage", { timeout: 10000 }).should('be.visible'); cy.contains("Credenciales inválidas", { matchCase: false, timeout: 10000 }).should('be.visible');
     };
 
     cy.buildTestUser().then((user) => {

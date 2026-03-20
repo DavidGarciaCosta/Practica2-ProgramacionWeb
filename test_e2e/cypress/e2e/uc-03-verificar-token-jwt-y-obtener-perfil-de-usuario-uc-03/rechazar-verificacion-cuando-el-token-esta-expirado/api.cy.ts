@@ -2,7 +2,7 @@
  * Feature: UC-03 Verificar token JWT y obtener perfil de usuario (UC-03)
  * Scenario: Rechazar verificación cuando el token está expirado
  * Type: API
- * Evidence summary: endpoints=/api/auth/verify messages=Token inválido, Token inválido o expirado, Token no proporcionado
+ * Evidence summary: endpoints=/api/auth/verify messages=Token inválido o expirado, Token inválido, Token no proporcionado
  */
 
 describe("Rechazar verificación cuando el token está expirado", () => {

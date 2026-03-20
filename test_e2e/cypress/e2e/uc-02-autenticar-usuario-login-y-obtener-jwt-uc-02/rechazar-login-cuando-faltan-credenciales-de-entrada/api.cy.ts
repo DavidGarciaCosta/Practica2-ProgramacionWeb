@@ -2,7 +2,7 @@
  * Feature: UC-02 Autenticar usuario (login) y obtener JWT (UC-02)
  * Scenario: Rechazar login cuando faltan credenciales de entrada
  * Type: API
- * Evidence summary: endpoints=/api/auth/login messages=Credenciales inválidas, Inicio de sesión exitoso
+ * Evidence summary: endpoints=/api/auth/login messages=Credenciales inválidas, Rol inválido, Token inválido
  */
 
 describe("Rechazar login cuando faltan credenciales de entrada", () => {

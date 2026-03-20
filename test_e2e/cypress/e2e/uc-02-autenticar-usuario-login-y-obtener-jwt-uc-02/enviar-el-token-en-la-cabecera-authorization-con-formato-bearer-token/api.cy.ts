@@ -2,7 +2,7 @@
  * Feature: UC-02 Autenticar usuario (login) y obtener JWT (UC-02)
  * Scenario: Enviar el token en la cabecera Authorization con formato Bearer <token>
  * Type: API
- * Evidence summary: endpoints=/api/auth/verify messages=Token inválido, Token inválido o expirado, Token no proporcionado
+ * Evidence summary: endpoints=/api/auth/verify messages=Token inválido, Token no proporcionado, Token inválido o expirado
  */
 
 describe("Enviar el token en la cabecera Authorization con formato Bearer <token>", () => {

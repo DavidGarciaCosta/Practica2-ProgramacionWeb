@@ -2,7 +2,7 @@
  * Feature: UC-01 Registrar usuario (UC-01)
  * Scenario: Rechazar registro con email duplicado
  * Type: API
- * Evidence summary: endpoints=/api/auth/register messages=El usuario o email ya existe, Usuario registrado exitosamente
+ * Evidence summary: endpoints=/api/auth/register messages=Token no proporcionado, Rol inválido, Token inválido
  */
 
 describe("Rechazar registro con email duplicado", () => {

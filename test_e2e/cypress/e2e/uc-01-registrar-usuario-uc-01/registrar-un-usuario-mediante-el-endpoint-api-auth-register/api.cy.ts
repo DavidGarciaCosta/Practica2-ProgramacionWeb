@@ -2,7 +2,7 @@
  * Feature: UC-01 Registrar usuario (UC-01)
  * Scenario: Registrar un usuario mediante el endpoint /api/auth/register
  * Type: API
- * Evidence summary: endpoints=/api/auth/register messages=Usuario registrado exitosamente
+ * Evidence summary: endpoints=/api/auth/register messages=Usuario registrado exitosamente, Pedido creado exitosamente, Producto creado exitosamente
  */
 
 describe("Registrar un usuario mediante el endpoint /api/auth/register", () => {
