@@ -7,7 +7,7 @@
 
 describe("Devolver el perfil de usuario sin password al verificar el token", () => {
   it("Devolver el perfil de usuario sin password al verificar el token", () => {
-    cy.request({ method: 'GET', url: '/api/auth/verify', failOnStatusCode: false }).then((res) => {
+    cy.request({ method: 'GET', url: "/api/auth/verify", failOnStatusCode: false }).then((res) => {
       expect(res.status).to.be.within(200, 499);
     });
   });

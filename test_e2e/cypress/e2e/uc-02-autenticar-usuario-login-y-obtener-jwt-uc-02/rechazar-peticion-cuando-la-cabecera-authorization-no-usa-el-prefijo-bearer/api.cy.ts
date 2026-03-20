@@ -2,11 +2,11 @@
  * Feature: UC-02 Autenticar usuario (login) y obtener JWT (UC-02)
  * Scenario: Rechazar petición cuando la cabecera Authorization no usa el prefijo Bearer
  * Type: API
- * Evidence summary: endpoints=/api/auth/verify messages=Token inválido, Token inválido o expirado, Token no proporcionado
+ * Evidence summary: endpoints=/api/auth/verify messages=Credenciales inválidas, Estado inválido, Rol inválido, Rol inválido. Use , Token inválido, Token inválido o expirado, Token no proporcionado
  */
 
-describe("Rechazar petici\u00f3n cuando la cabecera Authorization no usa el prefijo Bearer", () => {
-  it("Rechazar petici\u00f3n cuando la cabecera Authorization no usa el prefijo Bearer", () => {
+describe("Rechazar petición cuando la cabecera Authorization no usa el prefijo Bearer", () => {
+  it("Rechazar petición cuando la cabecera Authorization no usa el prefijo Bearer", () => {
     const unique = `${Date.now()}-${Math.floor(Math.random() * 1e6)}`;
     const user = {
       username: `e2e_verify_${unique}`,

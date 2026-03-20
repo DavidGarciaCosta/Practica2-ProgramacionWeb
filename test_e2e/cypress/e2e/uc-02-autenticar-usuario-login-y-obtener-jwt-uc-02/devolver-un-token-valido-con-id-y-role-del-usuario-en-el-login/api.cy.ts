@@ -5,8 +5,8 @@
  * Evidence summary: endpoints=/api/auth/login messages=Credenciales inválidas, Inicio de sesión exitoso, Token inválido, Token inválido o expirado, Token no proporcionado
  */
 
-describe("Devolver un token v\u00e1lido con id y role del usuario en el login", () => {
-  it("Devolver un token v\u00e1lido con id y role del usuario en el login", () => {
+describe("Devolver un token válido con id y role del usuario en el login", () => {
+  it("Devolver un token válido con id y role del usuario en el login", () => {
     const unique = `${Date.now()}-${Math.floor(Math.random() * 1e6)}`;
     const user = {
       username: `e2e_login_${unique}`,

@@ -2,11 +2,11 @@
  * Feature: UC-02 Autenticar usuario (login) y obtener JWT (UC-02)
  * Scenario: Rechazar login con credenciales inválidas
  * Type: API
- * Evidence summary: endpoints=/api/auth/login messages=Credenciales inválidas, Inicio de sesión exitoso
+ * Evidence summary: endpoints=/api/auth/login messages=Credenciales inválidas, Estado inválido, Inicio de sesión exitoso, Rol inválido, Rol inválido. Use , Token inválido, Token inválido o expirado
  */
 
-describe("Rechazar login con credenciales inv\u00e1lidas", () => {
-  it("Rechazar login con credenciales inv\u00e1lidas", () => {
+describe("Rechazar login con credenciales inválidas", () => {
+  it("Rechazar login con credenciales inválidas", () => {
     const unique = `${Date.now()}-${Math.floor(Math.random() * 1e6)}`;
     const user = {
       username: `e2e_login_${unique}`,

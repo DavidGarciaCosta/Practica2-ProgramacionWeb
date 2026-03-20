@@ -7,7 +7,7 @@
 
 describe("Rechazar registro con email duplicado", () => {
   it("Rechazar registro con email duplicado", () => {
-    cy.request({ method: 'GET', url: '/api/auth/register', failOnStatusCode: false }).then((res) => {
+    cy.request({ method: 'GET', url: "/api/auth/register", failOnStatusCode: false }).then((res) => {
       expect(res.status).to.be.within(200, 499);
     });
   });

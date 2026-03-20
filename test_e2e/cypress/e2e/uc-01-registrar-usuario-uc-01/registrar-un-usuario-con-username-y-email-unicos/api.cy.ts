@@ -5,9 +5,9 @@
  * Evidence summary: endpoints=/api/auth/register messages=Usuario registrado exitosamente
  */
 
-describe("Registrar un usuario con username y email \u00fanicos", () => {
-  it("Registrar un usuario con username y email \u00fanicos", () => {
-    cy.request({ method: 'GET', url: '/api/auth/register', failOnStatusCode: false }).then((res) => {
+describe("Registrar un usuario con username y email únicos", () => {
+  it("Registrar un usuario con username y email únicos", () => {
+    cy.request({ method: 'GET', url: "/api/auth/register", failOnStatusCode: false }).then((res) => {
       expect(res.status).to.be.within(200, 499);
     });
   });
