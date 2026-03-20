@@ -21,18 +21,19 @@ describe("Devolver un token válido con id y role del usuario en el login", () =
         });
     };
 
-    cy.visit("/login");
-    const unique = `${Date.now()}-${Math.floor(Math.random() * 1e6)}`;
-    const user = {
-      username: `e2e_user_${unique}`,
-      email: `e2e_${unique}@example.com`,
-      password: `E2Epass!${unique}`,
-    };
-    
-    fillField("#email", user.email);
+    const runScenario = (user: { username: string; email: string; password: string }) => {
+      cy.safeVisit("/login");
+      fillField("#email", user.email);
     fillField("#password", user.password);
     fillField("#userList", user.username);
-    cy.get("#loginBtn").should('be.visible').click();
-    cy.get("[data-cy=\"error-message\"]", { timeout: 10000 }).should('be.visible'); cy.contains("Credenciales inválidas", { matchCase: false, timeout: 10000 }).should('be.visible'); cy.contains("Inicio de sesión exitoso", { matchCase: false, timeout: 10000 }).should('be.visible');
+      cy.get("#loginBtn").should('be.visible').click();
+      cy.get("[data-cy=\"error-message\"]", { timeout: 10000 }).should('be.visible'); cy.contains("Credenciales inválidas", { matchCase: false, timeout: 10000 }).should('be.visible'); cy.contains("Inicio de sesión exitoso", { matchCase: false, timeout: 10000 }).should('be.visible');
+    };
+
+    cy.buildTestUser().then((user) => {
+      cy.seedUserByApi({ username: user.username, email: user.email, password: user.password }).then(() => {
+        runScenario(user);
+      });
+    });
   });
 });

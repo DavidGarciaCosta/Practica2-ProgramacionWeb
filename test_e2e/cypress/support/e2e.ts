@@ -1,1 +1,5 @@
-// Generated support entrypoint.
+import "./commands";
+
+beforeEach(() => {
+  cy.resetAppState();
+});
