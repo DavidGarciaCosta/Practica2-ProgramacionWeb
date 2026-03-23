@@ -2,7 +2,7 @@
  * Feature: UC-01 Registrar usuario (UC-01)
  * Scenario: Rechazar registro cuando falta algún campo de entrada
  * Type: UI
- * Evidence summary: pages=/register selectors=#acceptTerms, #confirmPassword, #email, #errorMessage, #newsletter, #password, #registerBtn, #successMessage, #username, [name="role"] messages=Rol inválido, Token inválido, Estado inválido
+ * Evidence summary: pages=/register selectors=#acceptTerms, #confirmPassword, #email, #errorMessage, #newsletter, #password, #successMessage, #username, [name="role"] messages=Rol inválido, No autorizado, Token inválido
  */
 
 describe("Rechazar registro cuando falta algún campo de entrada", () => {
@@ -23,11 +23,11 @@ describe("Rechazar registro cuando falta algún campo de entrada", () => {
 
     const runScenario = (user: { username: string; email: string; password: string }) => {
       cy.safeVisit("/register");
-      const formData = {   username: user.username,   email: user.email,   password: user.password,   confirmPassword: user.password, }; formData.confirmPassword = '';
-      fillField("#username", formData.username);
-      fillField("#email", formData.email);
-      fillField("#password", formData.password);
-      fillField("#confirmPassword", formData.confirmPassword);
+      const formData: Record<string, string> = {}; formData["username"] = user.username; formData["email"] = user.email; formData["password"] = user.password; formData["confirmPassword"] = user.password; formData["username"] = '';
+      fillField("#username", String(formData["username"] ?? ''));
+      fillField("#email", String(formData["email"] ?? ''));
+      fillField("#password", String(formData["password"] ?? ''));
+      fillField("#confirmPassword", String(formData["confirmPassword"] ?? ''));
       cy.get("[name=\"role\"]").check({ force: true });
       cy.get("#acceptTerms").check({ force: true });
       cy.get("#registerForm").submit();

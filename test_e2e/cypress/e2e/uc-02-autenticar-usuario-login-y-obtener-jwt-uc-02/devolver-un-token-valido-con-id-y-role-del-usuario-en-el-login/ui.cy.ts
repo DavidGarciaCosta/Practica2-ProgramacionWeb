@@ -2,7 +2,7 @@
  * Feature: UC-02 Autenticar usuario (login) y obtener JWT (UC-02)
  * Scenario: Devolver un token válido con id y role del usuario en el login
  * Type: UI
- * Evidence summary: pages=/login selectors=#email, #errorMessage, #loginBtn, #password, #rememberMe, #successMessage, #togglePassword messages=Token inválido, Token no proporcionado, Token inválido o expirado
+ * Evidence summary: pages=/login selectors=#email, #errorMessage, #loginBtn, #password, #rememberMe, #successMessage, #togglePassword messages=Error al actualizar rol, Inicio de sesión exitoso, Error al actualizar stock
  */
 
 describe("Devolver un token válido con id y role del usuario en el login", () => {
@@ -23,15 +23,21 @@ describe("Devolver un token válido con id y role del usuario en el login", () =
 
     const runScenario = (user: { username: string; email: string; password: string }) => {
       cy.safeVisit("/login");
-      const formData = {   username: user.username,   email: user.email,   password: user.password,   confirmPassword: user.password, };
-      fillField("#email", formData.email);
-      fillField("#password", formData.password);
+      const formData: Record<string, string> = {}; formData["email"] = user.email; formData["password"] = user.password; formData["password"] = `wrong_${String(formData["password"])}`;
+      fillField("#email", String(formData["email"] ?? ''));
+      fillField("#password", String(formData["password"] ?? ''));
       cy.get("#loginForm").submit();
-      cy.location('pathname', { timeout: 10000 }).should('include', "/products"); cy.get("#successMessage", { timeout: 10000 }).should('be.visible'); cy.contains("Token inválido", { matchCase: false, timeout: 10000 }).should('be.visible');
+      cy.location('pathname', { timeout: 10000 }).should('include', "/products"); cy.get("#successMessage", { timeout: 10000 }).should('be.visible'); cy.contains("Error al actualizar rol", { matchCase: false, timeout: 10000 }).should('be.visible');
     };
 
     cy.buildTestUser().then((user) => {
-      cy.seedUserByApi({ username: user.username, email: user.email, password: user.password }).then(() => {
+      const payload: Record<string, unknown> = {};
+      payload["username"] = user.username;
+      payload["email"] = user.email;
+      payload["password"] = user.password;
+      payload["confirmPassword"] = user.password;
+      cy.request({ method: 'POST', url: "/api/auth/register", body: payload, failOnStatusCode: false }).then((seedRes) => {
+        expect(seedRes.status).to.be.within(200, 299);
         runScenario(user);
       });
     });

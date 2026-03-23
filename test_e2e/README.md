@@ -45,4 +45,8 @@
 ## Skipped scenarios
 - Ninguno
 
+## Notes
+- Repo type: node_webapp
+- Discovery mode: local
+
 ## Run

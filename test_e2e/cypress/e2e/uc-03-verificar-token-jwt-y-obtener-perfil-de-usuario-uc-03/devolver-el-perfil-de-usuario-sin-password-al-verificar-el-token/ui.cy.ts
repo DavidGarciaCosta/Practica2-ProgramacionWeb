@@ -2,7 +2,7 @@
  * Feature: UC-03 Verificar token JWT y obtener perfil de usuario (UC-03)
  * Scenario: Devolver el perfil de usuario sin password al verificar el token
  * Type: UI
- * Evidence summary: pages=/register selectors=#acceptTerms, #confirmPassword, #email, #errorMessage, #newsletter, #password, #sendMessage, #successMessage, #username, [name="role"] messages=Token inválido, Token no proporcionado, Token inválido o expirado
+ * Evidence summary: pages=/register selectors=#acceptTerms, #confirmPassword, #email, #errorMessage, #newsletter, #password, #successMessage, #username, [name="role"] messages=Token inválido, Token no proporcionado, Token inválido o expirado
  */
 
 describe("Devolver el perfil de usuario sin password al verificar el token", () => {
@@ -23,11 +23,11 @@ describe("Devolver el perfil de usuario sin password al verificar el token", () 
 
     const runScenario = (user: { username: string; email: string; password: string }) => {
       cy.safeVisit("/register");
-      const formData = {   username: user.username,   email: user.email,   password: user.password,   confirmPassword: user.password, };
-      fillField("#username", formData.username);
-      fillField("#email", formData.email);
-      fillField("#password", formData.password);
-      fillField("#confirmPassword", formData.confirmPassword);
+      const formData: Record<string, string> = {}; formData["username"] = user.username; formData["email"] = user.email; formData["password"] = user.password; formData["confirmPassword"] = user.password;
+      fillField("#username", String(formData["username"] ?? ''));
+      fillField("#email", String(formData["email"] ?? ''));
+      fillField("#password", String(formData["password"] ?? ''));
+      fillField("#confirmPassword", String(formData["confirmPassword"] ?? ''));
       cy.get("[name=\"role\"]").check({ force: true });
       cy.get("#acceptTerms").check({ force: true });
       cy.get("#registerForm").submit();

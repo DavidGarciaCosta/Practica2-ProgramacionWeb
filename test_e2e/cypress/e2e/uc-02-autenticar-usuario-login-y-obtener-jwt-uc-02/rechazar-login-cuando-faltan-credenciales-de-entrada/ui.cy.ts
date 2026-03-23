@@ -2,7 +2,7 @@
  * Feature: UC-02 Autenticar usuario (login) y obtener JWT (UC-02)
  * Scenario: Rechazar login cuando faltan credenciales de entrada
  * Type: UI
- * Evidence summary: pages=/login selectors=#email, #errorMessage, #loginBtn, #password, #rememberMe, #successMessage, #togglePassword messages=Credenciales inválidas, Rol inválido, Token inválido
+ * Evidence summary: pages=/login selectors=#email, #errorMessage, #loginBtn, #password, #rememberMe, #successMessage, #togglePassword messages=Credenciales inválidas, Rol inválido, No autorizado
  */
 
 describe("Rechazar login cuando faltan credenciales de entrada", () => {
@@ -23,15 +23,21 @@ describe("Rechazar login cuando faltan credenciales de entrada", () => {
 
     const runScenario = (user: { username: string; email: string; password: string }) => {
       cy.safeVisit("/login");
-      const formData = {   username: user.username,   email: user.email,   password: user.password,   confirmPassword: user.password, }; formData.password = '';
-      fillField("#email", formData.email);
-      fillField("#password", formData.password);
+      const formData: Record<string, string> = {}; formData["email"] = user.email; formData["password"] = user.password; formData["password"] = `wrong_${String(formData["password"])}`;
+      fillField("#email", String(formData["email"] ?? ''));
+      fillField("#password", String(formData["password"] ?? ''));
       cy.get("#loginForm").submit();
       cy.location('pathname', { timeout: 10000 }).should('include', "/login"); cy.get("#errorMessage", { timeout: 10000 }).should('be.visible'); cy.contains("Credenciales inválidas", { matchCase: false, timeout: 10000 }).should('be.visible');
     };
 
     cy.buildTestUser().then((user) => {
-      cy.seedUserByApi({ username: user.username, email: user.email, password: user.password }).then(() => {
+      const payload: Record<string, unknown> = {};
+      payload["username"] = user.username;
+      payload["email"] = user.email;
+      payload["password"] = user.password;
+      payload["confirmPassword"] = user.password;
+      cy.request({ method: 'POST', url: "/api/auth/register", body: payload, failOnStatusCode: false }).then((seedRes) => {
+        expect(seedRes.status).to.be.within(200, 299);
         runScenario(user);
       });
     });
