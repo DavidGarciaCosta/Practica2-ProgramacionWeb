@@ -1,11 +1,12 @@
 # Kiwi TCMS
 
-Total publicados: 3
+Total publicados: 4
 
 ## Indice
 1. [UC-01](#uc-01) - Sin proyecto - reviewed
 2. [UC-02](#uc-02) - Sin proyecto - reviewed
 3. [UC-03](#uc-03) - Sin proyecto - reviewed
+4. [UC-04](#uc-04) - Sin proyecto - reviewed
 
 ---
 
@@ -189,5 +190,69 @@ Feature: Autorización por roles (user/admin)
     Given el sistema usa el token en el contexto para autorizar (trazabilidad: "contexto (token)")
     When se intenta acceder a una operación admin sin token
     Then el backend deniega el acceso (trazabilidad: "impedir accesos")
+
+```
+
+---
+
+## UC-04
+
+### Metadatos
+- Proyecto asociado: Sin proyecto
+- Kiwi: updated
+- ID en Kiwi: 407
+- Categoria: Sin categoria
+- Madurez: reviewed
+- Escenarios: 7
+- Directos: 3
+- Derivados: 4
+
+### Resumen final en Kiwi
+UC-04
+
+### Gherkin
+```gherkin
+Feature: Consulta pública del catálogo de productos
+
+  @direct @RF-12
+  Scenario: Listar productos con paginación, búsqueda y filtro
+    Given el catálogo permite listar productos (trazabilidad: "Listar productos")
+    When el visitante consulta el listado con paginación, búsqueda o filtro por categoría (trazabilidad: "paginación, búsqueda y filtro por categoría")
+    Then el sistema devuelve una lista de productos acorde a los criterios (trazabilidad: "soporta")
+
+  @direct @RF-13
+  Scenario: Consultar detalle de un producto
+    Given existe un producto en el catálogo (trazabilidad: "ver detalle de producto")
+    When el visitante solicita el detalle del producto
+    Then el sistema devuelve la información del producto (trazabilidad: "detalle")
+
+  @direct @RF-14
+  Scenario: Disponibilidad de queries GraphQL para catálogo
+    When un cliente consume la API GraphQL del catálogo
+    Then están disponibles las queries "products" y "product" (trazabilidad: "Query products/product")
+
+  @derived
+  Scenario: Paginación con page/limit devuelve subconjunto del catálogo
+    Given el listado soporta parámetros de paginación (trazabilidad: "page/limit")
+    When el visitante solicita una página concreta con un límite
+    Then el sistema devuelve solo los elementos de esa página (trazabilidad: "paginación")
+
+  @derived
+  Scenario: Búsqueda por nombre o descripción reduce resultados
+    Given el listado soporta búsqueda (trazabilidad: "búsqueda por nombre/descr")
+    When el visitante busca por un término
+    Then el sistema devuelve productos que coinciden con el nombre o descripción (trazabilidad: "búsqueda")
+
+  @derived
+  Scenario: Filtro por categoría reduce resultados
+    Given el listado soporta filtro por categoría (trazabilidad: "filtro por categoría")
+    When el visitante filtra por una categoría
+    Then el sistema devuelve productos de la categoría indicada (trazabilidad: "categoría")
+
+  @derived
+  Scenario: Consulta de detalle de producto inexistente
+    Given el catálogo permite ver detalle (trazabilidad: "ver detalle")
+    When el visitante solicita el detalle de un producto que no existe
+    Then el sistema informa que el producto no está disponible (trazabilidad: "producto")
 
 ```
