@@ -1,50 +1,43 @@
 # Kiwi TCMS
 
 ## Resumen
-UC-15
+UC-16
 
 ## Estado de publicacion
 - Kiwi: created
-- ID en Kiwi: 398
+- ID en Kiwi: 399
 - Categoria: 
 
 ## Resumen final en Kiwi
-UC-15
+UC-16
 
 ## Gherkin
 ```gherkin
-Feature: Listar pedidos con filtro por estado (admin)
+Feature: Ver detalle de pedido (admin)
 
   Background:
     Given que el sistema aplica autorización por roles (user/admin)
 
-  @direct @rf_RF-34
-  Scenario: Listar pedidos filtrando por estado
+  @direct @rf_RF-35
+  Scenario: Ver detalle de un pedido como admin
     Given que el solicitante tiene rol admin
-    And existen pedidos con distintos estados
-    When solicita listar pedidos aplicando un filtro por estado
-    Then el sistema devuelve los pedidos que coinciden con el estado solicitado
-    # trazabilidad: "filtro por estado"
+    And existe un pedido
+    When solicita ver el detalle del pedido
+    Then el sistema devuelve la información detallada del pedido
+    # trazabilidad: "ver detalle"
 
   @derived
-  Scenario: Listar pedidos sin filtro devuelve todos los pedidos
-    Given que el solicitante tiene rol admin
-    When solicita listar pedidos sin indicar filtro
-    Then el sistema devuelve el listado completo de pedidos
-    # trazabilidad: "Listar pedidos"
-
-  @derived
-  Scenario: Denegar listado de pedidos a usuario no admin
+  Scenario: Denegar ver detalle de pedido a usuario no admin
     Given que el solicitante no tiene rol admin
-    When solicita listar pedidos
+    When intenta ver el detalle de un pedido
     Then el sistema deniega el acceso
     # trazabilidad: "requieren rol admin"
 
   @derived
-  Scenario: Filtro por estado sin coincidencias devuelve listado vacío
+  Scenario: Fallar al consultar detalle de pedido inexistente
     Given que el solicitante tiene rol admin
-    And no existen pedidos con el estado solicitado
-    When solicita listar pedidos con filtro
-    Then el sistema devuelve un listado vacío
-    # trazabilidad: "filtro por estado"
+    And no existe el pedido solicitado
+    When solicita ver el detalle
+    Then el sistema indica que el pedido no existe
+    # trazabilidad: "ver detalle"
 ```
