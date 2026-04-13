@@ -1,85 +1,84 @@
 # Kiwi TCMS
 
-Total publicados: 5
+Total publicados: 6
 
 ---
 
 # Kiwi TCMS
 
 ## Resumen
-UC-05
+UC-06
 
 ## Estado de publicacion
 - Kiwi: created
-- ID en Kiwi: 408
+- ID en Kiwi: 409
 - Categoria: 
 
 ## Resumen final en Kiwi
-UC-05
+UC-06
 
 ## Gherkin
 ```gherkin
-Feature: Administración de productos (roles admin)
+Feature: Carrito de compra en el navegador (LocalStorage)
 
   Background:
-    Given el sistema de e-commerce está disponible
+    Given que el visitante usa el frontend estático del sistema
 
-  @direct @rf-09
-  Scenario: Requerir rol admin para operaciones administrativas
-    Given que un usuario intenta realizar una operación administrativa
-      # "Las operaciones administrativas requieren rol admin."
-    When el usuario no tiene rol admin
-    Then el sistema deniega la operación
+  @direct @rf-17
+  Scenario: Gestionar un carrito persistente en el navegador
+    Given que el carrito se gestiona en el navegador
+      # "carrito en el navegador"
+    When el usuario añade o modifica ítems en el carrito
+    Then el estado del carrito se persiste en LocalStorage
+      # "persistencia en LocalStorage"
 
-  @direct @rf-10
-  Scenario: Impedir acceso a operaciones admin a usuarios no admin
-    Given que un usuario autenticado tiene rol distinto de admin
-      # "impedir accesos a endpoints/resolvers admin a usuarios no admin"
-    When intenta acceder a una operación de administración de productos
-    Then el sistema impide el acceso
+  @direct @rf-18
+  Scenario: Mantener el carrito entre sesiones
+    Given que el usuario tiene un carrito persistido en LocalStorage
+      # "mantener entre sesiones"
+    When el usuario cierra y reabre el navegador
+    Then el carrito se carga desde LocalStorage
 
-  @direct @rf-13
-  Scenario: Crear un producto como administrador
-    Given que el usuario tiene rol admin
-      # "Crear producto"
-    When solicita crear un producto con datos válidos
-    Then el sistema crea el producto
+  @direct @rf-19
+  Scenario: Añadir ítems al carrito
+    Given que existe un producto disponible para añadir al carrito
+      # "Añadir"
+    When el usuario añade el producto al carrito
+    Then el carrito incluye el ítem añadido
 
-  @direct @rf-14
-  Scenario: Eliminar un producto como administrador
-    Given que el usuario tiene rol admin
-      # "eliminar producto"
-    And existe un producto en el catálogo
-    When solicita eliminar ese producto
-    Then el sistema elimina el producto
+  @direct @rf-20
+  Scenario: Modificar cantidades de ítems del carrito
+    Given que el carrito contiene un ítem
+      # "modificar cantidades"
+    When el usuario cambia la cantidad del ítem
+    Then el carrito refleja la nueva cantidad
 
-  @direct @rf-15
-  Scenario: Actualizar stock de un producto como administrador
-    Given que el usuario tiene rol admin
-      # "actualizar stock"
-    And existe un producto en el catálogo
-    When solicita actualizar el stock del producto a un valor válido
-    Then el sistema actualiza el stock
+  @direct @rf-21
+  Scenario: Eliminar ítems del carrito
+    Given que el carrito contiene un ítem
+      # "eliminar ítems"
+    When el usuario elimina el ítem del carrito
+    Then el ítem ya no aparece en el carrito
 
-  @direct @rf-16
-  Scenario: Rechazar actualización de stock a un valor negativo
-    Given que el usuario tiene rol admin
-      # "El stock no puede ser negativo."
-    And existe un producto en el catálogo
-    When solicita actualizar el stock a un valor negativo
-    Then el sistema rechaza la actualización de stock
-
-  @derived
-  Scenario: Rechazar crear producto si no es admin
-    Given que el usuario no tiene rol admin
-    When solicita crear un producto
-    Then el sistema rechaza la creación
+  @direct @rf-22
+  Scenario: Calcular subtotal y total del carrito
+    Given que el carrito contiene uno o más ítems
+      # "calcular subtotal/total"
+    When el sistema calcula los importes del carrito
+    Then se obtiene el subtotal
+    And se obtiene el total
 
   @derived
-  Scenario: Rechazar eliminar producto si no es admin
-    Given que el usuario no tiene rol admin
-    When solicita eliminar un producto
-    Then el sistema rechaza la eliminación
+  Scenario: Carrito vacío al iniciar sin datos en LocalStorage
+    Given que no existe un carrito almacenado en LocalStorage
+    When el usuario abre el catálogo
+    Then el carrito aparece vacío
+
+  @derived
+  Scenario: El total del carrito se actualiza al cambiar cantidades
+    Given que el carrito contiene ítems y tiene un total calculado
+    When el usuario modifica la cantidad de un ítem
+    Then el sistema recalcula subtotal y total
 
 ```
 
@@ -339,5 +338,86 @@ Feature: Consulta del catálogo de productos
       # "filtro por categoría"
     When el visitante filtra por una categoría concreta
     Then el sistema devuelve únicamente productos de esa categoría
+
+```
+
+---
+
+# Kiwi TCMS
+
+## Resumen
+UC-05
+
+## Estado de publicacion
+- Kiwi: created
+- ID en Kiwi: 408
+- Categoria: 
+
+## Resumen final en Kiwi
+UC-05
+
+## Gherkin
+```gherkin
+Feature: Administración de productos (roles admin)
+
+  Background:
+    Given el sistema de e-commerce está disponible
+
+  @direct @rf-09
+  Scenario: Requerir rol admin para operaciones administrativas
+    Given que un usuario intenta realizar una operación administrativa
+      # "Las operaciones administrativas requieren rol admin."
+    When el usuario no tiene rol admin
+    Then el sistema deniega la operación
+
+  @direct @rf-10
+  Scenario: Impedir acceso a operaciones admin a usuarios no admin
+    Given que un usuario autenticado tiene rol distinto de admin
+      # "impedir accesos a endpoints/resolvers admin a usuarios no admin"
+    When intenta acceder a una operación de administración de productos
+    Then el sistema impide el acceso
+
+  @direct @rf-13
+  Scenario: Crear un producto como administrador
+    Given que el usuario tiene rol admin
+      # "Crear producto"
+    When solicita crear un producto con datos válidos
+    Then el sistema crea el producto
+
+  @direct @rf-14
+  Scenario: Eliminar un producto como administrador
+    Given que el usuario tiene rol admin
+      # "eliminar producto"
+    And existe un producto en el catálogo
+    When solicita eliminar ese producto
+    Then el sistema elimina el producto
+
+  @direct @rf-15
+  Scenario: Actualizar stock de un producto como administrador
+    Given que el usuario tiene rol admin
+      # "actualizar stock"
+    And existe un producto en el catálogo
+    When solicita actualizar el stock del producto a un valor válido
+    Then el sistema actualiza el stock
+
+  @direct @rf-16
+  Scenario: Rechazar actualización de stock a un valor negativo
+    Given que el usuario tiene rol admin
+      # "El stock no puede ser negativo."
+    And existe un producto en el catálogo
+    When solicita actualizar el stock a un valor negativo
+    Then el sistema rechaza la actualización de stock
+
+  @derived
+  Scenario: Rechazar crear producto si no es admin
+    Given que el usuario no tiene rol admin
+    When solicita crear un producto
+    Then el sistema rechaza la creación
+
+  @derived
+  Scenario: Rechazar eliminar producto si no es admin
+    Given que el usuario no tiene rol admin
+    When solicita eliminar un producto
+    Then el sistema rechaza la eliminación
 
 ```
