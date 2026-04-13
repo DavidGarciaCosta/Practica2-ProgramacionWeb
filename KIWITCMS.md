@@ -1,56 +1,67 @@
 # Kiwi TCMS
 
+Total publicados: 1
+
+---
+
+# Kiwi TCMS
+
 ## Resumen
-UC-20
+UC-01
 
 ## Estado de publicacion
 - Kiwi: created
-- ID en Kiwi: 403
+- ID en Kiwi: 404
 - Categoria: 
 
 ## Resumen final en Kiwi
-UC-20
+UC-01
 
 ## Gherkin
 ```gherkin
-Feature: Chat en tiempo real (Socket.IO)
+Feature: Registro de usuario (JWT)
 
   Background:
-    Given que existe un canal de chat
+    Given el sistema de e-commerce está disponible
 
-  @direct @rf_RF-41
-  Scenario: Usar la sala por defecto 'general'
-    Given que un usuario se conecta al chat
-    When no especifica una sala
-    Then el sistema lo asocia a la sala por defecto 'general'
-    # trazabilidad: "Sala por defecto 'general'"
+  @direct @rf-01
+  Scenario: Registrar un usuario nuevo
+    Given que el usuario proporciona username, email y password
+      # "Entradas username, email, password"
+    When solicita el registro de un usuario
+      # "El sistema permite registrar usuarios"
+    Then el usuario queda registrado
+    And el sistema devuelve el perfil básico del usuario
 
-  @direct @rf_RF-39
-  Scenario: Enviar y recibir mensajes en tiempo real
-    Given que dos usuarios están conectados a la sala 'general'
-    When uno de los usuarios envía un mensaje
-    Then el otro usuario recibe el mensaje en tiempo real
-    # trazabilidad: "Emitir/recibir mensajes en tiempo real"
-
-  @direct @rf_RF-40
-  Scenario: Persistir mensajes en MongoDB
-    Given que un usuario envía un mensaje en el chat
-    When el sistema procesa el mensaje
-    Then el mensaje queda almacenado en la base de datos
-    # trazabilidad: "almacenar mensajes en MongoDB"
+  @direct @rf-02
+  Scenario: Impedir registro con username o email ya existente
+    Given que existe un usuario con el mismo username o el mismo email
+      # "username/email únicos"
+    When se intenta registrar otro usuario con ese username o email
+    Then el sistema rechaza el registro
+    And informa que el username o email debe ser único
 
   @derived
-  Scenario: Manejar desconexión y reconexión sin perder la capacidad de recibir mensajes
-    Given que un usuario está conectado a la sala 'general'
-    When el usuario se desconecta y se reconecta
-    Then el usuario puede volver a enviar y recibir mensajes
-    # trazabilidad: "tiempo real"
+  Scenario: Rechazar registro con datos obligatorios ausentes
+    Given que falta username o falta email o falta password
+      # "Entradas username, email, password"
+    When se intenta registrar el usuario
+    Then el sistema rechaza el registro
+    And informa que faltan datos obligatorios
 
   @derived
-  Scenario: Rechazar mensajes vacíos o inválidos
-    Given que un usuario está conectado al chat
-    When intenta enviar un mensaje vacío o inválido
-    Then el sistema rechaza el mensaje
-    And no lo distribuye a otros usuarios
-    # trazabilidad: "Emitir/recibir mensajes"
+  Scenario: Mantener la unicidad ante registros repetidos (idempotencia práctica)
+    Given que un usuario ya fue registrado con un username y email concretos
+      # "username/email únicos"
+    When se reintenta registrar el mismo username y email
+    Then el sistema rechaza el registro
+    And no crea una segunda cuenta
+
+  @derived
+  Scenario: Asegurar que la respuesta de registro no incluye el password
+    Given que el usuario solicita el registro con credenciales válidas
+    When el sistema responde al registro
+    Then el perfil devuelto no contiene el password
+      # "devuelve perfil sin password." (criterio análogo de perfil)
+
 ```
