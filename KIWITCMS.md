@@ -1,59 +1,52 @@
 # Kiwi TCMS
 
 ## Resumen
-UC-03
+UC-04
 
 ## Estado de publicacion
 - Kiwi: updated
-- ID en Kiwi: 363
+- ID en Kiwi: 364
 - Categoria: 
 
 ## Resumen final en Kiwi
-UC-03
+UC-04
 
 ## Gherkin
 ```gherkin
-Feature: Verificar token (JWT)
-
-  Background:
-    Given el sistema dispone de un endpoint de verificación de token
-
-  @direct @rf_RF-05
-  Scenario: Enviar token en cabecera Authorization Bearer
-    Given que el usuario dispone de un token JWT
-    When solicita la verificación enviando el token en la cabecera Authorization con esquema Bearer
-    Then el sistema procesa la verificación del token
-    # trazabilidad: "Authorization: Bearer <token>"
-
-  @direct @rf_RF-06
-  Scenario: Rechazar verificación con token expirado o inválido
-    Given que el usuario envía un token expirado o inválido
-    When solicita la verificación
-    Then el sistema rechaza la verificación
-    And el resultado indica que el token no es válido
-    # trazabilidad: "valida token expirado/inválido"
-
-  @direct @rf_RF-07
-  Scenario: Devolver perfil sin password al verificar token válido
-    Given que el usuario envía un token válido
-    When solicita la verificación
-    Then el sistema devuelve el perfil del usuario
-    And el perfil no incluye el password
-    # trazabilidad: "perfil sin password"
+Feature: Consultar catálogo de productos
 
   @derived
-  Scenario: Rechazar verificación cuando no se envía token
-    Given que el usuario no envía la cabecera Authorization
-    When solicita la verificación
-    Then el sistema rechaza la solicitud
-    And no devuelve perfil de usuario
-    # trazabilidad: "Authorization: Bearer"
+  Scenario: Listar productos con paginación
+    Given que existen productos en el catálogo
+    When el visitante solicita el listado indicando page y limit
+    Then el sistema devuelve una lista paginada de productos
+    # trazabilidad: "paginación"
 
   @derived
-  Scenario: Aceptar verificación de token válido y coherente con el usuario
-    Given que el usuario envía un token válido emitido por el sistema
-    When solicita la verificación
-    Then el sistema confirma la validez
-    And devuelve datos básicos del usuario
-    # trazabilidad: "devuelve perfil"
+  Scenario: Buscar productos por nombre o descripción
+    Given que existen productos en el catálogo
+    When el visitante solicita el listado aplicando un criterio de búsqueda por nombre o descripción
+    Then el sistema devuelve los productos que coinciden con la búsqueda
+    # trazabilidad: "búsqueda por nombre/descr"
+
+  @derived
+  Scenario: Filtrar productos por categoría
+    Given que existen productos en el catálogo con distintas categorías
+    When el visitante solicita el listado filtrando por categoría
+    Then el sistema devuelve únicamente los productos de esa categoría
+    # trazabilidad: "filtro por categoría"
+
+  @derived
+  Scenario: Combinar paginación, búsqueda y filtro
+    Given que existen productos en el catálogo
+    When el visitante solicita el listado combinando paginación, búsqueda y filtro por categoría
+    Then el sistema devuelve resultados coherentes con todos los criterios
+    # trazabilidad: "paginación, búsqueda y filtro por categoría"
+
+  @derived
+  Scenario: Listado vacío cuando no hay productos que cumplan el criterio
+    Given que no existen productos que coincidan con el criterio solicitado
+    When el visitante solicita el listado
+    Then el sistema devuelve una lista vacía
+    # trazabilidad: "consulta pública del catálogo"
 ```
