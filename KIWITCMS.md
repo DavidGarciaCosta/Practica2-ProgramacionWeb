@@ -1,108 +1,63 @@
 # Kiwi TCMS
 
-Total publicados: 7
+Total publicados: 8
 
 ---
 
 # Kiwi TCMS
 
 ## Resumen
-UC-07
+UC-08
 
 ## Estado de publicacion
 - Kiwi: created
-- ID en Kiwi: 410
+- ID en Kiwi: 411
 - Categoria: 
 
 ## Resumen final en Kiwi
-UC-07
+UC-08
 
 ## Gherkin
 ```gherkin
-Feature: Creación de pedidos (GraphQL)
+Feature: Consulta de pedidos del usuario
 
   Background:
     Given el sistema de e-commerce está disponible
 
-  @direct @rf-23
-  Scenario: Crear un pedido como usuario autenticado
+  @direct @rf-24
+  Scenario: Consultar histórico de pedidos propios
     Given que el usuario está autenticado
-      # "Un usuario autenticado puede crear pedidos"
-    And el usuario dispone de un carrito con ítems
-    When solicita crear un pedido
-    Then el sistema crea el pedido
-
-  @direct @rf-25
-  Scenario: Asignar un estado válido al pedido
-    Given que el usuario está autenticado
-      # "Estados pending, completed, cancelled"
-    And el usuario dispone de un carrito con ítems
-    When solicita crear un pedido
-    Then el pedido queda registrado con un estado soportado por el sistema
-
-  @direct @rf-26
-  Scenario: Impedir crear pedido con carrito vacío
-    Given que el usuario está autenticado
-      # "No se crea un pedido si el carrito está vacío."
-    And el carrito está vacío
-    When solicita crear un pedido
-    Then el sistema rechaza la creación del pedido
-
-  @direct @rf-27
-  Scenario: Fallar si un producto del carrito no existe
-    Given que el usuario está autenticado
-      # "Si un producto no existe..."
-    And el carrito incluye un producto que no existe
-    When solicita crear un pedido
-    Then el sistema rechaza la creación del pedido
-    And informa el motivo del fallo
-
-  @direct @rf-28
-  Scenario: Fallar si no hay stock suficiente
-    Given que el usuario está autenticado
-      # "no hay stock suficiente"
-    And el carrito incluye un producto con stock insuficiente
-    When solicita crear un pedido
-    Then el sistema rechaza la creación del pedido
-    And informa el motivo del fallo
-
-  @direct @rf-29
-  Scenario: Recalcular el total en servidor (no confiar en el cliente)
-    Given que el usuario está autenticado
-      # "El total ... se calcula en servidor"
-    And el cliente propone un total distinto al que corresponde
-    When solicita crear un pedido
-    Then el sistema calcula el total en el servidor
-    And el pedido usa el total calculado por el servidor
-
-  @direct @rf-30
-  Scenario: Descontar stock al crear el pedido
-    Given que el usuario está autenticado
-      # "descontar stock al crear pedido"
-    And el carrito contiene productos con stock suficiente
-    When se crea el pedido
-    Then el sistema reduce el stock de los productos incluidos
-
-  @direct @rf-31
-  Scenario: Vincular el pedido al usuario autenticado
-    Given que el usuario está autenticado
-      # "se vincula el pedido al usuario"
-    When se crea el pedido
-    Then el pedido queda asociado a la cuenta del usuario
+      # "consultar su histórico."
+    When consulta su histórico de pedidos
+    Then el sistema devuelve los pedidos asociados a ese usuario
 
   @derived
-  Scenario: Rechazar creación de pedido cuando el usuario no está autenticado
+  Scenario: No permitir consultar pedidos propios sin autenticación
     Given que el usuario no está autenticado
-    When intenta crear un pedido
+    When intenta consultar su histórico de pedidos
     Then el sistema rechaza la operación
 
   @derived
-  Scenario: Evitar que la creación de pedido deje stock negativo
+  Scenario: El histórico puede estar vacío
     Given que el usuario está autenticado
-    And el carrito contiene un producto con stock igual a la cantidad solicitada
-    When se crea el pedido
-    Then el stock resultante del producto es cero o positivo
-      # "El stock no puede ser negativo."
+    And el usuario no tiene pedidos previos
+    When consulta su histórico de pedidos
+    Then el sistema devuelve una lista vacía
+
+  @derived
+  Scenario: Consultar el detalle de un pedido propio
+    Given que el usuario está autenticado
+    And existe un pedido asociado a ese usuario
+      # "consulta de un pedido (order)"
+    When consulta el detalle de ese pedido
+    Then el sistema devuelve el detalle del pedido
+
+  @derived
+  Scenario: Impedir consultar el detalle de un pedido de otro usuario
+    Given que el usuario está autenticado
+    And existe un pedido asociado a otro usuario
+    When intenta consultar el detalle de ese pedido
+    Then el sistema rechaza la operación
 
 ```
 
@@ -523,5 +478,109 @@ Feature: Carrito de compra en el navegador (LocalStorage)
     Given que el carrito contiene ítems y tiene un total calculado
     When el usuario modifica la cantidad de un ítem
     Then el sistema recalcula subtotal y total
+
+```
+
+---
+
+# Kiwi TCMS
+
+## Resumen
+UC-07
+
+## Estado de publicacion
+- Kiwi: created
+- ID en Kiwi: 410
+- Categoria: 
+
+## Resumen final en Kiwi
+UC-07
+
+## Gherkin
+```gherkin
+Feature: Creación de pedidos (GraphQL)
+
+  Background:
+    Given el sistema de e-commerce está disponible
+
+  @direct @rf-23
+  Scenario: Crear un pedido como usuario autenticado
+    Given que el usuario está autenticado
+      # "Un usuario autenticado puede crear pedidos"
+    And el usuario dispone de un carrito con ítems
+    When solicita crear un pedido
+    Then el sistema crea el pedido
+
+  @direct @rf-25
+  Scenario: Asignar un estado válido al pedido
+    Given que el usuario está autenticado
+      # "Estados pending, completed, cancelled"
+    And el usuario dispone de un carrito con ítems
+    When solicita crear un pedido
+    Then el pedido queda registrado con un estado soportado por el sistema
+
+  @direct @rf-26
+  Scenario: Impedir crear pedido con carrito vacío
+    Given que el usuario está autenticado
+      # "No se crea un pedido si el carrito está vacío."
+    And el carrito está vacío
+    When solicita crear un pedido
+    Then el sistema rechaza la creación del pedido
+
+  @direct @rf-27
+  Scenario: Fallar si un producto del carrito no existe
+    Given que el usuario está autenticado
+      # "Si un producto no existe..."
+    And el carrito incluye un producto que no existe
+    When solicita crear un pedido
+    Then el sistema rechaza la creación del pedido
+    And informa el motivo del fallo
+
+  @direct @rf-28
+  Scenario: Fallar si no hay stock suficiente
+    Given que el usuario está autenticado
+      # "no hay stock suficiente"
+    And el carrito incluye un producto con stock insuficiente
+    When solicita crear un pedido
+    Then el sistema rechaza la creación del pedido
+    And informa el motivo del fallo
+
+  @direct @rf-29
+  Scenario: Recalcular el total en servidor (no confiar en el cliente)
+    Given que el usuario está autenticado
+      # "El total ... se calcula en servidor"
+    And el cliente propone un total distinto al que corresponde
+    When solicita crear un pedido
+    Then el sistema calcula el total en el servidor
+    And el pedido usa el total calculado por el servidor
+
+  @direct @rf-30
+  Scenario: Descontar stock al crear el pedido
+    Given que el usuario está autenticado
+      # "descontar stock al crear pedido"
+    And el carrito contiene productos con stock suficiente
+    When se crea el pedido
+    Then el sistema reduce el stock de los productos incluidos
+
+  @direct @rf-31
+  Scenario: Vincular el pedido al usuario autenticado
+    Given que el usuario está autenticado
+      # "se vincula el pedido al usuario"
+    When se crea el pedido
+    Then el pedido queda asociado a la cuenta del usuario
+
+  @derived
+  Scenario: Rechazar creación de pedido cuando el usuario no está autenticado
+    Given que el usuario no está autenticado
+    When intenta crear un pedido
+    Then el sistema rechaza la operación
+
+  @derived
+  Scenario: Evitar que la creación de pedido deje stock negativo
+    Given que el usuario está autenticado
+    And el carrito contiene un producto con stock igual a la cantidad solicitada
+    When se crea el pedido
+    Then el stock resultante del producto es cero o positivo
+      # "El stock no puede ser negativo."
 
 ```
