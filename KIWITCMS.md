@@ -1,76 +1,87 @@
 # Kiwi TCMS
 
-Total publicados: 9
+Total publicados: 10
 
 ---
 
 # Kiwi TCMS
 
 ## Resumen
-UC-09
+UC-10
 
 ## Estado de publicacion
 - Kiwi: created
-- ID en Kiwi: 412
+- ID en Kiwi: 413
 - Categoria: 
 
 ## Resumen final en Kiwi
-UC-09
+UC-10
 
 ## Gherkin
 ```gherkin
-Feature: Administración de usuarios
+Feature: Administración de pedidos y estadísticas
 
   Background:
     Given el sistema de e-commerce está disponible
 
-  @direct @rf-32
-  Scenario: Listar usuarios como administrador
+  @direct @rf-36
+  Scenario: Listar pedidos con filtro por estado
     Given que el usuario tiene rol admin
-      # "Listar usuarios"
-    When solicita el listado de usuarios
-    Then el sistema devuelve la lista de usuarios
+      # "Listar pedidos (con filtro por estado)"
+    When solicita el listado de pedidos indicando un estado
+    Then el sistema devuelve los pedidos con ese estado
 
-  @direct @rf-33
-  Scenario: Cambiar rol de un usuario (user/admin)
+  @direct @rf-37
+  Scenario: Ver detalle de un pedido
     Given que el usuario tiene rol admin
-      # "cambiar rol (user/admin)"
-    And existe un usuario con rol inicial
-    When el administrador solicita cambiar el rol del usuario
-    Then el sistema actualiza el rol del usuario
+      # "ver detalle"
+    And existe un pedido
+    When solicita el detalle del pedido
+    Then el sistema devuelve el detalle del pedido
 
-  @direct @rf-34
-  Scenario: Eliminar un usuario como administrador
+  @direct @rf-38
+  Scenario: Actualizar estado de un pedido
     Given que el usuario tiene rol admin
-      # "eliminar usuario"
-    And existe un usuario a eliminar
-    When el administrador solicita eliminar el usuario
-    Then el sistema elimina el usuario
+      # "actualizar estado"
+    And existe un pedido
+    When solicita actualizar el estado del pedido a un estado soportado
+    Then el sistema actualiza el estado del pedido
 
-  @direct @rf-35
-  Scenario: Impedir que un admin se elimine a sí mismo
+  @direct @rf-39
+  Scenario: Consultar estadísticas agregadas de pedidos
     Given que el usuario tiene rol admin
-      # "no permitir que un admin se elimine a sí mismo"
-    When el administrador intenta eliminar su propia cuenta
-    Then el sistema rechaza la eliminación
+      # "estadísticas agregadas"
+    When solicita las estadísticas de pedidos
+    Then el sistema devuelve estadísticas agregadas
+
+  @direct @rf-40
+  Scenario: Incluir total, por estado e ingresos en las estadísticas
+    Given que el usuario tiene rol admin
+      # "estadísticas (total, por estado, ingresos)"
+    When solicita las estadísticas de pedidos
+    Then las estadísticas incluyen el total de pedidos
+    And las estadísticas incluyen el desglose por estado
+    And las estadísticas incluyen los ingresos
 
   @derived
-  Scenario: Rechazar listar usuarios si no es admin
+  Scenario: Rechazar acceso a administración de pedidos si no es admin
     Given que el usuario no tiene rol admin
-    When solicita el listado de usuarios
+    When intenta listar pedidos o consultar estadísticas
     Then el sistema rechaza la operación
 
   @derived
-  Scenario: Rechazar cambiar rol si no es admin
-    Given que el usuario no tiene rol admin
-    When intenta cambiar el rol de otro usuario
-    Then el sistema rechaza la operación
+  Scenario: Filtrar pedidos sin resultados
+    Given que el usuario tiene rol admin
+    And no existen pedidos con el estado indicado
+    When solicita el listado filtrado por ese estado
+    Then el sistema devuelve una lista vacía
 
   @derived
-  Scenario: Rechazar eliminar un usuario si no es admin
-    Given que el usuario no tiene rol admin
-    When intenta eliminar un usuario
-    Then el sistema rechaza la operación
+  Scenario: Rechazar actualización de estado a un valor no soportado
+    Given que el usuario tiene rol admin
+    And existe un pedido
+    When solicita actualizar el estado del pedido a un valor no soportado
+    Then el sistema rechaza la actualización
 
 ```
 
@@ -653,6 +664,78 @@ Feature: Consulta de pedidos del usuario
     Given que el usuario está autenticado
     And existe un pedido asociado a otro usuario
     When intenta consultar el detalle de ese pedido
+    Then el sistema rechaza la operación
+
+```
+
+---
+
+# Kiwi TCMS
+
+## Resumen
+UC-09
+
+## Estado de publicacion
+- Kiwi: created
+- ID en Kiwi: 412
+- Categoria: 
+
+## Resumen final en Kiwi
+UC-09
+
+## Gherkin
+```gherkin
+Feature: Administración de usuarios
+
+  Background:
+    Given el sistema de e-commerce está disponible
+
+  @direct @rf-32
+  Scenario: Listar usuarios como administrador
+    Given que el usuario tiene rol admin
+      # "Listar usuarios"
+    When solicita el listado de usuarios
+    Then el sistema devuelve la lista de usuarios
+
+  @direct @rf-33
+  Scenario: Cambiar rol de un usuario (user/admin)
+    Given que el usuario tiene rol admin
+      # "cambiar rol (user/admin)"
+    And existe un usuario con rol inicial
+    When el administrador solicita cambiar el rol del usuario
+    Then el sistema actualiza el rol del usuario
+
+  @direct @rf-34
+  Scenario: Eliminar un usuario como administrador
+    Given que el usuario tiene rol admin
+      # "eliminar usuario"
+    And existe un usuario a eliminar
+    When el administrador solicita eliminar el usuario
+    Then el sistema elimina el usuario
+
+  @direct @rf-35
+  Scenario: Impedir que un admin se elimine a sí mismo
+    Given que el usuario tiene rol admin
+      # "no permitir que un admin se elimine a sí mismo"
+    When el administrador intenta eliminar su propia cuenta
+    Then el sistema rechaza la eliminación
+
+  @derived
+  Scenario: Rechazar listar usuarios si no es admin
+    Given que el usuario no tiene rol admin
+    When solicita el listado de usuarios
+    Then el sistema rechaza la operación
+
+  @derived
+  Scenario: Rechazar cambiar rol si no es admin
+    Given que el usuario no tiene rol admin
+    When intenta cambiar el rol de otro usuario
+    Then el sistema rechaza la operación
+
+  @derived
+  Scenario: Rechazar eliminar un usuario si no es admin
+    Given que el usuario no tiene rol admin
+    When intenta eliminar un usuario
     Then el sistema rechaza la operación
 
 ```
