@@ -1,62 +1,75 @@
 # Kiwi TCMS
 
-Total publicados: 8
+Total publicados: 9
 
 ---
 
 # Kiwi TCMS
 
 ## Resumen
-UC-08
+UC-09
 
 ## Estado de publicacion
 - Kiwi: created
-- ID en Kiwi: 411
+- ID en Kiwi: 412
 - Categoria: 
 
 ## Resumen final en Kiwi
-UC-08
+UC-09
 
 ## Gherkin
 ```gherkin
-Feature: Consulta de pedidos del usuario
+Feature: Administración de usuarios
 
   Background:
     Given el sistema de e-commerce está disponible
 
-  @direct @rf-24
-  Scenario: Consultar histórico de pedidos propios
-    Given que el usuario está autenticado
-      # "consultar su histórico."
-    When consulta su histórico de pedidos
-    Then el sistema devuelve los pedidos asociados a ese usuario
+  @direct @rf-32
+  Scenario: Listar usuarios como administrador
+    Given que el usuario tiene rol admin
+      # "Listar usuarios"
+    When solicita el listado de usuarios
+    Then el sistema devuelve la lista de usuarios
+
+  @direct @rf-33
+  Scenario: Cambiar rol de un usuario (user/admin)
+    Given que el usuario tiene rol admin
+      # "cambiar rol (user/admin)"
+    And existe un usuario con rol inicial
+    When el administrador solicita cambiar el rol del usuario
+    Then el sistema actualiza el rol del usuario
+
+  @direct @rf-34
+  Scenario: Eliminar un usuario como administrador
+    Given que el usuario tiene rol admin
+      # "eliminar usuario"
+    And existe un usuario a eliminar
+    When el administrador solicita eliminar el usuario
+    Then el sistema elimina el usuario
+
+  @direct @rf-35
+  Scenario: Impedir que un admin se elimine a sí mismo
+    Given que el usuario tiene rol admin
+      # "no permitir que un admin se elimine a sí mismo"
+    When el administrador intenta eliminar su propia cuenta
+    Then el sistema rechaza la eliminación
 
   @derived
-  Scenario: No permitir consultar pedidos propios sin autenticación
-    Given que el usuario no está autenticado
-    When intenta consultar su histórico de pedidos
+  Scenario: Rechazar listar usuarios si no es admin
+    Given que el usuario no tiene rol admin
+    When solicita el listado de usuarios
     Then el sistema rechaza la operación
 
   @derived
-  Scenario: El histórico puede estar vacío
-    Given que el usuario está autenticado
-    And el usuario no tiene pedidos previos
-    When consulta su histórico de pedidos
-    Then el sistema devuelve una lista vacía
+  Scenario: Rechazar cambiar rol si no es admin
+    Given que el usuario no tiene rol admin
+    When intenta cambiar el rol de otro usuario
+    Then el sistema rechaza la operación
 
   @derived
-  Scenario: Consultar el detalle de un pedido propio
-    Given que el usuario está autenticado
-    And existe un pedido asociado a ese usuario
-      # "consulta de un pedido (order)"
-    When consulta el detalle de ese pedido
-    Then el sistema devuelve el detalle del pedido
-
-  @derived
-  Scenario: Impedir consultar el detalle de un pedido de otro usuario
-    Given que el usuario está autenticado
-    And existe un pedido asociado a otro usuario
-    When intenta consultar el detalle de ese pedido
+  Scenario: Rechazar eliminar un usuario si no es admin
+    Given que el usuario no tiene rol admin
+    When intenta eliminar un usuario
     Then el sistema rechaza la operación
 
 ```
@@ -582,5 +595,64 @@ Feature: Creación de pedidos (GraphQL)
     When se crea el pedido
     Then el stock resultante del producto es cero o positivo
       # "El stock no puede ser negativo."
+
+```
+
+---
+
+# Kiwi TCMS
+
+## Resumen
+UC-08
+
+## Estado de publicacion
+- Kiwi: created
+- ID en Kiwi: 411
+- Categoria: 
+
+## Resumen final en Kiwi
+UC-08
+
+## Gherkin
+```gherkin
+Feature: Consulta de pedidos del usuario
+
+  Background:
+    Given el sistema de e-commerce está disponible
+
+  @direct @rf-24
+  Scenario: Consultar histórico de pedidos propios
+    Given que el usuario está autenticado
+      # "consultar su histórico."
+    When consulta su histórico de pedidos
+    Then el sistema devuelve los pedidos asociados a ese usuario
+
+  @derived
+  Scenario: No permitir consultar pedidos propios sin autenticación
+    Given que el usuario no está autenticado
+    When intenta consultar su histórico de pedidos
+    Then el sistema rechaza la operación
+
+  @derived
+  Scenario: El histórico puede estar vacío
+    Given que el usuario está autenticado
+    And el usuario no tiene pedidos previos
+    When consulta su histórico de pedidos
+    Then el sistema devuelve una lista vacía
+
+  @derived
+  Scenario: Consultar el detalle de un pedido propio
+    Given que el usuario está autenticado
+    And existe un pedido asociado a ese usuario
+      # "consulta de un pedido (order)"
+    When consulta el detalle de ese pedido
+    Then el sistema devuelve el detalle del pedido
+
+  @derived
+  Scenario: Impedir consultar el detalle de un pedido de otro usuario
+    Given que el usuario está autenticado
+    And existe un pedido asociado a otro usuario
+    When intenta consultar el detalle de ese pedido
+    Then el sistema rechaza la operación
 
 ```
