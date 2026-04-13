@@ -1,52 +1,50 @@
 # Kiwi TCMS
 
 ## Resumen
-UC-14
+UC-15
 
 ## Estado de publicacion
 - Kiwi: created
-- ID en Kiwi: 397
+- ID en Kiwi: 398
 - Categoria: 
 
 ## Resumen final en Kiwi
-UC-14
+UC-15
 
 ## Gherkin
 ```gherkin
-Feature: Eliminar usuario (admin)
+Feature: Listar pedidos con filtro por estado (admin)
 
   Background:
     Given que el sistema aplica autorización por roles (user/admin)
 
-  @direct @rf_RF-32
-  Scenario: Eliminar un usuario como admin
+  @direct @rf_RF-34
+  Scenario: Listar pedidos filtrando por estado
     Given que el solicitante tiene rol admin
-    And existe un usuario objetivo
-    When solicita eliminar el usuario
-    Then el sistema elimina el usuario
-    # trazabilidad: "eliminar usuario"
-
-  @direct @rf_RF-33
-  Scenario: Impedir que un admin se elimine a sí mismo
-    Given que el solicitante tiene rol admin
-    And el usuario objetivo es el propio solicitante
-    When solicita eliminar su propia cuenta
-    Then el sistema rechaza la operación
-    And la cuenta del administrador permanece activa
-    # trazabilidad: "no permitir que un admin se elimine a sí mismo"
+    And existen pedidos con distintos estados
+    When solicita listar pedidos aplicando un filtro por estado
+    Then el sistema devuelve los pedidos que coinciden con el estado solicitado
+    # trazabilidad: "filtro por estado"
 
   @derived
-  Scenario: Denegar eliminación de usuario a no admin
+  Scenario: Listar pedidos sin filtro devuelve todos los pedidos
+    Given que el solicitante tiene rol admin
+    When solicita listar pedidos sin indicar filtro
+    Then el sistema devuelve el listado completo de pedidos
+    # trazabilidad: "Listar pedidos"
+
+  @derived
+  Scenario: Denegar listado de pedidos a usuario no admin
     Given que el solicitante no tiene rol admin
-    When intenta eliminar un usuario
-    Then el sistema deniega la operación
+    When solicita listar pedidos
+    Then el sistema deniega el acceso
     # trazabilidad: "requieren rol admin"
 
   @derived
-  Scenario: Fallar al eliminar usuario inexistente
+  Scenario: Filtro por estado sin coincidencias devuelve listado vacío
     Given que el solicitante tiene rol admin
-    And no existe el usuario objetivo
-    When solicita eliminarlo
-    Then el sistema indica que el usuario no existe
-    # trazabilidad: "eliminar usuario"
+    And no existen pedidos con el estado solicitado
+    When solicita listar pedidos con filtro
+    Then el sistema devuelve un listado vacío
+    # trazabilidad: "filtro por estado"
 ```
