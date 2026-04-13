@@ -1,6 +1,6 @@
 # Kiwi TCMS
 
-Total publicados: 6
+Total publicados: 7
 
 ## Indice
 1. [UC-01](#uc-01) - Sin proyecto - reviewed
@@ -9,6 +9,7 @@ Total publicados: 6
 4. [UC-04](#uc-04) - Sin proyecto - reviewed
 5. [UC-05](#uc-05) - Sin proyecto - reviewed
 6. [UC-06](#uc-06) - Sin proyecto - reviewed
+7. [UC-07](#uc-07) - Sin proyecto - reviewed
 
 ---
 
@@ -420,5 +421,102 @@ Feature: Carrito de compra en el navegador (LocalStorage)
     Given el carrito permite modificar cantidades (trazabilidad: "modificar cantidades")
     When el usuario intenta establecer una cantidad no válida
     Then el carrito no aplica una cantidad inválida (trazabilidad: "modificar")
+
+```
+
+---
+
+## UC-07
+
+### Metadatos
+- Proyecto asociado: Sin proyecto
+- Kiwi: updated
+- ID en Kiwi: 410
+- Categoria: Sin categoria
+- Madurez: reviewed
+- Escenarios: 12
+- Directos: 11
+- Derivados: 1
+
+### Resumen final en Kiwi
+UC-07
+
+### Gherkin
+```gherkin
+Feature: Creación de pedidos (GraphQL createOrder)
+
+  Background:
+    Given existe la mutación GraphQL "createOrder" para crear pedidos (trazabilidad: "Mutation createOrder")
+    And los pedidos manejan estados "pending", "completed" y "cancelled" (trazabilidad: "Estados pending, completed, cancelled")
+
+  @direct @RF-30
+  Scenario: Crear pedido como usuario autenticado
+    Given el usuario está autenticado (trazabilidad: "usuario autenticado")
+    When el usuario solicita crear un pedido
+    Then el sistema permite la creación del pedido (trazabilidad: "puede crear pedidos")
+
+  @direct @RF-32
+  Scenario: Disponibilidad de mutación createOrder
+    When un cliente consume la API GraphQL de pedidos
+    Then está disponible la mutación "createOrder" (trazabilidad: "Mutation createOrder")
+
+  @direct @RF-34
+  Scenario: El pedido se crea con un estado válido
+    When se crea un pedido
+    Then el pedido queda en uno de los estados soportados (trazabilidad: "pending, completed, cancelled")
+
+  @direct @RF-35
+  Scenario: Validar stock al crear pedido
+    Given el pedido se compone de productos del catálogo (trazabilidad: "Validar stock")
+    When el usuario intenta crear el pedido
+    Then el sistema valida que exista stock suficiente para cada producto (trazabilidad: "Validar stock")
+
+  @direct @RF-36
+  Scenario: Validar precio al crear pedido
+    Given el usuario envía su carrito para crear el pedido (trazabilidad: "validar precio")
+    When se procesa la creación
+    Then el sistema valida el precio con el catálogo vigente (trazabilidad: "validar precio")
+
+  @direct @RF-37
+  Scenario: Recalcular total en servidor al crear pedido
+    Given el total no debe confiarse al cliente (trazabilidad: "no se confía en el cliente")
+    When el usuario solicita crear el pedido
+    Then el sistema recalcula el total en el servidor (trazabilidad: "recalcular total en servidor")
+
+  @direct @RF-38
+  Scenario: Descontar stock al crear pedido
+    Given existe stock disponible para los productos
+    When se crea el pedido
+    Then el sistema descuenta el stock correspondiente (trazabilidad: "descontar stock")
+
+  @direct @RF-39
+  Scenario: No permitir crear pedido con carrito vacío
+    Given el carrito del usuario está vacío (trazabilidad: "carrito está vacío")
+    When el usuario intenta crear un pedido
+    Then el sistema no crea el pedido (trazabilidad: "No se crea un pedido")
+
+  @direct @RF-40
+  Scenario: Fallar pedido por producto inexistente o stock insuficiente
+    Given el pedido incluye un producto inexistente o con stock insuficiente (trazabilidad: "no existe o no hay stock suficiente")
+    When el usuario intenta crear el pedido
+    Then el pedido falla con un mensaje informativo (trazabilidad: "falla con mensaje informativo")
+
+  @direct @RF-41
+  Scenario: Ignorar manipulación del total por el cliente
+    Given el cliente puede enviar un total manipulado (trazabilidad: "no se confía en el cliente")
+    When el usuario intenta crear el pedido
+    Then el total final se calcula en servidor y no usa el total del cliente (trazabilidad: "se calcula en servidor")
+
+  @direct @RF-42
+  Scenario: Vincular pedido al usuario y reducir stock
+    Given el usuario está autenticado (trazabilidad: "vincula el pedido al usuario")
+    When el usuario crea el pedido
+    Then el sistema vincula el pedido al usuario y reduce el stock (trazabilidad: "stock ... se reduce y se vincula")
+
+  @derived
+  Scenario: Crear pedido falla si el usuario no está autenticado
+    Given crear pedidos es para usuario autenticado (trazabilidad: "usuario autenticado")
+    When un visitante intenta crear un pedido
+    Then el sistema deniega la creación del pedido (trazabilidad: "puede crear pedidos")
 
 ```
