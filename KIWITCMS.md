@@ -1,6 +1,6 @@
 # Kiwi TCMS
 
-Total publicados: 7
+Total publicados: 8
 
 ## Indice
 1. [UC-01](#uc-01) - Sin proyecto - reviewed
@@ -10,6 +10,7 @@ Total publicados: 7
 5. [UC-05](#uc-05) - Sin proyecto - reviewed
 6. [UC-06](#uc-06) - Sin proyecto - reviewed
 7. [UC-07](#uc-07) - Sin proyecto - reviewed
+8. [UC-08](#uc-08) - Sin proyecto - reviewed
 
 ---
 
@@ -518,5 +519,60 @@ Feature: Creación de pedidos (GraphQL createOrder)
     Given crear pedidos es para usuario autenticado (trazabilidad: "usuario autenticado")
     When un visitante intenta crear un pedido
     Then el sistema deniega la creación del pedido (trazabilidad: "puede crear pedidos")
+
+```
+
+---
+
+## UC-08
+
+### Metadatos
+- Proyecto asociado: Sin proyecto
+- Kiwi: updated
+- ID en Kiwi: 411
+- Categoria: Sin categoria
+- Madurez: reviewed
+- Escenarios: 5
+- Directos: 2
+- Derivados: 3
+
+### Resumen final en Kiwi
+UC-08
+
+### Gherkin
+```gherkin
+Feature: Consulta de pedidos del usuario (histórico)
+
+  Background:
+    Given la API GraphQL incluye las queries "myOrders" y "order" (trazabilidad: "Queries myOrders, order")
+
+  @direct @RF-31
+  Scenario: Consultar histórico de pedidos como usuario autenticado
+    Given el usuario está autenticado (trazabilidad: "usuario autenticado")
+    When consulta su histórico de pedidos
+    Then el sistema devuelve sus pedidos (trazabilidad: "consultar su histórico")
+
+  @direct @RF-33
+  Scenario: Disponibilidad de queries myOrders y order
+    When un cliente consume la API GraphQL de consulta de pedidos
+    Then están disponibles "myOrders" y "order" (trazabilidad: "Queries myOrders, order")
+
+  @derived
+  Scenario: myOrders solo devuelve pedidos del propio usuario
+    Given el usuario consulta "myOrders" (trazabilidad: "myOrders")
+    When el sistema devuelve el listado
+    Then los pedidos devueltos pertenecen al usuario autenticado (trazabilidad: "su histórico")
+
+  @derived
+  Scenario: Consultar pedidos sin autenticación
+    Given consultar histórico es para usuario autenticado (trazabilidad: "usuario autenticado")
+    When un visitante intenta consultar "myOrders"
+    Then el sistema deniega el acceso o no devuelve pedidos (trazabilidad: "consultar su histórico")
+
+  @derived
+  Scenario: Consultar detalle de pedido inexistente
+    Given existe la query "order" (trazabilidad: "order")
+    When el usuario consulta un pedido que no existe
+    Then el sistema informa que no hay resultados (trazabilidad: "order")
 
 ```
