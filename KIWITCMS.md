@@ -1,6 +1,6 @@
 # Kiwi TCMS
 
-Total publicados: 8
+Total publicados: 9
 
 ## Indice
 1. [UC-01](#uc-01) - Sin proyecto - reviewed
@@ -11,6 +11,7 @@ Total publicados: 8
 6. [UC-06](#uc-06) - Sin proyecto - reviewed
 7. [UC-07](#uc-07) - Sin proyecto - reviewed
 8. [UC-08](#uc-08) - Sin proyecto - reviewed
+9. [UC-09](#uc-09) - Sin proyecto - reviewed
 
 ---
 
@@ -574,5 +575,78 @@ Feature: Consulta de pedidos del usuario (histórico)
     Given existe la query "order" (trazabilidad: "order")
     When el usuario consulta un pedido que no existe
     Then el sistema informa que no hay resultados (trazabilidad: "order")
+
+```
+
+---
+
+## UC-09
+
+### Metadatos
+- Proyecto asociado: Sin proyecto
+- Kiwi: updated
+- ID en Kiwi: 412
+- Categoria: Sin categoria
+- Madurez: reviewed
+- Escenarios: 8
+- Directos: 6
+- Derivados: 2
+
+### Resumen final en Kiwi
+UC-09
+
+### Gherkin
+```gherkin
+Feature: Administración de usuarios
+
+  Background:
+    Given el administrador gestiona usuarios registrados (trazabilidad: "Operaciones Listar usuarios, cambiar rol, eliminar usuario")
+    And el sistema no permite que un admin se elimine a sí mismo (trazabilidad: "no permitir que un admin se elimine a sí mismo")
+
+  @direct @RF-43
+  Scenario: Listar usuarios como administrador
+    Given un usuario con rol admin (trazabilidad: "Administrador")
+    When consulta el listado de usuarios (trazabilidad: "Listar usuarios")
+    Then el sistema devuelve los usuarios registrados (trazabilidad: "gestiona usuarios registrados")
+
+  @direct @RF-44
+  Scenario: Cambiar el rol de un usuario
+    Given un usuario con rol admin (trazabilidad: "cambiar rol")
+    When ejecuta el cambio de rol de un usuario a "user" o "admin" (trazabilidad: "(user/admin)")
+    Then el sistema actualiza el rol del usuario (trazabilidad: "cambiar rol")
+
+  @direct @RF-45
+  Scenario: Eliminar un usuario
+    Given un usuario con rol admin (trazabilidad: "eliminar usuario")
+    When solicita eliminar un usuario
+    Then el sistema elimina el usuario indicado (trazabilidad: "eliminar usuario")
+
+  @direct @RF-46
+  Scenario: Impedir auto-eliminación de administrador
+    Given un administrador autenticado (trazabilidad: "admin")
+    When intenta eliminar su propia cuenta
+    Then el sistema impide la auto-eliminación (trazabilidad: "no permitir")
+
+  @direct @RF-47
+  Scenario: Disponibilidad de query users
+    When un cliente consume la API GraphQL de administración de usuarios
+    Then está disponible la query "users" (trazabilidad: "Query users")
+
+  @direct @RF-48
+  Scenario: Disponibilidad de mutaciones updateUserRole y deleteUser
+    When un cliente consume la API GraphQL de administración de usuarios
+    Then están disponibles las mutaciones "updateUserRole" y "deleteUser" (trazabilidad: "Mutations updateUserRole, deleteUser")
+
+  @derived
+  Scenario: Usuario no-admin no puede listar usuarios
+    Given las operaciones administrativas requieren rol admin (trazabilidad: "requieren rol admin")
+    When un usuario no-admin intenta ejecutar la operación de listar usuarios
+    Then el sistema deniega el acceso (trazabilidad: "impedir accesos")
+
+  @derived
+  Scenario: Intentar eliminar un usuario inexistente
+    Given el sistema permite eliminar usuarios (trazabilidad: "eliminar usuario")
+    When un admin intenta eliminar un usuario que no existe
+    Then el sistema informa que el usuario no se encuentra (trazabilidad: "deleteUser")
 
 ```
