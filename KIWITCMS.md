@@ -1,57 +1,71 @@
 # Kiwi TCMS
 
-Total publicados: 3
+Total publicados: 4
 
 ---
 
 # Kiwi TCMS
 
 ## Resumen
-UC-03
+UC-04
 
 ## Estado de publicacion
 - Kiwi: created
-- ID en Kiwi: 406
+- ID en Kiwi: 407
 - Categoria: 
 
 ## Resumen final en Kiwi
-UC-03
+UC-04
 
 ## Gherkin
 ```gherkin
-Feature: Verificación de token JWT
+Feature: Consulta del catálogo de productos
 
   Background:
     Given el sistema de e-commerce está disponible
 
-  @direct @rf-07
-  Scenario: Detectar token inválido o expirado
-    Given que el usuario presenta un token JWT inválido o expirado
-      # "valida token expirado/inválido"
-    When solicita la verificación del token
-    Then el sistema rechaza la verificación del token
+  @direct @rf-11
+  Scenario: Listar productos con paginación, búsqueda y filtro por categoría
+    Given que existen productos en el catálogo
+      # "Listar productos con paginación, búsqueda y filtro por categoría"
+    When el visitante consulta el listado de productos indicando parámetros de paginación
+    And opcionalmente indica un texto de búsqueda
+    And opcionalmente indica una categoría
+    Then el sistema devuelve una lista de productos acorde a los criterios
 
-  @direct @rf-08
-  Scenario: Devolver perfil sin password con token válido
-    Given que el usuario presenta un token JWT válido
-    When solicita la verificación del token
-      # "/api/auth/verify" y "devuelve perfil sin password."
-    Then el sistema valida el token
-    And devuelve el perfil del usuario
-    And el perfil devuelto no contiene el password
-
-  @derived
-  Scenario: Rechazar verificación cuando no se envía token
-    Given que el usuario no envía ningún token
-    When solicita la verificación del token
-    Then el sistema rechaza la solicitud de verificación
+  @direct @rf-12
+  Scenario: Consultar el detalle de un producto
+    Given que existe un producto en el catálogo
+      # "ver detalle de producto."
+    When el visitante consulta el detalle de ese producto
+    Then el sistema devuelve la información del producto
 
   @derived
-  Scenario: Aceptar token enviado con el esquema Bearer
-    Given que el usuario envía un token JWT en la cabecera Authorization usando el esquema Bearer
-      # "Authorization: Bearer <token>."
-    When solicita la verificación del token
-    Then el sistema procesa el token proporcionado
+  Scenario: Devolver lista vacía cuando no hay productos que coincidan
+    Given que no existen productos que coincidan con el texto de búsqueda o la categoría indicada
+    When el visitante consulta el listado de productos
+    Then el sistema devuelve una lista vacía
+
+  @derived
+  Scenario: Respetar límites de paginación al listar productos
+    Given que existen más productos que los que caben en una página
+      # "paginación"
+    When el visitante consulta el listado con un límite de elementos por página
+    Then el sistema devuelve como máximo esa cantidad de productos
+
+  @derived
+  Scenario: Búsqueda por nombre o descripción
+    Given que existen productos con un término presente en el nombre o la descripción
+      # "búsqueda por nombre/descr"
+    When el visitante busca por ese término
+    Then el sistema devuelve los productos que coinciden por nombre o descripción
+
+  @derived
+  Scenario: Filtrar productos por categoría
+    Given que existen productos de varias categorías
+      # "filtro por categoría"
+    When el visitante filtra por una categoría concreta
+    Then el sistema devuelve únicamente productos de esa categoría
 
 ```
 
@@ -191,5 +205,58 @@ Feature: Autenticación de usuario (login) con JWT
       # "Salidas JWT + perfil básico del usuario"
     When el sistema devuelve el perfil básico del usuario
     Then el perfil no incluye el password
+
+```
+
+---
+
+# Kiwi TCMS
+
+## Resumen
+UC-03
+
+## Estado de publicacion
+- Kiwi: created
+- ID en Kiwi: 406
+- Categoria: 
+
+## Resumen final en Kiwi
+UC-03
+
+## Gherkin
+```gherkin
+Feature: Verificación de token JWT
+
+  Background:
+    Given el sistema de e-commerce está disponible
+
+  @direct @rf-07
+  Scenario: Detectar token inválido o expirado
+    Given que el usuario presenta un token JWT inválido o expirado
+      # "valida token expirado/inválido"
+    When solicita la verificación del token
+    Then el sistema rechaza la verificación del token
+
+  @direct @rf-08
+  Scenario: Devolver perfil sin password con token válido
+    Given que el usuario presenta un token JWT válido
+    When solicita la verificación del token
+      # "/api/auth/verify" y "devuelve perfil sin password."
+    Then el sistema valida el token
+    And devuelve el perfil del usuario
+    And el perfil devuelto no contiene el password
+
+  @derived
+  Scenario: Rechazar verificación cuando no se envía token
+    Given que el usuario no envía ningún token
+    When solicita la verificación del token
+    Then el sistema rechaza la solicitud de verificación
+
+  @derived
+  Scenario: Aceptar token enviado con el esquema Bearer
+    Given que el usuario envía un token JWT en la cabecera Authorization usando el esquema Bearer
+      # "Authorization: Bearer <token>."
+    When solicita la verificación del token
+    Then el sistema procesa el token proporcionado
 
 ```
