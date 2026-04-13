@@ -1,87 +1,64 @@
 # Kiwi TCMS
 
-Total publicados: 10
+Total publicados: 11
 
 ---
 
 # Kiwi TCMS
 
 ## Resumen
-UC-10
+UC-11
 
 ## Estado de publicacion
 - Kiwi: created
-- ID en Kiwi: 413
+- ID en Kiwi: 414
 - Categoria: 
 
 ## Resumen final en Kiwi
-UC-10
+UC-11
 
 ## Gherkin
 ```gherkin
-Feature: Administración de pedidos y estadísticas
+Feature: Chat en tiempo real (Socket.IO)
 
   Background:
-    Given el sistema de e-commerce está disponible
+    Given el sistema de chat en tiempo real está disponible
 
-  @direct @rf-36
-  Scenario: Listar pedidos con filtro por estado
-    Given que el usuario tiene rol admin
-      # "Listar pedidos (con filtro por estado)"
-    When solicita el listado de pedidos indicando un estado
-    Then el sistema devuelve los pedidos con ese estado
+  @direct @rf-41
+  Scenario: Emitir mensajes en tiempo real
+    Given que el usuario está conectado al chat
+      # "Emitir... mensajes en tiempo real"
+    When el usuario envía un mensaje al chat
+    Then el sistema emite el mensaje en tiempo real
 
-  @direct @rf-37
-  Scenario: Ver detalle de un pedido
-    Given que el usuario tiene rol admin
-      # "ver detalle"
-    And existe un pedido
-    When solicita el detalle del pedido
-    Then el sistema devuelve el detalle del pedido
+  @direct @rf-42
+  Scenario: Recibir mensajes en tiempo real
+    Given que hay al menos dos usuarios conectados al chat
+      # "recibir mensajes en tiempo real"
+    When un usuario envía un mensaje
+    Then los demás usuarios reciben el mensaje en tiempo real
 
-  @direct @rf-38
-  Scenario: Actualizar estado de un pedido
-    Given que el usuario tiene rol admin
-      # "actualizar estado"
-    And existe un pedido
-    When solicita actualizar el estado del pedido a un estado soportado
-    Then el sistema actualiza el estado del pedido
-
-  @direct @rf-39
-  Scenario: Consultar estadísticas agregadas de pedidos
-    Given que el usuario tiene rol admin
-      # "estadísticas agregadas"
-    When solicita las estadísticas de pedidos
-    Then el sistema devuelve estadísticas agregadas
-
-  @direct @rf-40
-  Scenario: Incluir total, por estado e ingresos en las estadísticas
-    Given que el usuario tiene rol admin
-      # "estadísticas (total, por estado, ingresos)"
-    When solicita las estadísticas de pedidos
-    Then las estadísticas incluyen el total de pedidos
-    And las estadísticas incluyen el desglose por estado
-    And las estadísticas incluyen los ingresos
+  @direct @rf-43
+  Scenario: Persistir mensajes del chat en MongoDB
+    Given que el sistema tiene persistencia de mensajes habilitada
+      # "almacenar mensajes en MongoDB (Message)."
+    When se envía un mensaje
+    Then el sistema almacena el mensaje en la base de datos
 
   @derived
-  Scenario: Rechazar acceso a administración de pedidos si no es admin
-    Given que el usuario no tiene rol admin
-    When intenta listar pedidos o consultar estadísticas
-    Then el sistema rechaza la operación
+  Scenario: Operar en la sala por defecto 'general'
+    Given que el usuario se conecta al chat
+      # "Sala por defecto 'general'"
+    When el usuario entra al chat sin indicar sala
+    Then el sistema lo conecta a la sala por defecto
 
   @derived
-  Scenario: Filtrar pedidos sin resultados
-    Given que el usuario tiene rol admin
-    And no existen pedidos con el estado indicado
-    When solicita el listado filtrado por ese estado
-    Then el sistema devuelve una lista vacía
-
-  @derived
-  Scenario: Rechazar actualización de estado a un valor no soportado
-    Given que el usuario tiene rol admin
-    And existe un pedido
-    When solicita actualizar el estado del pedido a un valor no soportado
-    Then el sistema rechaza la actualización
+  Scenario: Enviar y recibir mensajes sin persistencia (si se configura como opcional)
+    Given que la persistencia de mensajes está deshabilitada
+      # "persistencia opcional de mensajes"
+    When un usuario envía un mensaje al chat
+    Then el sistema entrega el mensaje en tiempo real
+    And el sistema no almacena el mensaje
 
 ```
 
@@ -737,5 +714,88 @@ Feature: Administración de usuarios
     Given que el usuario no tiene rol admin
     When intenta eliminar un usuario
     Then el sistema rechaza la operación
+
+```
+
+---
+
+# Kiwi TCMS
+
+## Resumen
+UC-10
+
+## Estado de publicacion
+- Kiwi: created
+- ID en Kiwi: 413
+- Categoria: 
+
+## Resumen final en Kiwi
+UC-10
+
+## Gherkin
+```gherkin
+Feature: Administración de pedidos y estadísticas
+
+  Background:
+    Given el sistema de e-commerce está disponible
+
+  @direct @rf-36
+  Scenario: Listar pedidos con filtro por estado
+    Given que el usuario tiene rol admin
+      # "Listar pedidos (con filtro por estado)"
+    When solicita el listado de pedidos indicando un estado
+    Then el sistema devuelve los pedidos con ese estado
+
+  @direct @rf-37
+  Scenario: Ver detalle de un pedido
+    Given que el usuario tiene rol admin
+      # "ver detalle"
+    And existe un pedido
+    When solicita el detalle del pedido
+    Then el sistema devuelve el detalle del pedido
+
+  @direct @rf-38
+  Scenario: Actualizar estado de un pedido
+    Given que el usuario tiene rol admin
+      # "actualizar estado"
+    And existe un pedido
+    When solicita actualizar el estado del pedido a un estado soportado
+    Then el sistema actualiza el estado del pedido
+
+  @direct @rf-39
+  Scenario: Consultar estadísticas agregadas de pedidos
+    Given que el usuario tiene rol admin
+      # "estadísticas agregadas"
+    When solicita las estadísticas de pedidos
+    Then el sistema devuelve estadísticas agregadas
+
+  @direct @rf-40
+  Scenario: Incluir total, por estado e ingresos en las estadísticas
+    Given que el usuario tiene rol admin
+      # "estadísticas (total, por estado, ingresos)"
+    When solicita las estadísticas de pedidos
+    Then las estadísticas incluyen el total de pedidos
+    And las estadísticas incluyen el desglose por estado
+    And las estadísticas incluyen los ingresos
+
+  @derived
+  Scenario: Rechazar acceso a administración de pedidos si no es admin
+    Given que el usuario no tiene rol admin
+    When intenta listar pedidos o consultar estadísticas
+    Then el sistema rechaza la operación
+
+  @derived
+  Scenario: Filtrar pedidos sin resultados
+    Given que el usuario tiene rol admin
+    And no existen pedidos con el estado indicado
+    When solicita el listado filtrado por ese estado
+    Then el sistema devuelve una lista vacía
+
+  @derived
+  Scenario: Rechazar actualización de estado a un valor no soportado
+    Given que el usuario tiene rol admin
+    And existe un pedido
+    When solicita actualizar el estado del pedido a un valor no soportado
+    Then el sistema rechaza la actualización
 
 ```
