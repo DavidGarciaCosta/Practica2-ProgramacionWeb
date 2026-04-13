@@ -1,60 +1,59 @@
 # Kiwi TCMS
 
 ## Resumen
-UC-02
+UC-03
 
 ## Estado de publicacion
 - Kiwi: updated
-- ID en Kiwi: 362
+- ID en Kiwi: 363
 - Categoria: 
 
 ## Resumen final en Kiwi
-UC-02
+UC-03
 
 ## Gherkin
 ```gherkin
-Feature: Login de usuario (JWT)
+Feature: Verificar token (JWT)
 
   Background:
-    Given existe un usuario registrado con credenciales válidas
+    Given el sistema dispone de un endpoint de verificación de token
 
-  @direct @rf_RF-03
-  Scenario: Autenticar usuario con JWT
-    Given que el usuario proporciona sus credenciales de acceso
-    When solicita autenticación
-    Then el sistema autentica al usuario
-    And emite un token JWT
-    # trazabilidad: "autenticarlos mediante tokens JWT"
+  @direct @rf_RF-05
+  Scenario: Enviar token en cabecera Authorization Bearer
+    Given que el usuario dispone de un token JWT
+    When solicita la verificación enviando el token en la cabecera Authorization con esquema Bearer
+    Then el sistema procesa la verificación del token
+    # trazabilidad: "Authorization: Bearer <token>"
 
-  @direct @rf_RF-04
-  Scenario: Devolver token con id y role del usuario
-    Given que el usuario proporciona credenciales correctas
-    When solicita autenticación
-    Then el sistema devuelve un token válido
-    And el token contiene el identificador y el rol del usuario
-    # trazabilidad: "token válido con id y role"
+  @direct @rf_RF-06
+  Scenario: Rechazar verificación con token expirado o inválido
+    Given que el usuario envía un token expirado o inválido
+    When solicita la verificación
+    Then el sistema rechaza la verificación
+    And el resultado indica que el token no es válido
+    # trazabilidad: "valida token expirado/inválido"
 
-  @direct @rf_RF-08
-  Scenario: No exponer contraseñas en el almacenamiento (hash bcrypt)
-    Given que un usuario se registra y/o existe en el sistema
-    When se inspecciona el almacenamiento de credenciales
-    Then la contraseña no está almacenada en claro
-    And la contraseña está almacenada con hash usando bcrypt
-    # trazabilidad: "hash (bcrypt)"
-
-  @derived
-  Scenario: Rechazar login con credenciales inválidas
-    Given que el usuario proporciona credenciales incorrectas
-    When solicita autenticación
-    Then el sistema rechaza la autenticación
-    And no emite un token JWT
-    # trazabilidad: "autenticarlos mediante tokens JWT"
+  @direct @rf_RF-07
+  Scenario: Devolver perfil sin password al verificar token válido
+    Given que el usuario envía un token válido
+    When solicita la verificación
+    Then el sistema devuelve el perfil del usuario
+    And el perfil no incluye el password
+    # trazabilidad: "perfil sin password"
 
   @derived
-  Scenario: Rechazar login cuando faltan credenciales
-    Given que el usuario no proporciona alguno de los campos requeridos para autenticación
-    When solicita autenticación
+  Scenario: Rechazar verificación cuando no se envía token
+    Given que el usuario no envía la cabecera Authorization
+    When solicita la verificación
     Then el sistema rechaza la solicitud
-    And no emite token
-    # trazabilidad: "Entradas username, email, password"
+    And no devuelve perfil de usuario
+    # trazabilidad: "Authorization: Bearer"
+
+  @derived
+  Scenario: Aceptar verificación de token válido y coherente con el usuario
+    Given que el usuario envía un token válido emitido por el sistema
+    When solicita la verificación
+    Then el sistema confirma la validez
+    And devuelve datos básicos del usuario
+    # trazabilidad: "devuelve perfil"
 ```
