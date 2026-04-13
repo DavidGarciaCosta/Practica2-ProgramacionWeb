@@ -1,10 +1,11 @@
 # Kiwi TCMS
 
-Total publicados: 2
+Total publicados: 3
 
 ## Indice
 1. [UC-01](#uc-01) - Sin proyecto - reviewed
 2. [UC-02](#uc-02) - Sin proyecto - reviewed
+3. [UC-03](#uc-03) - Sin proyecto - reviewed
 
 ---
 
@@ -132,5 +133,61 @@ Feature: Verificación de token de autenticación
     Given el endpoint debe validar token expirado (trazabilidad: "token expirado")
     When el cliente envía un token expirado a "/api/auth/verify"
     Then el sistema rechaza la verificación (trazabilidad: "valida token expirado")
+
+```
+
+---
+
+## UC-03
+
+### Metadatos
+- Proyecto asociado: Sin proyecto
+- Kiwi: updated
+- ID en Kiwi: 406
+- Categoria: Sin categoria
+- Madurez: reviewed
+- Escenarios: 5
+- Directos: 3
+- Derivados: 2
+
+### Resumen final en Kiwi
+UC-03
+
+### Gherkin
+```gherkin
+Feature: Autorización por roles (user/admin)
+
+  Background:
+    Given el sistema dispone de roles "user" y "admin" (trazabilidad: "roles (usuario/administrador)")
+
+  @direct @RF-09
+  Scenario: Operaciones administrativas requieren rol admin
+    Given existe una operación administrativa (trazabilidad: "operaciones administrativas")
+    When un usuario con rol distinto de admin intenta ejecutarla
+    Then el sistema requiere rol admin para permitir la operación (trazabilidad: "requieren rol admin")
+
+  @direct @RF-10
+  Scenario: Bloquear acceso a endpoints/resolvers admin a no-admin
+    Given el backend debe impedir accesos a endpoints/resolvers admin (trazabilidad: "impedir accesos")
+    When un usuario no-admin intenta acceder a una operación admin
+    Then el backend bloquea el acceso (trazabilidad: "a usuarios no admin")
+
+  @direct @RF-11
+  Scenario: La autorización en GraphQL se decide desde el contexto (token)
+    Given una operación GraphQL requiere autorización (trazabilidad: "autorizar resolvers")
+    When el backend evalúa el contexto construido a partir del token (trazabilidad: "contexto (token)")
+    Then el resolver permite o deniega el acceso según el rol del usuario (trazabilidad: "para autorizar")
+
+  @derived
+  Scenario: Acceso permitido a operación admin con rol admin
+    Given un usuario autenticado con rol admin (trazabilidad: "rol admin")
+    When intenta acceder a una operación administrativa
+    Then el backend permite el acceso (trazabilidad: "operaciones administrativas")
+
+  @derived
+  Scenario: Acceso denegado a operación admin con token ausente
+    Given el sistema usa el token en el contexto para autorizar (trazabilidad: "contexto (token)")
+    When se intenta acceder a una operación admin sin token
+    Then el backend deniega el acceso (trazabilidad: "impedir accesos")
 
 ```
