@@ -1,71 +1,85 @@
 # Kiwi TCMS
 
-Total publicados: 4
+Total publicados: 5
 
 ---
 
 # Kiwi TCMS
 
 ## Resumen
-UC-04
+UC-05
 
 ## Estado de publicacion
 - Kiwi: created
-- ID en Kiwi: 407
+- ID en Kiwi: 408
 - Categoria: 
 
 ## Resumen final en Kiwi
-UC-04
+UC-05
 
 ## Gherkin
 ```gherkin
-Feature: Consulta del catálogo de productos
+Feature: Administración de productos (roles admin)
 
   Background:
     Given el sistema de e-commerce está disponible
 
-  @direct @rf-11
-  Scenario: Listar productos con paginación, búsqueda y filtro por categoría
-    Given que existen productos en el catálogo
-      # "Listar productos con paginación, búsqueda y filtro por categoría"
-    When el visitante consulta el listado de productos indicando parámetros de paginación
-    And opcionalmente indica un texto de búsqueda
-    And opcionalmente indica una categoría
-    Then el sistema devuelve una lista de productos acorde a los criterios
+  @direct @rf-09
+  Scenario: Requerir rol admin para operaciones administrativas
+    Given que un usuario intenta realizar una operación administrativa
+      # "Las operaciones administrativas requieren rol admin."
+    When el usuario no tiene rol admin
+    Then el sistema deniega la operación
 
-  @direct @rf-12
-  Scenario: Consultar el detalle de un producto
-    Given que existe un producto en el catálogo
-      # "ver detalle de producto."
-    When el visitante consulta el detalle de ese producto
-    Then el sistema devuelve la información del producto
+  @direct @rf-10
+  Scenario: Impedir acceso a operaciones admin a usuarios no admin
+    Given que un usuario autenticado tiene rol distinto de admin
+      # "impedir accesos a endpoints/resolvers admin a usuarios no admin"
+    When intenta acceder a una operación de administración de productos
+    Then el sistema impide el acceso
+
+  @direct @rf-13
+  Scenario: Crear un producto como administrador
+    Given que el usuario tiene rol admin
+      # "Crear producto"
+    When solicita crear un producto con datos válidos
+    Then el sistema crea el producto
+
+  @direct @rf-14
+  Scenario: Eliminar un producto como administrador
+    Given que el usuario tiene rol admin
+      # "eliminar producto"
+    And existe un producto en el catálogo
+    When solicita eliminar ese producto
+    Then el sistema elimina el producto
+
+  @direct @rf-15
+  Scenario: Actualizar stock de un producto como administrador
+    Given que el usuario tiene rol admin
+      # "actualizar stock"
+    And existe un producto en el catálogo
+    When solicita actualizar el stock del producto a un valor válido
+    Then el sistema actualiza el stock
+
+  @direct @rf-16
+  Scenario: Rechazar actualización de stock a un valor negativo
+    Given que el usuario tiene rol admin
+      # "El stock no puede ser negativo."
+    And existe un producto en el catálogo
+    When solicita actualizar el stock a un valor negativo
+    Then el sistema rechaza la actualización de stock
 
   @derived
-  Scenario: Devolver lista vacía cuando no hay productos que coincidan
-    Given que no existen productos que coincidan con el texto de búsqueda o la categoría indicada
-    When el visitante consulta el listado de productos
-    Then el sistema devuelve una lista vacía
+  Scenario: Rechazar crear producto si no es admin
+    Given que el usuario no tiene rol admin
+    When solicita crear un producto
+    Then el sistema rechaza la creación
 
   @derived
-  Scenario: Respetar límites de paginación al listar productos
-    Given que existen más productos que los que caben en una página
-      # "paginación"
-    When el visitante consulta el listado con un límite de elementos por página
-    Then el sistema devuelve como máximo esa cantidad de productos
-
-  @derived
-  Scenario: Búsqueda por nombre o descripción
-    Given que existen productos con un término presente en el nombre o la descripción
-      # "búsqueda por nombre/descr"
-    When el visitante busca por ese término
-    Then el sistema devuelve los productos que coinciden por nombre o descripción
-
-  @derived
-  Scenario: Filtrar productos por categoría
-    Given que existen productos de varias categorías
-      # "filtro por categoría"
-    When el visitante filtra por una categoría concreta
-    Then el sistema devuelve únicamente productos de esa categoría
+  Scenario: Rechazar eliminar producto si no es admin
+    Given que el usuario no tiene rol admin
+    When solicita eliminar un producto
+    Then el sistema rechaza la eliminación
 
 ```
 
@@ -258,5 +272,72 @@ Feature: Verificación de token JWT
       # "Authorization: Bearer <token>."
     When solicita la verificación del token
     Then el sistema procesa el token proporcionado
+
+```
+
+---
+
+# Kiwi TCMS
+
+## Resumen
+UC-04
+
+## Estado de publicacion
+- Kiwi: created
+- ID en Kiwi: 407
+- Categoria: 
+
+## Resumen final en Kiwi
+UC-04
+
+## Gherkin
+```gherkin
+Feature: Consulta del catálogo de productos
+
+  Background:
+    Given el sistema de e-commerce está disponible
+
+  @direct @rf-11
+  Scenario: Listar productos con paginación, búsqueda y filtro por categoría
+    Given que existen productos en el catálogo
+      # "Listar productos con paginación, búsqueda y filtro por categoría"
+    When el visitante consulta el listado de productos indicando parámetros de paginación
+    And opcionalmente indica un texto de búsqueda
+    And opcionalmente indica una categoría
+    Then el sistema devuelve una lista de productos acorde a los criterios
+
+  @direct @rf-12
+  Scenario: Consultar el detalle de un producto
+    Given que existe un producto en el catálogo
+      # "ver detalle de producto."
+    When el visitante consulta el detalle de ese producto
+    Then el sistema devuelve la información del producto
+
+  @derived
+  Scenario: Devolver lista vacía cuando no hay productos que coincidan
+    Given que no existen productos que coincidan con el texto de búsqueda o la categoría indicada
+    When el visitante consulta el listado de productos
+    Then el sistema devuelve una lista vacía
+
+  @derived
+  Scenario: Respetar límites de paginación al listar productos
+    Given que existen más productos que los que caben en una página
+      # "paginación"
+    When el visitante consulta el listado con un límite de elementos por página
+    Then el sistema devuelve como máximo esa cantidad de productos
+
+  @derived
+  Scenario: Búsqueda por nombre o descripción
+    Given que existen productos con un término presente en el nombre o la descripción
+      # "búsqueda por nombre/descr"
+    When el visitante busca por ese término
+    Then el sistema devuelve los productos que coinciden por nombre o descripción
+
+  @derived
+  Scenario: Filtrar productos por categoría
+    Given que existen productos de varias categorías
+      # "filtro por categoría"
+    When el visitante filtra por una categoría concreta
+    Then el sistema devuelve únicamente productos de esa categoría
 
 ```
