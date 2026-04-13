@@ -1,6 +1,6 @@
 # Kiwi TCMS
 
-Total publicados: 10
+Total publicados: 11
 
 ## Indice
 1. [UC-01](#uc-01) - Sin proyecto - reviewed
@@ -13,6 +13,7 @@ Total publicados: 10
 8. [UC-08](#uc-08) - Sin proyecto - reviewed
 9. [UC-09](#uc-09) - Sin proyecto - reviewed
 10. [UC-10](#uc-10) - Sin proyecto - reviewed
+11. [UC-11](#uc-11) - Sin proyecto - reviewed
 
 ---
 
@@ -728,5 +729,67 @@ Feature: Administración de pedidos y estadísticas
     Given el listado admite filtro por estado (trazabilidad: "filtro por estado")
     When el admin filtra por un estado sin pedidos asociados
     Then el sistema devuelve una lista vacía (trazabilidad: "Listar pedidos")
+
+```
+
+---
+
+## UC-11
+
+### Metadatos
+- Proyecto asociado: Sin proyecto
+- Kiwi: updated
+- ID en Kiwi: 414
+- Categoria: Sin categoria
+- Madurez: reviewed
+- Escenarios: 6
+- Directos: 4
+- Derivados: 2
+
+### Resumen final en Kiwi
+UC-11
+
+### Gherkin
+```gherkin
+Feature: Chat en tiempo real (Socket.IO)
+
+  Background:
+    Given el sistema proporciona chat en tiempo real con Socket.IO (trazabilidad: "Chat en tiempo real con Socket.IO")
+    And existe una sala por defecto llamada "general" (trazabilidad: "Sala por defecto 'general'")
+
+  @direct @RF-55
+  Scenario: Disponibilidad del chat en tiempo real
+    When un cliente se conecta al chat
+    Then el sistema permite comunicación en tiempo real (trazabilidad: "tiempo real")
+
+  @direct @RF-56
+  Scenario: Conectar y publicar mensajes en sala general
+    Given el usuario se conecta a la sala por defecto "general" (trazabilidad: "general")
+    When el usuario publica un mensaje
+    Then los participantes de la sala pueden recibirlo (trazabilidad: "Emitir/recibir mensajes")
+
+  @direct @RF-57
+  Scenario: Emitir y recibir mensajes en tiempo real
+    Given hay al menos dos clientes conectados al chat (trazabilidad: "Emitir/recibir")
+    When un cliente emite un mensaje
+    Then el otro cliente lo recibe en tiempo real (trazabilidad: "en tiempo real")
+
+  @direct @RF-58
+  Scenario: Persistencia de mensajes en MongoDB
+    Given el sistema almacena mensajes en MongoDB (trazabilidad: "almacenar mensajes en MongoDB")
+    When un usuario envía un mensaje
+    Then el sistema persiste el mensaje como entidad "Message" (trazabilidad: "MongoDB (Message)")
+
+  @derived
+  Scenario: Envío de mensaje vacío
+    Given el chat permite emitir mensajes (trazabilidad: "Emitir/recibir")
+    When un usuario intenta enviar un mensaje vacío
+    Then el sistema no debería propagar un mensaje vacío (trazabilidad: "mensajes")
+
+  @derived
+  Scenario: Persistencia opcional de mensajes (nota de consistencia)
+    Given en la documentación se menciona persistencia opcional (trazabilidad: "persistencia opcional de mensajes")
+    When se configura el chat sin persistencia
+    Then los mensajes pueden no almacenarse sin afectar al envío/recepción (trazabilidad: "Emitir/recibir mensajes")
 
 ```
