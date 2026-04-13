@@ -1,84 +1,108 @@
 # Kiwi TCMS
 
-Total publicados: 6
+Total publicados: 7
 
 ---
 
 # Kiwi TCMS
 
 ## Resumen
-UC-06
+UC-07
 
 ## Estado de publicacion
 - Kiwi: created
-- ID en Kiwi: 409
+- ID en Kiwi: 410
 - Categoria: 
 
 ## Resumen final en Kiwi
-UC-06
+UC-07
 
 ## Gherkin
 ```gherkin
-Feature: Carrito de compra en el navegador (LocalStorage)
+Feature: Creación de pedidos (GraphQL)
 
   Background:
-    Given que el visitante usa el frontend estático del sistema
+    Given el sistema de e-commerce está disponible
 
-  @direct @rf-17
-  Scenario: Gestionar un carrito persistente en el navegador
-    Given que el carrito se gestiona en el navegador
-      # "carrito en el navegador"
-    When el usuario añade o modifica ítems en el carrito
-    Then el estado del carrito se persiste en LocalStorage
-      # "persistencia en LocalStorage"
+  @direct @rf-23
+  Scenario: Crear un pedido como usuario autenticado
+    Given que el usuario está autenticado
+      # "Un usuario autenticado puede crear pedidos"
+    And el usuario dispone de un carrito con ítems
+    When solicita crear un pedido
+    Then el sistema crea el pedido
 
-  @direct @rf-18
-  Scenario: Mantener el carrito entre sesiones
-    Given que el usuario tiene un carrito persistido en LocalStorage
-      # "mantener entre sesiones"
-    When el usuario cierra y reabre el navegador
-    Then el carrito se carga desde LocalStorage
+  @direct @rf-25
+  Scenario: Asignar un estado válido al pedido
+    Given que el usuario está autenticado
+      # "Estados pending, completed, cancelled"
+    And el usuario dispone de un carrito con ítems
+    When solicita crear un pedido
+    Then el pedido queda registrado con un estado soportado por el sistema
 
-  @direct @rf-19
-  Scenario: Añadir ítems al carrito
-    Given que existe un producto disponible para añadir al carrito
-      # "Añadir"
-    When el usuario añade el producto al carrito
-    Then el carrito incluye el ítem añadido
+  @direct @rf-26
+  Scenario: Impedir crear pedido con carrito vacío
+    Given que el usuario está autenticado
+      # "No se crea un pedido si el carrito está vacío."
+    And el carrito está vacío
+    When solicita crear un pedido
+    Then el sistema rechaza la creación del pedido
 
-  @direct @rf-20
-  Scenario: Modificar cantidades de ítems del carrito
-    Given que el carrito contiene un ítem
-      # "modificar cantidades"
-    When el usuario cambia la cantidad del ítem
-    Then el carrito refleja la nueva cantidad
+  @direct @rf-27
+  Scenario: Fallar si un producto del carrito no existe
+    Given que el usuario está autenticado
+      # "Si un producto no existe..."
+    And el carrito incluye un producto que no existe
+    When solicita crear un pedido
+    Then el sistema rechaza la creación del pedido
+    And informa el motivo del fallo
 
-  @direct @rf-21
-  Scenario: Eliminar ítems del carrito
-    Given que el carrito contiene un ítem
-      # "eliminar ítems"
-    When el usuario elimina el ítem del carrito
-    Then el ítem ya no aparece en el carrito
+  @direct @rf-28
+  Scenario: Fallar si no hay stock suficiente
+    Given que el usuario está autenticado
+      # "no hay stock suficiente"
+    And el carrito incluye un producto con stock insuficiente
+    When solicita crear un pedido
+    Then el sistema rechaza la creación del pedido
+    And informa el motivo del fallo
 
-  @direct @rf-22
-  Scenario: Calcular subtotal y total del carrito
-    Given que el carrito contiene uno o más ítems
-      # "calcular subtotal/total"
-    When el sistema calcula los importes del carrito
-    Then se obtiene el subtotal
-    And se obtiene el total
+  @direct @rf-29
+  Scenario: Recalcular el total en servidor (no confiar en el cliente)
+    Given que el usuario está autenticado
+      # "El total ... se calcula en servidor"
+    And el cliente propone un total distinto al que corresponde
+    When solicita crear un pedido
+    Then el sistema calcula el total en el servidor
+    And el pedido usa el total calculado por el servidor
+
+  @direct @rf-30
+  Scenario: Descontar stock al crear el pedido
+    Given que el usuario está autenticado
+      # "descontar stock al crear pedido"
+    And el carrito contiene productos con stock suficiente
+    When se crea el pedido
+    Then el sistema reduce el stock de los productos incluidos
+
+  @direct @rf-31
+  Scenario: Vincular el pedido al usuario autenticado
+    Given que el usuario está autenticado
+      # "se vincula el pedido al usuario"
+    When se crea el pedido
+    Then el pedido queda asociado a la cuenta del usuario
 
   @derived
-  Scenario: Carrito vacío al iniciar sin datos en LocalStorage
-    Given que no existe un carrito almacenado en LocalStorage
-    When el usuario abre el catálogo
-    Then el carrito aparece vacío
+  Scenario: Rechazar creación de pedido cuando el usuario no está autenticado
+    Given que el usuario no está autenticado
+    When intenta crear un pedido
+    Then el sistema rechaza la operación
 
   @derived
-  Scenario: El total del carrito se actualiza al cambiar cantidades
-    Given que el carrito contiene ítems y tiene un total calculado
-    When el usuario modifica la cantidad de un ítem
-    Then el sistema recalcula subtotal y total
+  Scenario: Evitar que la creación de pedido deje stock negativo
+    Given que el usuario está autenticado
+    And el carrito contiene un producto con stock igual a la cantidad solicitada
+    When se crea el pedido
+    Then el stock resultante del producto es cero o positivo
+      # "El stock no puede ser negativo."
 
 ```
 
@@ -419,5 +443,85 @@ Feature: Administración de productos (roles admin)
     Given que el usuario no tiene rol admin
     When solicita eliminar un producto
     Then el sistema rechaza la eliminación
+
+```
+
+---
+
+# Kiwi TCMS
+
+## Resumen
+UC-06
+
+## Estado de publicacion
+- Kiwi: created
+- ID en Kiwi: 409
+- Categoria: 
+
+## Resumen final en Kiwi
+UC-06
+
+## Gherkin
+```gherkin
+Feature: Carrito de compra en el navegador (LocalStorage)
+
+  Background:
+    Given que el visitante usa el frontend estático del sistema
+
+  @direct @rf-17
+  Scenario: Gestionar un carrito persistente en el navegador
+    Given que el carrito se gestiona en el navegador
+      # "carrito en el navegador"
+    When el usuario añade o modifica ítems en el carrito
+    Then el estado del carrito se persiste en LocalStorage
+      # "persistencia en LocalStorage"
+
+  @direct @rf-18
+  Scenario: Mantener el carrito entre sesiones
+    Given que el usuario tiene un carrito persistido en LocalStorage
+      # "mantener entre sesiones"
+    When el usuario cierra y reabre el navegador
+    Then el carrito se carga desde LocalStorage
+
+  @direct @rf-19
+  Scenario: Añadir ítems al carrito
+    Given que existe un producto disponible para añadir al carrito
+      # "Añadir"
+    When el usuario añade el producto al carrito
+    Then el carrito incluye el ítem añadido
+
+  @direct @rf-20
+  Scenario: Modificar cantidades de ítems del carrito
+    Given que el carrito contiene un ítem
+      # "modificar cantidades"
+    When el usuario cambia la cantidad del ítem
+    Then el carrito refleja la nueva cantidad
+
+  @direct @rf-21
+  Scenario: Eliminar ítems del carrito
+    Given que el carrito contiene un ítem
+      # "eliminar ítems"
+    When el usuario elimina el ítem del carrito
+    Then el ítem ya no aparece en el carrito
+
+  @direct @rf-22
+  Scenario: Calcular subtotal y total del carrito
+    Given que el carrito contiene uno o más ítems
+      # "calcular subtotal/total"
+    When el sistema calcula los importes del carrito
+    Then se obtiene el subtotal
+    And se obtiene el total
+
+  @derived
+  Scenario: Carrito vacío al iniciar sin datos en LocalStorage
+    Given que no existe un carrito almacenado en LocalStorage
+    When el usuario abre el catálogo
+    Then el carrito aparece vacío
+
+  @derived
+  Scenario: El total del carrito se actualiza al cambiar cantidades
+    Given que el carrito contiene ítems y tiene un total calculado
+    When el usuario modifica la cantidad de un ítem
+    Then el sistema recalcula subtotal y total
 
 ```
