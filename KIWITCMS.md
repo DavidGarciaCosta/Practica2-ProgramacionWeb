@@ -1,6 +1,123 @@
 # Kiwi TCMS
 
-Total publicados: 2
+Total publicados: 3
+
+---
+
+# Kiwi TCMS
+
+## Resumen
+UC-03
+
+## Estado de publicacion
+- Kiwi: created
+- ID en Kiwi: 406
+- Categoria: 
+
+## Resumen final en Kiwi
+UC-03
+
+## Gherkin
+```gherkin
+Feature: Verificación de token JWT
+
+  Background:
+    Given el sistema de e-commerce está disponible
+
+  @direct @rf-07
+  Scenario: Detectar token inválido o expirado
+    Given que el usuario presenta un token JWT inválido o expirado
+      # "valida token expirado/inválido"
+    When solicita la verificación del token
+    Then el sistema rechaza la verificación del token
+
+  @direct @rf-08
+  Scenario: Devolver perfil sin password con token válido
+    Given que el usuario presenta un token JWT válido
+    When solicita la verificación del token
+      # "/api/auth/verify" y "devuelve perfil sin password."
+    Then el sistema valida el token
+    And devuelve el perfil del usuario
+    And el perfil devuelto no contiene el password
+
+  @derived
+  Scenario: Rechazar verificación cuando no se envía token
+    Given que el usuario no envía ningún token
+    When solicita la verificación del token
+    Then el sistema rechaza la solicitud de verificación
+
+  @derived
+  Scenario: Aceptar token enviado con el esquema Bearer
+    Given que el usuario envía un token JWT en la cabecera Authorization usando el esquema Bearer
+      # "Authorization: Bearer <token>."
+    When solicita la verificación del token
+    Then el sistema procesa el token proporcionado
+
+```
+
+---
+
+# Kiwi TCMS
+
+## Resumen
+UC-01
+
+## Estado de publicacion
+- Kiwi: created
+- ID en Kiwi: 404
+- Categoria: 
+
+## Resumen final en Kiwi
+UC-01
+
+## Gherkin
+```gherkin
+Feature: Registro de usuario (JWT)
+
+  Background:
+    Given el sistema de e-commerce está disponible
+
+  @direct @rf-01
+  Scenario: Registrar un usuario nuevo
+    Given que el usuario proporciona username, email y password
+      # "Entradas username, email, password"
+    When solicita el registro de un usuario
+      # "El sistema permite registrar usuarios"
+    Then el usuario queda registrado
+    And el sistema devuelve el perfil básico del usuario
+
+  @direct @rf-02
+  Scenario: Impedir registro con username o email ya existente
+    Given que existe un usuario con el mismo username o el mismo email
+      # "username/email únicos"
+    When se intenta registrar otro usuario con ese username o email
+    Then el sistema rechaza el registro
+    And informa que el username o email debe ser único
+
+  @derived
+  Scenario: Rechazar registro con datos obligatorios ausentes
+    Given que falta username o falta email o falta password
+      # "Entradas username, email, password"
+    When se intenta registrar el usuario
+    Then el sistema rechaza el registro
+    And informa que faltan datos obligatorios
+
+  @derived
+  Scenario: Mantener la unicidad ante registros repetidos (idempotencia práctica)
+    Given que un usuario ya fue registrado con un username y email concretos
+      # "username/email únicos"
+    When se reintenta registrar el mismo username y email
+    Then el sistema rechaza el registro
+    And no crea una segunda cuenta
+
+  @derived
+  Scenario: Asegurar que la respuesta de registro no incluye el password
+    Given que el usuario solicita el registro con credenciales válidas
+    When el sistema responde al registro
+    Then el perfil devuelto no contiene el password
+      # "devuelve perfil sin password." (criterio análogo de perfil)
+
+```
 
 ---
 
@@ -74,69 +191,5 @@ Feature: Autenticación de usuario (login) con JWT
       # "Salidas JWT + perfil básico del usuario"
     When el sistema devuelve el perfil básico del usuario
     Then el perfil no incluye el password
-
-```
-
----
-
-# Kiwi TCMS
-
-## Resumen
-UC-01
-
-## Estado de publicacion
-- Kiwi: created
-- ID en Kiwi: 404
-- Categoria: 
-
-## Resumen final en Kiwi
-UC-01
-
-## Gherkin
-```gherkin
-Feature: Registro de usuario (JWT)
-
-  Background:
-    Given el sistema de e-commerce está disponible
-
-  @direct @rf-01
-  Scenario: Registrar un usuario nuevo
-    Given que el usuario proporciona username, email y password
-      # "Entradas username, email, password"
-    When solicita el registro de un usuario
-      # "El sistema permite registrar usuarios"
-    Then el usuario queda registrado
-    And el sistema devuelve el perfil básico del usuario
-
-  @direct @rf-02
-  Scenario: Impedir registro con username o email ya existente
-    Given que existe un usuario con el mismo username o el mismo email
-      # "username/email únicos"
-    When se intenta registrar otro usuario con ese username o email
-    Then el sistema rechaza el registro
-    And informa que el username o email debe ser único
-
-  @derived
-  Scenario: Rechazar registro con datos obligatorios ausentes
-    Given que falta username o falta email o falta password
-      # "Entradas username, email, password"
-    When se intenta registrar el usuario
-    Then el sistema rechaza el registro
-    And informa que faltan datos obligatorios
-
-  @derived
-  Scenario: Mantener la unicidad ante registros repetidos (idempotencia práctica)
-    Given que un usuario ya fue registrado con un username y email concretos
-      # "username/email únicos"
-    When se reintenta registrar el mismo username y email
-    Then el sistema rechaza el registro
-    And no crea una segunda cuenta
-
-  @derived
-  Scenario: Asegurar que la respuesta de registro no incluye el password
-    Given que el usuario solicita el registro con credenciales válidas
-    When el sistema responde al registro
-    Then el perfil devuelto no contiene el password
-      # "devuelve perfil sin password." (criterio análogo de perfil)
 
 ```
