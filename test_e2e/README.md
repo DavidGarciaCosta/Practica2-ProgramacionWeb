@@ -1,49 +1,176 @@
 # Generated E2E Suite
 
 ## Planned scenarios
-- Registrar un usuario mediante el endpoint /api/auth/register
-- Registrar un usuario con username y email únicos
-- Almacenar la contraseña con hash usando bcrypt al registrar
-- Rechazar registro con username duplicado
-- Rechazar registro con email duplicado
-- Rechazar registro cuando falta algún campo de entrada
-- Rechazar registro cuando el formato del email no es válido
-- Registrar un usuario mediante el endpoint /api/auth/register
-- Registrar un usuario con username y email únicos
-- Almacenar la contraseña con hash usando bcrypt al registrar
-- Rechazar registro con username duplicado
-- Rechazar registro con email duplicado
-- Rechazar registro cuando falta algún campo de entrada
-- Rechazar registro cuando el formato del email no es válido
-- Autenticar un usuario mediante tokens JWT
-- Devolver un token válido con id y role del usuario en el login
-- Enviar el token en la cabecera Authorization con formato Bearer <token>
-- Rechazar login con credenciales inválidas
-- Rechazar login cuando faltan credenciales de entrada
-- Rechazar petición cuando la cabecera Authorization no usa el prefijo Bearer
-- Rechazar petición cuando falta la cabecera Authorization
-- Autenticar un usuario mediante tokens JWT
-- Devolver un token válido con id y role del usuario en el login
-- Enviar el token en la cabecera Authorization con formato Bearer <token>
-- Rechazar login con credenciales inválidas
-- Rechazar login cuando faltan credenciales de entrada
-- Rechazar petición cuando la cabecera Authorization no usa el prefijo Bearer
-- Rechazar petición cuando falta la cabecera Authorization
-- Validar token expirado o inválido en el endpoint /api/auth/verify
-- Devolver el perfil de usuario sin password al verificar el token
-- Verificar token válido y obtener perfil básico
-- Rechazar verificación cuando el token está expirado
-- Rechazar verificación cuando el token es inválido
-- Devolver perfil sin password en una verificación exitosa
-- Validar token expirado o inválido en el endpoint /api/auth/verify
-- Devolver el perfil de usuario sin password al verificar el token
-- Verificar token válido y obtener perfil básico
-- Rechazar verificación cuando el token está expirado
-- Rechazar verificación cuando el token es inválido
-- Devolver perfil sin password en una verificación exitosa
+- Registrar un usuario y autenticarse usando JWT
+- Las contraseñas se almacenan con hash
+- Enviar el token con esquema Bearer en Authorization
+- Exposición de endpoints de registro e inicio de sesión
+- Evitar duplicados de username o email en registro
+- El login devuelve token con id y role
+- Login fallido con credenciales inválidas
+- Registro fallido por datos requeridos ausentes
+- Registrar un usuario y autenticarse usando JWT
+- Las contraseñas se almacenan con hash
+- Enviar el token con esquema Bearer en Authorization
+- Exposición de endpoints de registro e inicio de sesión
+- Evitar duplicados de username o email en registro
+- El login devuelve token con id y role
+- Login fallido con credenciales inválidas
+- Registro fallido por datos requeridos ausentes
+- El sistema expone un endpoint para verificación de token
+- Verificar token válido devuelve perfil sin password
+- Token ausente en verificación
+- Token inválido en verificación
+- Token expirado en verificación
+- El sistema expone un endpoint para verificación de token
+- Verificar token válido devuelve perfil sin password
+- Token ausente en verificación
+- Token inválido en verificación
+- Token expirado en verificación
+- Operaciones administrativas requieren rol admin
+- La autorización en GraphQL se decide desde el contexto (token)
+- Acceso permitido a operación admin con rol admin
+- Acceso denegado a operación admin con token ausente
+- Operaciones administrativas requieren rol admin
+- La autorización en GraphQL se decide desde el contexto (token)
+- Acceso permitido a operación admin con rol admin
+- Acceso denegado a operación admin con token ausente
+- Crear pedido como usuario autenticado
+- Disponibilidad de mutación createOrder
+- El pedido se crea con un estado válido
+- Validar precio al crear pedido
+- Recalcular total en servidor al crear pedido
+- Descontar stock al crear pedido
+- Ignorar manipulación del total por el cliente
+- Crear pedido falla si el usuario no está autenticado
+- Crear pedido como usuario autenticado
+- Disponibilidad de mutación createOrder
+- El pedido se crea con un estado válido
+- Validar precio al crear pedido
+- Recalcular total en servidor al crear pedido
+- Descontar stock al crear pedido
+- Ignorar manipulación del total por el cliente
+- Crear pedido falla si el usuario no está autenticado
+- Cambiar el rol de un usuario
+- Eliminar un usuario
+- Cambiar el rol de un usuario
+- Eliminar un usuario
+- Listar pedidos con filtro por estado
+- Consultar estadísticas agregadas de pedidos
+- Usuario no-admin no puede listar pedidos (orders)
+- Listar pedidos con filtro por estado
+- Consultar estadísticas agregadas de pedidos
+- Usuario no-admin no puede listar pedidos (orders)
 
 ## Skipped scenarios
-- Ninguno
+- Bloquear acceso a endpoints/resolvers admin a no-admin: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Bloquear acceso a endpoints/resolvers admin a no-admin: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Listar productos con paginación, búsqueda y filtro: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Consultar detalle de un producto: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Disponibilidad de queries GraphQL para catálogo: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Paginación con page/limit devuelve subconjunto del catálogo: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Búsqueda por nombre o descripción reduce resultados: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Filtro por categoría reduce resultados: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Consulta de detalle de producto inexistente: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Listar productos con paginación, búsqueda y filtro: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Consultar detalle de un producto: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Disponibilidad de queries GraphQL para catálogo: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Paginación con page/limit devuelve subconjunto del catálogo: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Búsqueda por nombre o descripción reduce resultados: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Filtro por categoría reduce resultados: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Consulta de detalle de producto inexistente: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Crear producto como administrador: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Eliminar producto como administrador: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Actualizar stock como administrador: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Disponibilidad de mutaciones GraphQL de administración de productos: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- El listado soporta page/limit: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- El listado soporta búsqueda por nombre o descripción: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- El listado soporta filtro por categoría: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Bloquear mutaciones admin a usuarios no-admin: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- No permitir stock negativo: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Actualizar stock a cero (borde): Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Eliminar un producto inexistente: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Crear producto como administrador: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Eliminar producto como administrador: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Actualizar stock como administrador: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Disponibilidad de mutaciones GraphQL de administración de productos: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- El listado soporta page/limit: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- El listado soporta búsqueda por nombre o descripción: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- El listado soporta filtro por categoría: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Bloquear mutaciones admin a usuarios no-admin: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- No permitir stock negativo: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Actualizar stock a cero (borde): Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Eliminar un producto inexistente: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Gestionar carrito con persistencia en LocalStorage: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Mantener el carrito entre sesiones: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Añadir ítems al carrito: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Modificar cantidades de ítems del carrito: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Eliminar ítems del carrito: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Calcular subtotal y total del carrito: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Eliminar el último ítem deja el carrito vacío: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Cantidad no válida al modificar un ítem: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Gestionar carrito con persistencia en LocalStorage: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Mantener el carrito entre sesiones: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Añadir ítems al carrito: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Modificar cantidades de ítems del carrito: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Eliminar ítems del carrito: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Calcular subtotal y total del carrito: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Eliminar el último ítem deja el carrito vacío: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Cantidad no válida al modificar un ítem: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Validar stock al crear pedido: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- No permitir crear pedido con carrito vacío: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Fallar pedido por producto inexistente o stock insuficiente: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Vincular pedido al usuario y reducir stock: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Validar stock al crear pedido: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- No permitir crear pedido con carrito vacío: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Fallar pedido por producto inexistente o stock insuficiente: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Vincular pedido al usuario y reducir stock: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Consultar histórico de pedidos como usuario autenticado: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Disponibilidad de queries myOrders y order: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- myOrders solo devuelve pedidos del propio usuario: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Consultar pedidos sin autenticación: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Consultar detalle de pedido inexistente: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Consultar histórico de pedidos como usuario autenticado: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Disponibilidad de queries myOrders y order: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- myOrders solo devuelve pedidos del propio usuario: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Consultar pedidos sin autenticación: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Consultar detalle de pedido inexistente: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Listar usuarios como administrador: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Impedir auto-eliminación de administrador: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Disponibilidad de query users: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Disponibilidad de mutaciones updateUserRole y deleteUser: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Usuario no-admin no puede listar usuarios: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Intentar eliminar un usuario inexistente: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Listar usuarios como administrador: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Impedir auto-eliminación de administrador: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Disponibilidad de query users: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Disponibilidad de mutaciones updateUserRole y deleteUser: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Usuario no-admin no puede listar usuarios: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Intentar eliminar un usuario inexistente: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Ver detalle de un pedido: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Actualizar estado de un pedido: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Disponibilidad de queries orders, order y orderStats: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Disponibilidad de mutaciones updateOrderStatus y cancelOrder: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Cancelar un pedido como administrador: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Filtrar pedidos por estado sin resultados: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Ver detalle de un pedido: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Actualizar estado de un pedido: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Disponibilidad de queries orders, order y orderStats: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Disponibilidad de mutaciones updateOrderStatus y cancelOrder: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Cancelar un pedido como administrador: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Filtrar pedidos por estado sin resultados: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Disponibilidad del chat en tiempo real: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Conectar y publicar mensajes en sala general: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Emitir y recibir mensajes en tiempo real: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Persistencia de mensajes en MongoDB: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Envío de mensaje vacío: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Persistencia opcional de mensajes (nota de consistencia): Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Disponibilidad del chat en tiempo real: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Conectar y publicar mensajes en sala general: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Emitir y recibir mensajes en tiempo real: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Persistencia de mensajes en MongoDB: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Envío de mensaje vacío: Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
+- Persistencia opcional de mensajes (nota de consistencia): Evidencia UI insuficiente: faltan ruta navegable o selectores fiables para inputs.
 
 ## Notes
 - Repo type: node_webapp
