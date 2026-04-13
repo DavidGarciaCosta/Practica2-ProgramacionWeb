@@ -52,26 +52,27 @@ Do not scan the whole repository.
 
 Use this exploration order:
 
-1. `AGENTS.md`
-2. `README.md`
-3. `queriesMutations.md`
-4. `server.js`
-5. `config.js`
-6. `src/public/login.html`
-7. `src/public/register.html`
-8. `src/public/products.html`
-9. `src/public/cart.html`
-10. `src/public/my-orders.html`
-11. `src/public/admin.html`
-12. `src/public/chat.html`
-13. `src/public/client.js`
-14. `src/public/cart.js`
-15. `src/public/graphql-client.js`
-16. `src/routes/authRoutes.js`
-17. `src/routes/productRoutes.js`
-18. `src/routes/adminRoutes.js`
-19. `src/graphql/schema.js`
-20. `src/graphql/resolvers.js`
+1. `KIWITCMS.md`
+2. `AGENTS.md`
+3. `README.md`
+4. `queriesMutations.md`
+5. `server.js`
+6. `config.js`
+7. `src/public/login.html`
+8. `src/public/register.html`
+9. `src/public/products.html`
+10. `src/public/cart.html`
+11. `src/public/my-orders.html`
+12. `src/public/admin.html`
+13. `src/public/chat.html`
+14. `src/public/client.js`
+15. `src/public/cart.js`
+16. `src/public/graphql-client.js`
+17 `src/routes/authRoutes.js`
+18. `src/routes/productRoutes.js`
+19. `src/routes/adminRoutes.js`
+20. `src/graphql/schema.js`
+21. `src/graphql/resolvers.js`
 
 Stop exploring as soon as enough evidence is obtained.
 
@@ -1276,6 +1277,8 @@ If a gap affects test generation, document it inside test_e2e/README.md.
 What Agents Should Inspect Next
 
 After reading this file, inspect in this exact order:
+
+KIWITCMS.md
 
 README.md
 
