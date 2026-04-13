@@ -1,12 +1,13 @@
 # Kiwi TCMS
 
-Total publicados: 4
+Total publicados: 5
 
 ## Indice
 1. [UC-01](#uc-01) - Sin proyecto - reviewed
 2. [UC-02](#uc-02) - Sin proyecto - reviewed
 3. [UC-03](#uc-03) - Sin proyecto - reviewed
 4. [UC-04](#uc-04) - Sin proyecto - reviewed
+5. [UC-05](#uc-05) - Sin proyecto - reviewed
 
 ---
 
@@ -254,5 +255,96 @@ Feature: Consulta pública del catálogo de productos
     Given el catálogo permite ver detalle (trazabilidad: "ver detalle")
     When el visitante solicita el detalle de un producto que no existe
     Then el sistema informa que el producto no está disponible (trazabilidad: "producto")
+
+```
+
+---
+
+## UC-05
+
+### Metadatos
+- Proyecto asociado: Sin proyecto
+- Kiwi: updated
+- ID en Kiwi: 408
+- Categoria: Sin categoria
+- Madurez: reviewed
+- Escenarios: 11
+- Directos: 9
+- Derivados: 2
+
+### Resumen final en Kiwi
+UC-05
+
+### Gherkin
+```gherkin
+Feature: Administración de productos (CRUD/stock)
+
+  Background:
+    Given solo admin puede crear/eliminar productos y modificar stock (trazabilidad: "Solo admin puede crear/eliminar productos y modificar stock")
+
+  @direct @RF-15
+  Scenario: Crear producto como administrador
+    Given un administrador autenticado (trazabilidad: "Solo admin")
+    When ejecuta la mutación "createProduct" (trazabilidad: "Mutations: createProduct")
+    Then el sistema crea el producto (trazabilidad: "Crear producto")
+
+  @direct @RF-16
+  Scenario: Eliminar producto como administrador
+    Given un administrador autenticado (trazabilidad: "Solo admin")
+    When ejecuta la mutación "deleteProduct" (trazabilidad: "deleteProduct")
+    Then el sistema elimina el producto (trazabilidad: "eliminar producto")
+
+  @direct @RF-17
+  Scenario: Actualizar stock como administrador
+    Given un administrador autenticado (trazabilidad: "modificar stock")
+    When ejecuta la mutación "updateProductStock" (trazabilidad: "updateProductStock")
+    Then el sistema actualiza el stock del producto (trazabilidad: "actualizar stock")
+
+  @direct @RF-18
+  Scenario: Disponibilidad de mutaciones GraphQL de administración de productos
+    When un cliente consume la API GraphQL de administración de productos
+    Then están disponibles "createProduct", "deleteProduct" y "updateProductStock" (trazabilidad: "Mutations: createProduct, deleteProduct, updateProductStock")
+
+  @direct @RF-19
+  Scenario: El listado soporta page/limit
+    Given el catálogo soporta listado paginado (trazabilidad: "page/limit")
+    When se consulta con "page" y "limit"
+    Then el sistema aplica la paginación (trazabilidad: "soporta")
+
+  @direct @RF-20
+  Scenario: El listado soporta búsqueda por nombre o descripción
+    Given el catálogo soporta búsqueda (trazabilidad: "búsqueda por nombre/descr")
+    When se consulta el listado con un término de búsqueda
+    Then el sistema filtra por nombre o descripción (trazabilidad: "búsqueda")
+
+  @direct @RF-21
+  Scenario: El listado soporta filtro por categoría
+    Given el catálogo soporta filtro (trazabilidad: "filtro por categoría")
+    When se consulta el listado con una categoría
+    Then el sistema filtra por la categoría (trazabilidad: "categoría")
+
+  @direct @RF-22
+  Scenario: Bloquear mutaciones admin a usuarios no-admin
+    Given un usuario autenticado sin rol admin (trazabilidad: "usuarios no admin")
+    When intenta ejecutar una mutación de administración de productos (trazabilidad: "crear/eliminar productos")
+    Then el sistema deniega la operación (trazabilidad: "Solo admin")
+
+  @direct @RF-23
+  Scenario: No permitir stock negativo
+    Given el stock no puede ser negativo (trazabilidad: "El stock no puede ser negativo")
+    When un administrador intenta actualizar el stock a un valor negativo
+    Then el sistema rechaza la actualización (trazabilidad: "no puede ser negativo")
+
+  @derived
+  Scenario: Actualizar stock a cero (borde)
+    Given el stock no puede ser negativo (trazabilidad: "no puede ser negativo")
+    When un administrador actualiza el stock del producto a 0
+    Then el sistema acepta el valor y mantiene el stock en 0 (trazabilidad: "stock")
+
+  @derived
+  Scenario: Eliminar un producto inexistente
+    Given el sistema permite eliminar productos (trazabilidad: "eliminar producto")
+    When un administrador intenta eliminar un producto que no existe
+    Then el sistema informa que el producto no se encuentra (trazabilidad: "deleteProduct")
 
 ```
