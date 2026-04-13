@@ -1,43 +1,51 @@
 # Kiwi TCMS
 
 ## Resumen
-UC-16
+UC-17
 
 ## Estado de publicacion
 - Kiwi: created
-- ID en Kiwi: 399
+- ID en Kiwi: 400
 - Categoria: 
 
 ## Resumen final en Kiwi
-UC-16
+UC-17
 
 ## Gherkin
 ```gherkin
-Feature: Ver detalle de pedido (admin)
+Feature: Actualizar estado de pedido (admin)
 
   Background:
     Given que el sistema aplica autorización por roles (user/admin)
 
-  @direct @rf_RF-35
-  Scenario: Ver detalle de un pedido como admin
+  @direct @rf_RF-36
+  Scenario: Actualizar el estado de un pedido
     Given que el solicitante tiene rol admin
-    And existe un pedido
-    When solicita ver el detalle del pedido
-    Then el sistema devuelve la información detallada del pedido
-    # trazabilidad: "ver detalle"
+    And existe un pedido con un estado actual
+    When solicita actualizar el estado del pedido
+    Then el sistema actualiza el estado del pedido
+    # trazabilidad: "actualizar estado"
 
   @derived
-  Scenario: Denegar ver detalle de pedido a usuario no admin
+  Scenario: Denegar actualización de estado a usuario no admin
     Given que el solicitante no tiene rol admin
-    When intenta ver el detalle de un pedido
-    Then el sistema deniega el acceso
+    When intenta actualizar el estado de un pedido
+    Then el sistema deniega la operación
     # trazabilidad: "requieren rol admin"
 
   @derived
-  Scenario: Fallar al consultar detalle de pedido inexistente
+  Scenario: Fallar al actualizar estado de un pedido inexistente
     Given que el solicitante tiene rol admin
     And no existe el pedido solicitado
-    When solicita ver el detalle
+    When solicita actualizar el estado
     Then el sistema indica que el pedido no existe
-    # trazabilidad: "ver detalle"
+    # trazabilidad: "actualizar estado"
+
+  @derived
+  Scenario: Actualizar estado a un valor no permitido
+    Given que el solicitante tiene rol admin
+    And existe un pedido
+    When solicita actualizar el estado a un valor fuera de los estados soportados
+    Then el sistema rechaza la actualización
+    # trazabilidad: "Estados pending, completed, cancelled"
 ```
