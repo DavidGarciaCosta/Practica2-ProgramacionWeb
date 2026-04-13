@@ -1,6 +1,6 @@
 # Kiwi TCMS
 
-Total publicados: 5
+Total publicados: 6
 
 ## Indice
 1. [UC-01](#uc-01) - Sin proyecto - reviewed
@@ -8,6 +8,7 @@ Total publicados: 5
 3. [UC-03](#uc-03) - Sin proyecto - reviewed
 4. [UC-04](#uc-04) - Sin proyecto - reviewed
 5. [UC-05](#uc-05) - Sin proyecto - reviewed
+6. [UC-06](#uc-06) - Sin proyecto - reviewed
 
 ---
 
@@ -346,5 +347,78 @@ Feature: Administración de productos (CRUD/stock)
     Given el sistema permite eliminar productos (trazabilidad: "eliminar producto")
     When un administrador intenta eliminar un producto que no existe
     Then el sistema informa que el producto no se encuentra (trazabilidad: "deleteProduct")
+
+```
+
+---
+
+## UC-06
+
+### Metadatos
+- Proyecto asociado: Sin proyecto
+- Kiwi: updated
+- ID en Kiwi: 409
+- Categoria: Sin categoria
+- Madurez: reviewed
+- Escenarios: 8
+- Directos: 6
+- Derivados: 2
+
+### Resumen final en Kiwi
+UC-06
+
+### Gherkin
+```gherkin
+Feature: Carrito de compra en el navegador (LocalStorage)
+
+  Background:
+    Given el carrito se persiste en LocalStorage y se mantiene entre sesiones (trazabilidad: "LocalStorage (mantener entre sesiones)")
+
+  @direct @RF-24
+  Scenario: Gestionar carrito con persistencia en LocalStorage
+    When el usuario usa el carrito en el navegador (trazabilidad: "carrito en el navegador")
+    Then el sistema persiste el carrito en LocalStorage (trazabilidad: "persistencia en LocalStorage")
+
+  @direct @RF-25
+  Scenario: Mantener el carrito entre sesiones
+    Given el usuario tiene ítems en el carrito (trazabilidad: "carrito")
+    When el usuario cierra y vuelve a abrir la sesión del navegador
+    Then el carrito se mantiene (trazabilidad: "mantener entre sesiones")
+
+  @direct @RF-26
+  Scenario: Añadir ítems al carrito
+    Given existe un producto en el catálogo (trazabilidad: "Operaciones Añadir")
+    When el usuario añade el producto al carrito
+    Then el carrito incluye el ítem añadido (trazabilidad: "Añadir")
+
+  @direct @RF-27
+  Scenario: Modificar cantidades de ítems del carrito
+    Given existe un ítem en el carrito (trazabilidad: "modificar cantidades")
+    When el usuario cambia la cantidad del ítem
+    Then el carrito refleja la nueva cantidad (trazabilidad: "modificar")
+
+  @direct @RF-28
+  Scenario: Eliminar ítems del carrito
+    Given existe un ítem en el carrito (trazabilidad: "eliminar ítems")
+    When el usuario elimina el ítem
+    Then el carrito ya no contiene el ítem (trazabilidad: "eliminar")
+
+  @direct @RF-29
+  Scenario: Calcular subtotal y total del carrito
+    Given el carrito contiene uno o más ítems (trazabilidad: "calcular subtotal/total")
+    When el usuario consulta el resumen del carrito
+    Then el sistema calcula subtotal y total (trazabilidad: "subtotal/total")
+
+  @derived
+  Scenario: Eliminar el último ítem deja el carrito vacío
+    Given el carrito contiene un único ítem (trazabilidad: "eliminar ítems")
+    When el usuario elimina ese ítem
+    Then el carrito queda vacío (trazabilidad: "carrito")
+
+  @derived
+  Scenario: Cantidad no válida al modificar un ítem
+    Given el carrito permite modificar cantidades (trazabilidad: "modificar cantidades")
+    When el usuario intenta establecer una cantidad no válida
+    Then el carrito no aplica una cantidad inválida (trazabilidad: "modificar")
 
 ```
