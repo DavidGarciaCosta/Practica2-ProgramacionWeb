@@ -1,52 +1,39 @@
 # Kiwi TCMS
 
 ## Resumen
-UC-04
+UC-05
 
 ## Estado de publicacion
 - Kiwi: updated
-- ID en Kiwi: 364
+- ID en Kiwi: 365
 - Categoria: 
 
 ## Resumen final en Kiwi
-UC-04
+UC-05
 
 ## Gherkin
 ```gherkin
-Feature: Consultar catálogo de productos
+Feature: Ver detalle de producto
+
+  @direct @rf_RF-12
+  Scenario: Consultar detalle de un producto existente
+    Given que existe un producto en el catálogo
+    When el visitante solicita el detalle del producto
+    Then el sistema devuelve la información del producto
+    # trazabilidad: "ver detalle de producto"
 
   @derived
-  Scenario: Listar productos con paginación
-    Given que existen productos en el catálogo
-    When el visitante solicita el listado indicando page y limit
-    Then el sistema devuelve una lista paginada de productos
-    # trazabilidad: "paginación"
+  Scenario: Fallar al solicitar el detalle de un producto inexistente
+    Given que no existe un producto con el identificador solicitado
+    When el visitante solicita el detalle del producto
+    Then el sistema indica que el producto no existe
+    # trazabilidad: "ver detalle de producto"
 
   @derived
-  Scenario: Buscar productos por nombre o descripción
-    Given que existen productos en el catálogo
-    When el visitante solicita el listado aplicando un criterio de búsqueda por nombre o descripción
-    Then el sistema devuelve los productos que coinciden con la búsqueda
-    # trazabilidad: "búsqueda por nombre/descr"
-
-  @derived
-  Scenario: Filtrar productos por categoría
-    Given que existen productos en el catálogo con distintas categorías
-    When el visitante solicita el listado filtrando por categoría
-    Then el sistema devuelve únicamente los productos de esa categoría
-    # trazabilidad: "filtro por categoría"
-
-  @derived
-  Scenario: Combinar paginación, búsqueda y filtro
-    Given que existen productos en el catálogo
-    When el visitante solicita el listado combinando paginación, búsqueda y filtro por categoría
-    Then el sistema devuelve resultados coherentes con todos los criterios
-    # trazabilidad: "paginación, búsqueda y filtro por categoría"
-
-  @derived
-  Scenario: Listado vacío cuando no hay productos que cumplan el criterio
-    Given que no existen productos que coincidan con el criterio solicitado
-    When el visitante solicita el listado
-    Then el sistema devuelve una lista vacía
+  Scenario: Consultar detalle sin autenticación
+    Given que el visitante no está autenticado
+    And existe un producto en el catálogo
+    When el visitante solicita el detalle del producto
+    Then el sistema devuelve la información del producto
     # trazabilidad: "consulta pública del catálogo"
 ```
