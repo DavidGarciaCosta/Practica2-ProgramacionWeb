@@ -1,61 +1,60 @@
 # Kiwi TCMS
 
 ## Resumen
-UC-01
+UC-02
 
 ## Estado de publicacion
 - Kiwi: updated
-- ID en Kiwi: 361
+- ID en Kiwi: 362
 - Categoria: 
 
 ## Resumen final en Kiwi
-UC-01
+UC-02
 
 ## Gherkin
 ```gherkin
-Feature: Registro de usuario
+Feature: Login de usuario (JWT)
 
   Background:
-    Given el sistema permite el registro de usuarios
+    Given existe un usuario registrado con credenciales válidas
 
-  @direct @rf_RF-01
-  Scenario: Registrar un usuario
-    Given que el visitante aporta credenciales de registro (username, email, password)
-    When solicita el registro
-    Then el sistema crea la cuenta de usuario
-    And las credenciales quedan registradas sin exponer la contraseña en claro
-    # trazabilidad: "El sistema permite registrar usuarios"
+  @direct @rf_RF-03
+  Scenario: Autenticar usuario con JWT
+    Given que el usuario proporciona sus credenciales de acceso
+    When solicita autenticación
+    Then el sistema autentica al usuario
+    And emite un token JWT
+    # trazabilidad: "autenticarlos mediante tokens JWT"
 
-  @direct @rf_RF-02
-  Scenario: Impedir registro con username o email duplicados
-    Given que ya existe un usuario registrado con el mismo username o el mismo email
-    When el visitante solicita el registro con esos datos
-    Then el sistema rechaza el registro
-    And informa que username y/o email deben ser únicos
-    # trazabilidad: "username/email únicos"
+  @direct @rf_RF-04
+  Scenario: Devolver token con id y role del usuario
+    Given que el usuario proporciona credenciales correctas
+    When solicita autenticación
+    Then el sistema devuelve un token válido
+    And el token contiene el identificador y el rol del usuario
+    # trazabilidad: "token válido con id y role"
+
+  @direct @rf_RF-08
+  Scenario: No exponer contraseñas en el almacenamiento (hash bcrypt)
+    Given que un usuario se registra y/o existe en el sistema
+    When se inspecciona el almacenamiento de credenciales
+    Then la contraseña no está almacenada en claro
+    And la contraseña está almacenada con hash usando bcrypt
+    # trazabilidad: "hash (bcrypt)"
 
   @derived
-  Scenario: Registrar usuario con datos mínimos válidos
-    Given que el visitante aporta un username, email y password válidos
-    And no existe un usuario con el mismo username ni con el mismo email
-    When solicita el registro
-    Then el sistema crea la cuenta
-    And el usuario queda disponible para autenticación posterior
-    # trazabilidad: "permite registrar usuarios"
+  Scenario: Rechazar login con credenciales inválidas
+    Given que el usuario proporciona credenciales incorrectas
+    When solicita autenticación
+    Then el sistema rechaza la autenticación
+    And no emite un token JWT
+    # trazabilidad: "autenticarlos mediante tokens JWT"
 
   @derived
-  Scenario: Rechazar registro cuando falta algún dato obligatorio
-    Given que el visitante no proporciona alguno de los datos de entrada (username, email o password)
-    When solicita el registro
-    Then el sistema rechaza el registro
-    And no se crea la cuenta
+  Scenario: Rechazar login cuando faltan credenciales
+    Given que el usuario no proporciona alguno de los campos requeridos para autenticación
+    When solicita autenticación
+    Then el sistema rechaza la solicitud
+    And no emite token
     # trazabilidad: "Entradas username, email, password"
-
-  @derived
-  Scenario: Idempotencia funcional ante reintento de registro con mismos datos
-    Given que un registro previo con username y email ya fue realizado con éxito
-    When el visitante vuelve a solicitar el registro con el mismo username y/o email
-    Then el sistema no crea un segundo usuario
-    And el sistema rechaza la solicitud por duplicidad
-    # trazabilidad: "username/email únicos"
 ```
