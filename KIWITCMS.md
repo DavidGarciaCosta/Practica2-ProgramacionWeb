@@ -1,57 +1,44 @@
 # Kiwi TCMS
 
 ## Resumen
-UC-06
+UC-07
 
 ## Estado de publicacion
 - Kiwi: updated
-- ID en Kiwi: 366
+- ID en Kiwi: 367
 - Categoria: 
 
 ## Resumen final en Kiwi
-UC-06
+UC-07
 
 ## Gherkin
 ```gherkin
-Feature: Crear producto (admin)
+Feature: Eliminar producto (admin)
 
   Background:
     Given que el sistema aplica autorización por roles (user/admin)
 
-  @direct @rf_RF-13
-  Scenario: Permitir creación de producto solo a admin
+  @direct @rf_RF-14
+  Scenario: Permitir eliminar producto solo a admin
     Given que el solicitante tiene rol admin
-    When solicita la creación de un producto
-    Then el sistema crea el producto
-    # trazabilidad: "Solo admin puede crear"
+    And existe un producto en el catálogo
+    When solicita eliminar el producto
+    Then el sistema elimina el producto
+    # trazabilidad: "Solo admin puede crear/eliminar productos"
 
-  @direct @rf_RF-09
-  Scenario: Requerir rol admin para operaciones administrativas
-    Given que la operación es administrativa
-    When un usuario sin rol admin intenta crear un producto
+  @derived
+  Scenario: Denegar eliminación a usuario no admin
+    Given que el solicitante no tiene rol admin
+    When intenta eliminar un producto
     Then el sistema deniega la operación
+    And el producto permanece sin cambios
     # trazabilidad: "requieren rol admin"
 
-  @direct @rf_RF-10
-  Scenario: Impedir acceso a operación admin a usuario no admin
-    Given que el solicitante no tiene rol admin
-    When intenta acceder a la operación administrativa de creación de producto
-    Then el backend impide el acceso
-    # trazabilidad: "impedir accesos a endpoints/resolvers admin"
-
   @derived
-  Scenario: Rechazar creación cuando faltan datos del producto
+  Scenario: Fallar al eliminar un producto inexistente
     Given que el solicitante tiene rol admin
-    And no se proporcionan los datos mínimos para definir un producto
-    When solicita la creación
-    Then el sistema rechaza la creación
-    And no se crea el producto
-    # trazabilidad: "Gestión de productos (CRUD)"
-
-  @derived
-  Scenario: Crear producto y que aparezca en el catálogo público
-    Given que el solicitante tiene rol admin
-    When crea un producto
-    Then el producto queda disponible en el catálogo para consultas públicas
-    # trazabilidad: "consulta pública del catálogo"
+    And no existe el producto solicitado
+    When solicita eliminarlo
+    Then el sistema indica que el producto no existe
+    # trazabilidad: "eliminar productos"
 ```
