@@ -1,6 +1,6 @@
 # Kiwi TCMS
 
-Total publicados: 9
+Total publicados: 10
 
 ## Indice
 1. [UC-01](#uc-01) - Sin proyecto - reviewed
@@ -12,6 +12,7 @@ Total publicados: 9
 7. [UC-07](#uc-07) - Sin proyecto - reviewed
 8. [UC-08](#uc-08) - Sin proyecto - reviewed
 9. [UC-09](#uc-09) - Sin proyecto - reviewed
+10. [UC-10](#uc-10) - Sin proyecto - reviewed
 
 ---
 
@@ -648,5 +649,84 @@ Feature: Administración de usuarios
     Given el sistema permite eliminar usuarios (trazabilidad: "eliminar usuario")
     When un admin intenta eliminar un usuario que no existe
     Then el sistema informa que el usuario no se encuentra (trazabilidad: "deleteUser")
+
+```
+
+---
+
+## UC-10
+
+### Metadatos
+- Proyecto asociado: Sin proyecto
+- Kiwi: updated
+- ID en Kiwi: 413
+- Categoria: Sin categoria
+- Madurez: reviewed
+- Escenarios: 9
+- Directos: 6
+- Derivados: 3
+
+### Resumen final en Kiwi
+UC-10
+
+### Gherkin
+```gherkin
+Feature: Administración de pedidos y estadísticas
+
+  Background:
+    Given la API GraphQL incluye queries "orders", "order" y "orderStats" (trazabilidad: "Query orders/order/orderStats")
+    And la API GraphQL incluye mutaciones "updateOrderStatus" y "cancelOrder" (trazabilidad: "Mutation updateOrderStatus, cancelOrder")
+
+  @direct @RF-49
+  Scenario: Listar pedidos con filtro por estado
+    Given un usuario con rol admin (trazabilidad: "Administrador")
+    When lista pedidos aplicando filtro por estado (trazabilidad: "filtro por estado")
+    Then el sistema devuelve pedidos que cumplen el filtro (trazabilidad: "Listar pedidos")
+
+  @direct @RF-50
+  Scenario: Ver detalle de un pedido
+    Given un usuario con rol admin (trazabilidad: "ver detalle")
+    When consulta el detalle de un pedido
+    Then el sistema devuelve la información del pedido (trazabilidad: "ver detalle")
+
+  @direct @RF-51
+  Scenario: Actualizar estado de un pedido
+    Given un usuario con rol admin (trazabilidad: "actualizar estado")
+    When actualiza el estado de un pedido
+    Then el sistema guarda el nuevo estado del pedido (trazabilidad: "actualizar estado")
+
+  @direct @RF-52
+  Scenario: Consultar estadísticas agregadas de pedidos
+    Given un usuario con rol admin (trazabilidad: "estadísticas")
+    When consulta las estadísticas agregadas
+    Then el sistema devuelve totales, desglose por estado e ingresos (trazabilidad: "total, por estado, ingresos")
+
+  @direct @RF-53
+  Scenario: Disponibilidad de queries orders, order y orderStats
+    When un cliente consume la API GraphQL de administración de pedidos
+    Then están disponibles "orders", "order" y "orderStats" (trazabilidad: "orders/order/orderStats")
+
+  @direct @RF-54
+  Scenario: Disponibilidad de mutaciones updateOrderStatus y cancelOrder
+    When un cliente consume la API GraphQL de administración de pedidos
+    Then están disponibles "updateOrderStatus" y "cancelOrder" (trazabilidad: "updateOrderStatus, cancelOrder")
+
+  @derived
+  Scenario: Usuario no-admin no puede listar pedidos (orders)
+    Given las operaciones administrativas requieren rol admin (trazabilidad: "requieren rol admin")
+    When un usuario no-admin intenta consultar "orders"
+    Then el sistema deniega el acceso (trazabilidad: "impedir accesos")
+
+  @derived
+  Scenario: Cancelar un pedido como administrador
+    Given un usuario con rol admin (trazabilidad: "cancelOrder")
+    When ejecuta la operación de cancelar un pedido
+    Then el sistema marca el pedido como cancelado (trazabilidad: "cancelOrder")
+
+  @derived
+  Scenario: Filtrar pedidos por estado sin resultados
+    Given el listado admite filtro por estado (trazabilidad: "filtro por estado")
+    When el admin filtra por un estado sin pedidos asociados
+    Then el sistema devuelve una lista vacía (trazabilidad: "Listar pedidos")
 
 ```
