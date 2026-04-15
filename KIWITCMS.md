@@ -1,6 +1,6 @@
 # Kiwi TCMS
 
-Total publicados: 10
+Total publicados: 11
 
 ## Indice
 1. [UC-01](#uc-01) - RM - reviewed
@@ -13,6 +13,7 @@ Total publicados: 10
 8. [UC-08](#uc-08) - RM - reviewed
 9. [UC-09](#uc-09) - RM - reviewed
 10. [UC-10](#uc-10) - RM - reviewed
+11. [UC-11](#uc-11) - RM - reviewed
 
 ---
 
@@ -685,5 +686,52 @@ Feature: Administración de pedidos (solo admin)
     And existen pedidos
     When el administrador lista pedidos sin indicar filtro de estado
     Then el sistema devuelve el listado de pedidos
+
+```
+
+---
+
+## UC-11
+
+### Metadatos
+- Proyecto asociado: RM
+- Kiwi: created
+- ID en Kiwi: 425
+- Categoria: Sin categoria
+- Madurez: reviewed
+- Escenarios: 3
+- Directos: 1
+- Derivados: 2
+
+### Resumen final en Kiwi
+UC-11 [RM]
+
+### Gherkin
+```gherkin
+Feature: Estadísticas agregadas de pedidos (solo admin)
+
+  # Trazabilidad: "estadísticas (total, por estado, ingresos)."
+  @direct @uc-11 @rf-35
+  Scenario: Consultar estadísticas de pedidos
+    Given que un administrador está autenticado
+    And existen pedidos con distintos estados
+    When el administrador consulta las estadísticas agregadas de pedidos
+    Then el sistema devuelve el total de pedidos
+    And el sistema devuelve agregados por estado
+    And el sistema devuelve los ingresos
+
+  @derived @uc-11
+  Scenario: Usuario no admin no puede consultar estadísticas
+    Given que un usuario con rol no admin está autenticado
+    When el usuario intenta consultar estadísticas de pedidos
+    Then el sistema deniega el acceso por permisos insuficientes
+
+  @derived @uc-11
+  Scenario: Estadísticas con cero pedidos
+    Given que un administrador está autenticado
+    And no existen pedidos
+    When el administrador consulta las estadísticas agregadas de pedidos
+    Then el sistema devuelve total 0
+    And el sistema devuelve ingresos 0
 
 ```
