@@ -1,6 +1,6 @@
 # Kiwi TCMS
 
-Total publicados: 5
+Total publicados: 6
 
 ## Indice
 1. [UC-01](#uc-01) - RM - reviewed
@@ -8,6 +8,7 @@ Total publicados: 5
 3. [UC-03](#uc-03) - RM - reviewed
 4. [UC-04](#uc-04) - RM - reviewed
 5. [UC-05](#uc-05) - RM - reviewed
+6. [UC-06](#uc-06) - RM - reviewed
 
 ---
 
@@ -322,5 +323,84 @@ Feature: Administración de productos (operaciones restringidas a admin)
     And no existe un producto con un identificador dado
     When el administrador intenta eliminar el producto inexistente
     Then el sistema informa que el producto no existe
+
+```
+
+---
+
+## UC-06
+
+### Metadatos
+- Proyecto asociado: RM
+- Kiwi: created
+- ID en Kiwi: 420
+- Categoria: Sin categoria
+- Madurez: reviewed
+- Escenarios: 8
+- Directos: 6
+- Derivados: 2
+
+### Resumen final en Kiwi
+UC-06 [RM]
+
+### Gherkin
+```gherkin
+Feature: Carrito de compra en navegador con LocalStorage
+
+  # Trazabilidad: "El usuario gestiona un carrito en el navegador con persistencia en LocalStorage."
+  @direct @uc-06 @rf-15
+  Scenario: Gestionar carrito en navegador con persistencia
+    Given que el usuario usa el carrito en el navegador
+    When el usuario añade un producto al carrito
+    Then el carrito refleja el producto añadido
+    And el carrito se persiste en LocalStorage
+
+  # Trazabilidad: "LocalStorage (mantener entre sesiones)"
+  @direct @uc-06 @rf-16
+  Scenario: Mantener carrito entre sesiones
+    Given que existe un carrito guardado en LocalStorage
+    When el usuario vuelve a abrir la aplicación en el navegador
+    Then el sistema carga el carrito desde LocalStorage
+
+  # Trazabilidad: "Añadir, modificar cantidades, eliminar ítems, calcular subtotal/total"
+  @direct @uc-06 @rf-17
+  Scenario: Añadir ítems al carrito
+    Given que el carrito está vacío
+    When el usuario añade un ítem al carrito
+    Then el carrito contiene el ítem añadido
+
+  # Trazabilidad: "Añadir, modificar cantidades, eliminar ítems, calcular subtotal/total"
+  @direct @uc-06 @rf-18
+  Scenario: Modificar cantidades de ítems en el carrito
+    Given que el carrito contiene un ítem con cantidad 1
+    When el usuario cambia la cantidad del ítem a 2
+    Then el carrito actualiza la cantidad a 2
+
+  # Trazabilidad: "Añadir, modificar cantidades, eliminar ítems, calcular subtotal/total"
+  @direct @uc-06 @rf-19
+  Scenario: Eliminar ítems del carrito
+    Given que el carrito contiene un ítem
+    When el usuario elimina el ítem del carrito
+    Then el carrito no contiene el ítem
+
+  # Trazabilidad: "Añadir, modificar cantidades, eliminar ítems, calcular subtotal/total"
+  @direct @uc-06 @rf-20
+  Scenario: Calcular subtotal y total del carrito
+    Given que el carrito contiene uno o más ítems con precio asociado
+    When el usuario consulta el subtotal y el total del carrito
+    Then el sistema calcula el subtotal
+    And el sistema calcula el total
+
+  @derived @uc-06
+  Scenario: Modificar cantidad a cero elimina el ítem
+    Given que el carrito contiene un ítem con cantidad 1
+    When el usuario establece la cantidad del ítem a 0
+    Then el ítem se elimina del carrito
+
+  @derived @uc-06
+  Scenario: Carrito vacío tiene total cero
+    Given que el carrito está vacío
+    When el usuario consulta el total del carrito
+    Then el total calculado es 0
 
 ```
