@@ -1,10 +1,11 @@
 # Kiwi TCMS
 
-Total publicados: 2
+Total publicados: 3
 
 ## Indice
 1. [UC-01](#uc-01) - RM - reviewed
 2. [UC-02](#uc-02) - RM - reviewed
+3. [UC-03](#uc-03) - RM - reviewed
 
 ---
 
@@ -128,5 +129,51 @@ Feature: Login y uso de token JWT
     Given que una operación requiere autenticación mediante token
     When el usuario invoca la operación con una cabecera Authorization que no sigue el formato "Bearer <token>"
     Then el sistema rechaza la solicitud por autenticación no válida
+
+```
+
+---
+
+## UC-03
+
+### Metadatos
+- Proyecto asociado: RM
+- Kiwi: created
+- ID en Kiwi: 417
+- Categoria: Sin categoria
+- Madurez: reviewed
+- Escenarios: 3
+- Directos: 1
+- Derivados: 2
+
+### Resumen final en Kiwi
+UC-03 [RM]
+
+### Gherkin
+```gherkin
+Feature: Verificación de token y obtención de perfil
+
+  # Trazabilidad: "El endpoint de verificación valida token expirado/inválido y devuelve perfil sin password."
+  @direct @uc-03 @rf-03
+  Scenario: Verificar token válido devuelve perfil sin password
+    Given que el usuario dispone de un token JWT válido
+    When el usuario solicita la verificación del token
+    Then el sistema valida el token
+    And el sistema devuelve el perfil del usuario
+    And el perfil devuelto no incluye el password
+
+  # Trazabilidad: "El endpoint de verificación valida token expirado/inválido"
+  @derived @uc-03
+  Scenario: Verificar token expirado o inválido falla
+    Given que el usuario dispone de un token JWT expirado o inválido
+    When el usuario solicita la verificación del token
+    Then el sistema rechaza la verificación
+    And el sistema informa que el token no es válido
+
+  @derived @uc-03
+  Scenario: Verificación sin token falla
+    Given que el usuario no envía token
+    When el usuario solicita la verificación del token
+    Then el sistema rechaza la verificación por falta de autenticación
 
 ```
