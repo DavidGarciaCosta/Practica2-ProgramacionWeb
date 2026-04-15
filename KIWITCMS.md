@@ -1,11 +1,12 @@
 # Kiwi TCMS
 
-Total publicados: 3
+Total publicados: 4
 
 ## Indice
 1. [UC-01](#uc-01) - RM - reviewed
 2. [UC-02](#uc-02) - RM - reviewed
 3. [UC-03](#uc-03) - RM - reviewed
+4. [UC-04](#uc-04) - RM - reviewed
 
 ---
 
@@ -175,5 +176,68 @@ Feature: Verificación de token y obtención de perfil
     Given que el usuario no envía token
     When el usuario solicita la verificación del token
     Then el sistema rechaza la verificación por falta de autenticación
+
+```
+
+---
+
+## UC-04
+
+### Metadatos
+- Proyecto asociado: RM
+- Kiwi: created
+- ID en Kiwi: 418
+- Categoria: Sin categoria
+- Madurez: reviewed
+- Escenarios: 6
+- Directos: 3
+- Derivados: 3
+
+### Resumen final en Kiwi
+UC-04 [RM]
+
+### Gherkin
+```gherkin
+Feature: Consulta pública del catálogo de productos
+
+  # Trazabilidad: "Listar productos con paginación, búsqueda y filtro por categoría"
+  @direct @uc-04 @rf-08
+  Scenario: Listar productos con paginación, búsqueda y filtro por categoría
+    Given que existen productos en el catálogo
+    When el visitante consulta el listado de productos indicando page y limit y un texto de búsqueda y una categoría
+    Then el sistema devuelve una lista paginada de productos que coinciden con los criterios
+
+  # Trazabilidad: "ver detalle de producto"
+  @direct @uc-04 @rf-09
+  Scenario: Consultar detalle de un producto
+    Given que existe un producto en el catálogo
+    When el visitante consulta el detalle del producto
+    Then el sistema devuelve la información del producto solicitado
+
+  # Trazabilidad: "El listado soporta page/limit, búsqueda por nombre/descr y filtro por categoría."
+  @direct @uc-04 @rf-10
+  Scenario: Búsqueda por nombre o descripción y paginación con page/limit
+    Given que existen productos con nombres y descripciones variadas
+    When el visitante consulta el catálogo usando page y limit y un texto de búsqueda
+    Then el sistema filtra por coincidencias en nombre o descripción
+    And el sistema aplica paginación según page y limit
+
+  @derived @uc-04
+  Scenario: Consultar catálogo con página fuera de rango devuelve lista vacía
+    Given que existen N productos en el catálogo
+    When el visitante consulta una página que no contiene resultados
+    Then el sistema devuelve una lista vacía de productos
+
+  @derived @uc-04
+  Scenario: Filtro por categoría sin resultados devuelve lista vacía
+    Given que existen productos en el catálogo
+    When el visitante consulta el catálogo filtrando por una categoría sin productos
+    Then el sistema devuelve una lista vacía de productos
+
+  @derived @uc-04
+  Scenario: Consultar detalle de producto inexistente falla
+    Given que no existe un producto con un identificador dado
+    When el visitante consulta el detalle del producto inexistente
+    Then el sistema informa que el producto no existe
 
 ```
