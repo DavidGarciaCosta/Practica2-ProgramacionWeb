@@ -1,6 +1,6 @@
 # Kiwi TCMS
 
-Total publicados: 11
+Total publicados: 12
 
 ## Indice
 1. [UC-01](#uc-01) - RM - reviewed
@@ -14,6 +14,7 @@ Total publicados: 11
 9. [UC-09](#uc-09) - RM - reviewed
 10. [UC-10](#uc-10) - RM - reviewed
 11. [UC-11](#uc-11) - RM - reviewed
+12. [UC-12](#uc-12) - RM - reviewed
 
 ---
 
@@ -733,5 +734,62 @@ Feature: Estadísticas agregadas de pedidos (solo admin)
     When el administrador consulta las estadísticas agregadas de pedidos
     Then el sistema devuelve total 0
     And el sistema devuelve ingresos 0
+
+```
+
+---
+
+## UC-12
+
+### Metadatos
+- Proyecto asociado: RM
+- Kiwi: created
+- ID en Kiwi: 426
+- Categoria: Sin categoria
+- Madurez: reviewed
+- Escenarios: 5
+- Directos: 3
+- Derivados: 2
+
+### Resumen final en Kiwi
+UC-12 [RM]
+
+### Gherkin
+```gherkin
+Feature: Chat en tiempo real (Socket.IO)
+
+  # Trazabilidad: "Emitir/recibir mensajes en tiempo real"
+  @direct @uc-12 @rf-37
+  Scenario: Enviar y recibir mensajes en tiempo real
+    Given que dos usuarios están conectados al chat
+    When un usuario envía un mensaje en el chat
+    Then el otro usuario recibe el mensaje en tiempo real
+
+  # Trazabilidad: "almacenar mensajes en MongoDB (Message)."
+  @direct @uc-12 @rf-38
+  Scenario: Persistir mensajes en base de datos
+    Given que un usuario está conectado al chat
+    When el usuario envía un mensaje
+    Then el sistema almacena el mensaje en MongoDB
+
+  # Trazabilidad: "Sala por defecto 'general'"
+  @direct @uc-12 @rf-39
+  Scenario: Conectar a la sala por defecto general
+    Given que un usuario abre el chat
+    When el sistema inicia la sesión de chat
+    Then el usuario se une a la sala por defecto "general"
+
+  @derived @uc-12
+  Scenario: Usuario desconectado no recibe mensajes en tiempo real
+    Given que un usuario estaba conectado al chat
+    And el usuario se desconecta
+    When otro usuario envía un mensaje
+    Then el usuario desconectado no recibe el mensaje en tiempo real
+
+  @derived @uc-12
+  Scenario: Recuperar historial de mensajes desde persistencia (si está habilitado)
+    Given que existen mensajes persistidos en MongoDB
+    When un usuario se conecta al chat
+    Then el sistema puede proporcionar el historial de mensajes persistidos
 
 ```
