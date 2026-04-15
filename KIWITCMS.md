@@ -1,6 +1,6 @@
 # Kiwi TCMS
 
-Total publicados: 9
+Total publicados: 10
 
 ## Indice
 1. [UC-01](#uc-01) - RM - reviewed
@@ -12,6 +12,7 @@ Total publicados: 9
 7. [UC-07](#uc-07) - RM - reviewed
 8. [UC-08](#uc-08) - RM - reviewed
 9. [UC-09](#uc-09) - RM - reviewed
+10. [UC-10](#uc-10) - RM - reviewed
 
 ---
 
@@ -610,5 +611,79 @@ Feature: Administración de usuarios (solo admin)
     Given que un usuario con rol no admin está autenticado
     When el usuario intenta eliminar a un usuario
     Then el sistema deniega el acceso por permisos insuficientes
+
+```
+
+---
+
+## UC-10
+
+### Metadatos
+- Proyecto asociado: RM
+- Kiwi: created
+- ID en Kiwi: 424
+- Categoria: Sin categoria
+- Madurez: reviewed
+- Escenarios: 7
+- Directos: 4
+- Derivados: 3
+
+### Resumen final en Kiwi
+UC-10 [RM]
+
+### Gherkin
+```gherkin
+Feature: Administración de pedidos (solo admin)
+
+  # Trazabilidad: "Listar pedidos (con filtro por estado)"
+  @direct @uc-10 @rf-32
+  Scenario: Listar pedidos con filtro por estado
+    Given que un administrador está autenticado
+    And existen pedidos con distintos estados
+    When el administrador lista pedidos filtrando por un estado
+    Then el sistema devuelve solo los pedidos que coinciden con el estado
+
+  # Trazabilidad: "ver detalle"
+  @direct @uc-10 @rf-33
+  Scenario: Consultar detalle de un pedido
+    Given que un administrador está autenticado
+    And existe un pedido
+    When el administrador consulta el detalle del pedido
+    Then el sistema devuelve el detalle del pedido
+
+  # Trazabilidad: "actualizar estado"
+  @direct @uc-10 @rf-34
+  Scenario: Actualizar estado de un pedido
+    Given que un administrador está autenticado
+    And existe un pedido con estado "pending"
+    When el administrador actualiza el estado del pedido a otro estado permitido
+    Then el sistema guarda el nuevo estado del pedido
+
+  # Trazabilidad: "cancelOrder"
+  @direct @uc-10 @rf-36
+  Scenario: Cancelar un pedido
+    Given que un administrador está autenticado
+    And existe un pedido
+    When el administrador solicita cancelar el pedido
+    Then el sistema marca el pedido como cancelado
+
+  @derived @uc-10
+  Scenario: Usuario no admin no puede listar pedidos
+    Given que un usuario con rol no admin está autenticado
+    When el usuario intenta listar pedidos
+    Then el sistema deniega el acceso por permisos insuficientes
+
+  @derived @uc-10
+  Scenario: Usuario no admin no puede actualizar estado de pedidos
+    Given que un usuario con rol no admin está autenticado
+    When el usuario intenta actualizar el estado de un pedido
+    Then el sistema deniega el acceso por permisos insuficientes
+
+  @derived @uc-10
+  Scenario: Listar pedidos sin filtro devuelve todos los pedidos
+    Given que un administrador está autenticado
+    And existen pedidos
+    When el administrador lista pedidos sin indicar filtro de estado
+    Then el sistema devuelve el listado de pedidos
 
 ```
