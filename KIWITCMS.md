@@ -1,6 +1,6 @@
 # Kiwi TCMS
 
-Total publicados: 8
+Total publicados: 9
 
 ## Indice
 1. [UC-01](#uc-01) - RM - reviewed
@@ -11,6 +11,7 @@ Total publicados: 8
 6. [UC-06](#uc-06) - RM - reviewed
 7. [UC-07](#uc-07) - RM - reviewed
 8. [UC-08](#uc-08) - RM - reviewed
+9. [UC-09](#uc-09) - RM - reviewed
 
 ---
 
@@ -537,5 +538,77 @@ Feature: Consulta del histórico de pedidos del usuario
     And el usuario no tiene pedidos asociados
     When el usuario consulta su histórico de pedidos
     Then el sistema devuelve una lista vacía
+
+```
+
+---
+
+## UC-09
+
+### Metadatos
+- Proyecto asociado: RM
+- Kiwi: created
+- ID en Kiwi: 423
+- Categoria: Sin categoria
+- Madurez: reviewed
+- Escenarios: 7
+- Directos: 4
+- Derivados: 3
+
+### Resumen final en Kiwi
+UC-09 [RM]
+
+### Gherkin
+```gherkin
+Feature: Administración de usuarios (solo admin)
+
+  # Trazabilidad: "Listar usuarios, cambiar rol (user/admin), eliminar usuario"
+  @direct @uc-09 @rf-28
+  Scenario: Listar usuarios como administrador
+    Given que un administrador está autenticado
+    When el administrador solicita listar usuarios
+    Then el sistema devuelve la lista de usuarios registrados
+
+  # Trazabilidad: "cambiar rol (user/admin)"
+  @direct @uc-09 @rf-29
+  Scenario: Cambiar rol de un usuario como administrador
+    Given que un administrador está autenticado
+    And existe un usuario con rol user
+    When el administrador actualiza el rol del usuario a admin
+    Then el sistema guarda el nuevo rol del usuario
+
+  # Trazabilidad: "eliminar usuario"
+  @direct @uc-09 @rf-30
+  Scenario: Eliminar un usuario como administrador
+    Given que un administrador está autenticado
+    And existe un usuario registrado
+    When el administrador solicita eliminar al usuario
+    Then el sistema elimina al usuario
+
+  # Trazabilidad: "no permitir que un admin se elimine a sí mismo"
+  @direct @uc-09 @rf-31
+  Scenario: Impedir que un admin se elimine a sí mismo
+    Given que un administrador está autenticado
+    When el administrador intenta eliminar su propia cuenta
+    Then el sistema rechaza la operación
+    And el sistema mantiene la cuenta del administrador
+
+  @derived @uc-09
+  Scenario: Usuario no admin no puede listar usuarios
+    Given que un usuario con rol no admin está autenticado
+    When el usuario intenta listar usuarios
+    Then el sistema deniega el acceso por permisos insuficientes
+
+  @derived @uc-09
+  Scenario: Usuario no admin no puede cambiar roles
+    Given que un usuario con rol no admin está autenticado
+    When el usuario intenta cambiar el rol de otro usuario
+    Then el sistema deniega el acceso por permisos insuficientes
+
+  @derived @uc-09
+  Scenario: Usuario no admin no puede eliminar usuarios
+    Given que un usuario con rol no admin está autenticado
+    When el usuario intenta eliminar a un usuario
+    Then el sistema deniega el acceso por permisos insuficientes
 
 ```
