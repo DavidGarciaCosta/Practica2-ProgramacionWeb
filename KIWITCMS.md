@@ -1,12 +1,13 @@
 # Kiwi TCMS
 
-Total publicados: 4
+Total publicados: 5
 
 ## Indice
 1. [UC-01](#uc-01) - RM - reviewed
 2. [UC-02](#uc-02) - RM - reviewed
 3. [UC-03](#uc-03) - RM - reviewed
 4. [UC-04](#uc-04) - RM - reviewed
+5. [UC-05](#uc-05) - RM - reviewed
 
 ---
 
@@ -238,6 +239,88 @@ Feature: Consulta pública del catálogo de productos
   Scenario: Consultar detalle de producto inexistente falla
     Given que no existe un producto con un identificador dado
     When el visitante consulta el detalle del producto inexistente
+    Then el sistema informa que el producto no existe
+
+```
+
+---
+
+## UC-05
+
+### Metadatos
+- Proyecto asociado: RM
+- Kiwi: created
+- ID en Kiwi: 419
+- Categoria: Sin categoria
+- Madurez: reviewed
+- Escenarios: 8
+- Directos: 6
+- Derivados: 2
+
+### Resumen final en Kiwi
+UC-05 [RM]
+
+### Gherkin
+```gherkin
+Feature: Administración de productos (operaciones restringidas a admin)
+
+  # Trazabilidad: "Las operaciones administrativas requieren rol admin."
+  @direct @uc-05 @rf-06
+  Scenario: Requerir rol admin para operaciones administrativas
+    Given que un usuario está autenticado con rol no admin
+    When el usuario intenta ejecutar una operación administrativa de productos
+    Then el sistema deniega el acceso por permisos insuficientes
+
+  # Trazabilidad: "El backend debe impedir accesos a endpoints/resolvers admin a usuarios no admin."
+  @direct @uc-05 @rf-07
+  Scenario: Bloquear acceso a resolvers/endpoints admin si no es admin
+    Given que un usuario está autenticado con rol no admin
+    When el usuario intenta acceder a una operación marcada como admin
+    Then el sistema impide el acceso
+
+  # Trazabilidad: "Solo admin puede crear/eliminar productos"
+  @direct @uc-05 @rf-11
+  Scenario: Crear producto como administrador
+    Given que un administrador está autenticado
+    When el administrador solicita crear un producto
+    Then el sistema crea el producto en el catálogo
+
+  # Trazabilidad: "Solo admin puede crear/eliminar productos"
+  @direct @uc-05 @rf-12
+  Scenario: Eliminar producto como administrador
+    Given que un administrador está autenticado
+    And existe un producto en el catálogo
+    When el administrador solicita eliminar el producto
+    Then el sistema elimina el producto del catálogo
+
+  # Trazabilidad: "Solo admin puede crear/eliminar productos y modificar stock."
+  @direct @uc-05 @rf-13
+  Scenario: Actualizar stock como administrador
+    Given que un administrador está autenticado
+    And existe un producto en el catálogo
+    When el administrador solicita actualizar el stock del producto
+    Then el sistema actualiza el stock del producto
+
+  # Trazabilidad: "El stock no puede ser negativo."
+  @direct @uc-05 @rf-14
+  Scenario: Impedir actualizar stock a un valor negativo
+    Given que un administrador está autenticado
+    And existe un producto en el catálogo
+    When el administrador solicita actualizar el stock a un valor negativo
+    Then el sistema rechaza la actualización
+    And el sistema mantiene el stock sin cambios
+
+  @derived @uc-05
+  Scenario: Rechazar crear producto si no hay autenticación
+    Given que un visitante no está autenticado
+    When el visitante intenta crear un producto
+    Then el sistema deniega el acceso por falta de autenticación
+
+  @derived @uc-05
+  Scenario: Eliminar producto inexistente informa error
+    Given que un administrador está autenticado
+    And no existe un producto con un identificador dado
+    When el administrador intenta eliminar el producto inexistente
     Then el sistema informa que el producto no existe
 
 ```
