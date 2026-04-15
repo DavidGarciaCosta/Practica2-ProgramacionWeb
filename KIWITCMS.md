@@ -1,6 +1,6 @@
 # Kiwi TCMS
 
-Total publicados: 7
+Total publicados: 8
 
 ## Indice
 1. [UC-01](#uc-01) - RM - reviewed
@@ -10,6 +10,7 @@ Total publicados: 7
 5. [UC-05](#uc-05) - RM - reviewed
 6. [UC-06](#uc-06) - RM - reviewed
 7. [UC-07](#uc-07) - RM - reviewed
+8. [UC-08](#uc-08) - RM - reviewed
 
 ---
 
@@ -492,5 +493,49 @@ Feature: Creación de pedidos (validaciones en servidor)
     When el usuario solicita crear un pedido
     Then el sistema calcula el total con el precio vigente en servidor
     And el sistema crea el pedido con el total recalculado o rechaza la operación según reglas de negocio
+
+```
+
+---
+
+## UC-08
+
+### Metadatos
+- Proyecto asociado: RM
+- Kiwi: created
+- ID en Kiwi: 422
+- Categoria: Sin categoria
+- Madurez: reviewed
+- Escenarios: 3
+- Directos: 1
+- Derivados: 2
+
+### Resumen final en Kiwi
+UC-08 [RM]
+
+### Gherkin
+```gherkin
+Feature: Consulta del histórico de pedidos del usuario
+
+  # Trazabilidad: "y consultar su histórico."
+  @direct @uc-08 @rf-22
+  Scenario: Consultar mis pedidos siendo usuario autenticado
+    Given que el usuario está autenticado
+    And el usuario tiene uno o más pedidos asociados
+    When el usuario consulta su histórico de pedidos
+    Then el sistema devuelve la lista de pedidos del usuario
+
+  @derived @uc-08
+  Scenario: Consultar mis pedidos sin autenticación falla
+    Given que el visitante no está autenticado
+    When el visitante consulta el histórico de pedidos
+    Then el sistema rechaza la consulta por falta de autenticación
+
+  @derived @uc-08
+  Scenario: Usuario sin pedidos obtiene lista vacía
+    Given que el usuario está autenticado
+    And el usuario no tiene pedidos asociados
+    When el usuario consulta su histórico de pedidos
+    Then el sistema devuelve una lista vacía
 
 ```
