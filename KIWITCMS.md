@@ -1,6 +1,6 @@
 # Kiwi TCMS
 
-Total publicados: 6
+Total publicados: 7
 
 ## Indice
 1. [UC-01](#uc-01) - RM - reviewed
@@ -9,6 +9,7 @@ Total publicados: 6
 4. [UC-04](#uc-04) - RM - reviewed
 5. [UC-05](#uc-05) - RM - reviewed
 6. [UC-06](#uc-06) - RM - reviewed
+7. [UC-07](#uc-07) - RM - reviewed
 
 ---
 
@@ -402,5 +403,94 @@ Feature: Carrito de compra en navegador con LocalStorage
     Given que el carrito está vacío
     When el usuario consulta el total del carrito
     Then el total calculado es 0
+
+```
+
+---
+
+## UC-07
+
+### Metadatos
+- Proyecto asociado: RM
+- Kiwi: created
+- ID en Kiwi: 421
+- Categoria: Sin categoria
+- Madurez: reviewed
+- Escenarios: 8
+- Directos: 6
+- Derivados: 2
+
+### Resumen final en Kiwi
+UC-07 [RM]
+
+### Gherkin
+```gherkin
+Feature: Creación de pedidos (validaciones en servidor)
+
+  # Trazabilidad: "Un usuario autenticado puede crear pedidos"
+  @direct @uc-07 @rf-21
+  Scenario: Crear pedido siendo usuario autenticado
+    Given que el usuario está autenticado
+    And el usuario dispone de un carrito con ítems
+    When el usuario solicita crear un pedido
+    Then el sistema crea el pedido
+
+  # Trazabilidad: "No se crea un pedido si el carrito está vacío."
+  @direct @uc-07 @rf-23
+  Scenario: Impedir crear pedido con carrito vacío
+    Given que el usuario está autenticado
+    And el carrito no contiene ítems
+    When el usuario solicita crear un pedido
+    Then el sistema rechaza la creación del pedido
+    And el sistema informa que el carrito está vacío
+
+  # Trazabilidad: "Si un producto no existe o no hay stock suficiente, el pedido falla con mensaje informativo."
+  @direct @uc-07 @rf-24
+  Scenario: Fallar creación de pedido si hay producto inexistente o sin stock
+    Given que el usuario está autenticado
+    And el carrito contiene un producto inexistente o con stock insuficiente
+    When el usuario solicita crear un pedido
+    Then el sistema rechaza la creación del pedido
+    And el sistema informa del motivo (producto inexistente o stock insuficiente)
+
+  # Trazabilidad: "El total usado para el pedido se calcula en servidor (no se confía en el cliente)."
+  @direct @uc-07 @rf-25
+  Scenario: Recalcular total del pedido en servidor
+    Given que el usuario está autenticado
+    And el carrito contiene ítems con precios
+    When el usuario solicita crear un pedido proporcionando un total calculado en cliente
+    Then el sistema calcula el total en servidor
+    And el sistema ignora cualquier manipulación del total enviado por el cliente
+
+  # Trazabilidad: "Al crear el pedido, el stock de productos se reduce"
+  @direct @uc-07 @rf-26
+  Scenario: Descontar stock al crear pedido
+    Given que el usuario está autenticado
+    And el carrito contiene un producto con stock disponible
+    When el usuario solicita crear un pedido
+    Then el sistema reduce el stock del producto según las cantidades del pedido
+
+  # Trazabilidad: "y se vincula el pedido al usuario."
+  @direct @uc-07 @rf-27
+  Scenario: Vincular pedido al usuario
+    Given que el usuario está autenticado
+    And el carrito contiene ítems
+    When el usuario solicita crear un pedido
+    Then el sistema vincula el pedido creado al usuario autenticado
+
+  @derived @uc-07
+  Scenario: Rechazar creación de pedido si el usuario no está autenticado
+    Given que el visitante no está autenticado
+    When el visitante intenta crear un pedido
+    Then el sistema rechaza la operación por falta de autenticación
+
+  @derived @uc-07
+  Scenario: Fallar creación de pedido si el precio del producto cambió en el servidor
+    Given que el usuario está autenticado
+    And el carrito contiene ítems
+    And el precio de uno de los productos difiere respecto al valor que el cliente tenía
+    When el usuario solicita crear un pedido
+    Then el sistema calcula el total con el precio vigente en servidor
+    And el sistema crea el pedido con el total recalculado o rechaza la operación según reglas de negocio
 
 ```
