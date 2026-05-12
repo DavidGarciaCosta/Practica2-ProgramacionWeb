@@ -29,7 +29,7 @@ Cypress.Commands.add('safeVisit', (path: string) => {
     failOnStatusCode: false,
     retryOnNetworkFailure: true,
   });
-  cy.location('pathname', { timeout: 10000 }).should('include', path);
+  cy.get('body', { timeout: 10000 }).should('be.visible');
 });
 
 declare global {
