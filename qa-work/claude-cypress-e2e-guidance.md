@@ -4,8 +4,8 @@ Este archivo esta pensado para que el desarrollador lo entregue a Claude antes d
 Claude NO debe implementar a ciegas: debe hacer preguntas, cerrar ambiguedades y proponer una arquitectura mantenible antes de escribir codigo.
 
 ## Contexto
-- Generado: 2026-06-03 08:11:29 UTC
-- Casos Kiwi publicados incluidos: 4
+- Generado: 2026-06-03 08:11:31 UTC
+- Casos Kiwi publicados incluidos: 5
 - Stack objetivo: Cypress E2E
 
 ## Reglas de trabajo con Claude
@@ -33,6 +33,7 @@ Claude NO debe implementar a ciegas: debe hacer preguntas, cerrar ambiguedades y
 | KIWI-624 | UC-02 | `cypress/e2e/uc-02.cy.ts` | Pendiente de implementar |
 | KIWI-625 | UC-03 | `cypress/e2e/uc-03.cy.ts` | Pendiente de implementar |
 | KIWI-626 | UC-04 | `cypress/e2e/uc-04.cy.ts` | Pendiente de implementar |
+| KIWI-627 | UC-05 | `cypress/e2e/uc-05.cy.ts` | Pendiente de implementar |
 
 ## Guia por caso Kiwi
 
@@ -528,6 +529,125 @@ Feature: Gestionar productos (CRUD/stock) como administrador
 - Eliminar un producto inexistente
 - Actualizar stock a cero
 - Operación administrativa sin token
+
+#### Preguntas obligatorias que Claude debe hacer al desarrollador
+- Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
+- Que usuario, rol, permisos y estado inicial necesita el caso?
+- Que datos deben existir antes del test y como se crean de forma determinista?
+- Que datos deben limpiarse despues para que el test sea independiente?
+- Que llamadas externas deben mockearse, interceptarse o estabilizarse?
+- Que selectores robustos existen para cada accion y assertion?
+- Que resultado visible, persistido o de API prueba realmente que el caso se satisface?
+- Que edge cases o errores estan implicitos en el caso Kiwi?
+- Como se ejecutara este test en CI y que variables necesita?
+
+#### Propuesta de implementacion Cypress
+- Crear un `describe` con referencia clara a KIWI-{case_id}.
+- Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
+- Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
+- Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
+- Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
+
+#### Criterios de aceptacion del test
+- [ ] Incluye trazabilidad KIWI-{case_id}.
+- [ ] Falla si se rompe el comportamiento funcional principal.
+- [ ] Cubre precondiciones y datos necesarios.
+- [ ] Usa selectores robustos.
+- [ ] No depende del orden de ejecucion ni de datos compartidos inestables.
+- [ ] Puede ejecutarse localmente y en CI.
+
+#### Riesgos a vigilar
+- Flakiness por esperas fijas, datos compartidos, servicios externos o fechas.
+- Falsos positivos por asserts demasiado genericos.
+- Duplicacion de helpers o comandos Cypress innecesarios.
+
+### 5. KIWI-627 - UC-05
+
+- Proyecto: `pr`
+- Categoria: `no informada`
+- Spec sugerida: `cypress/e2e/uc-05.cy.ts`
+
+#### Objetivo funcional
+El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma observable y no solo que la UI navega sin error.
+
+#### Gherkin / Caso Kiwi
+```gherkin
+Feature: Gestionar carrito de compra en el navegador
+  Como visitante/usuario
+  Quiero gestionar un carrito en el navegador
+  Para preparar un pedido
+
+  Background:
+    Given que el carrito se gestiona en el navegador
+
+  # @direct — RF-27
+  Scenario: Carrito con persistencia en LocalStorage
+    When el usuario añade productos al carrito
+    Then el carrito se persiste en LocalStorage
+    # trazabilidad: "carrito ... persistencia en LocalStorage"
+
+  # @direct — RF-28
+  Scenario: Mantener carrito entre sesiones
+    Given que el usuario ha guardado un carrito en LocalStorage
+    When el usuario vuelve a abrir la aplicación en otra sesión
+    Then el carrito se recupera desde LocalStorage
+    # trazabilidad: "mantener entre sesiones"
+
+  # @direct — RF-29
+  Scenario: Añadir ítems al carrito
+    When el usuario añade un ítem al carrito
+    Then el carrito contiene el ítem añadido
+    # trazabilidad: "Añadir"
+
+  # @direct — RF-30
+  Scenario: Modificar cantidades de ítems
+    Given que el carrito contiene un ítem
+    When el usuario modifica la cantidad del ítem
+    Then el carrito refleja la nueva cantidad
+    # trazabilidad: "modificar cantidades"
+
+  # @direct — RF-31
+  Scenario: Eliminar ítems del carrito
+    Given que el carrito contiene un ítem
+    When el usuario elimina el ítem
+    Then el carrito ya no contiene el ítem
+    # trazabilidad: "eliminar ítems"
+
+  # @direct — RF-32
+  Scenario: Calcular subtotal y total
+    Given que el carrito contiene uno o más ítems
+    When el usuario consulta el resumen del carrito
+    Then el sistema calcula el subtotal
+    And el sistema calcula el total
+    # trazabilidad: "calcular subtotal/total"
+
+  # @derived — cobertura adicional
+  Scenario: Persistencia tras modificar cantidades
+    Given que el carrito está persistido en LocalStorage
+    When el usuario cambia cantidades
+    Then el carrito actualizado se vuelve a persistir en LocalStorage
+
+  Scenario: Vaciar el carrito eliminando todos los ítems
+    Given que el carrito contiene múltiples ítems
+    When el usuario elimina todos los ítems
+    Then el carrito queda vacío
+
+  Scenario: Total con carrito vacío
+    Given que el carrito está vacío
+    When el usuario consulta el total
+    Then el total es 0 o equivalente funcional
+```
+
+#### Escenarios detectados
+- Carrito con persistencia en LocalStorage
+- Mantener carrito entre sesiones
+- Añadir ítems al carrito
+- Modificar cantidades de ítems
+- Eliminar ítems del carrito
+- Calcular subtotal y total
+- Persistencia tras modificar cantidades
+- Vaciar el carrito eliminando todos los ítems
+- Total con carrito vacío
 
 #### Preguntas obligatorias que Claude debe hacer al desarrollador
 - Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
