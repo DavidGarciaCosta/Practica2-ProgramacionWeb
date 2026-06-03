@@ -4,8 +4,8 @@ Este archivo esta pensado para que el desarrollador lo entregue a Claude antes d
 Claude NO debe implementar a ciegas: debe hacer preguntas, cerrar ambiguedades y proponer una arquitectura mantenible antes de escribir codigo.
 
 ## Contexto
-- Generado: 2026-06-03 08:11:31 UTC
-- Casos Kiwi publicados incluidos: 5
+- Generado: 2026-06-03 08:11:33 UTC
+- Casos Kiwi publicados incluidos: 6
 - Stack objetivo: Cypress E2E
 
 ## Reglas de trabajo con Claude
@@ -34,6 +34,7 @@ Claude NO debe implementar a ciegas: debe hacer preguntas, cerrar ambiguedades y
 | KIWI-625 | UC-03 | `cypress/e2e/uc-03.cy.ts` | Pendiente de implementar |
 | KIWI-626 | UC-04 | `cypress/e2e/uc-04.cy.ts` | Pendiente de implementar |
 | KIWI-627 | UC-05 | `cypress/e2e/uc-05.cy.ts` | Pendiente de implementar |
+| KIWI-628 | UC-06 | `cypress/e2e/uc-06.cy.ts` | Pendiente de implementar |
 
 ## Guia por caso Kiwi
 
@@ -648,6 +649,178 @@ Feature: Gestionar carrito de compra en el navegador
 - Persistencia tras modificar cantidades
 - Vaciar el carrito eliminando todos los ítems
 - Total con carrito vacío
+
+#### Preguntas obligatorias que Claude debe hacer al desarrollador
+- Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
+- Que usuario, rol, permisos y estado inicial necesita el caso?
+- Que datos deben existir antes del test y como se crean de forma determinista?
+- Que datos deben limpiarse despues para que el test sea independiente?
+- Que llamadas externas deben mockearse, interceptarse o estabilizarse?
+- Que selectores robustos existen para cada accion y assertion?
+- Que resultado visible, persistido o de API prueba realmente que el caso se satisface?
+- Que edge cases o errores estan implicitos en el caso Kiwi?
+- Como se ejecutara este test en CI y que variables necesita?
+
+#### Propuesta de implementacion Cypress
+- Crear un `describe` con referencia clara a KIWI-{case_id}.
+- Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
+- Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
+- Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
+- Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
+
+#### Criterios de aceptacion del test
+- [ ] Incluye trazabilidad KIWI-{case_id}.
+- [ ] Falla si se rompe el comportamiento funcional principal.
+- [ ] Cubre precondiciones y datos necesarios.
+- [ ] Usa selectores robustos.
+- [ ] No depende del orden de ejecucion ni de datos compartidos inestables.
+- [ ] Puede ejecutarse localmente y en CI.
+
+#### Riesgos a vigilar
+- Flakiness por esperas fijas, datos compartidos, servicios externos o fechas.
+- Falsos positivos por asserts demasiado genericos.
+- Duplicacion de helpers o comandos Cypress innecesarios.
+
+### 6. KIWI-628 - UC-06
+
+- Proyecto: `pr`
+- Categoria: `no informada`
+- Spec sugerida: `cypress/e2e/uc-06.cy.ts`
+
+#### Objetivo funcional
+El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma observable y no solo que la UI navega sin error.
+
+#### Gherkin / Caso Kiwi
+```gherkin
+Feature: Crear pedido (usuario autenticado)
+  Como usuario autenticado
+  Quiero crear un pedido
+  Para comprar los productos del carrito
+
+  Background:
+    Given que el usuario está autenticado
+
+  # @direct — RF-33
+  Scenario: Crear un pedido como usuario autenticado
+    Given que el usuario tiene un carrito con productos
+    When el usuario solicita crear el pedido
+    Then el sistema crea el pedido
+    # trazabilidad: "puede crear pedidos"
+
+  # @direct — RF-35
+  Scenario: Disponibilidad de la mutation createOrder
+    When el cliente ejecuta la mutation GraphQL "createOrder"
+    Then el sistema procesa la creación del pedido
+    # trazabilidad: "Mutation createOrder"
+
+  # @direct — RF-38
+  Scenario: Validar stock al crear el pedido
+    Given que el carrito contiene productos
+    When el usuario solicita crear el pedido
+    Then el sistema valida el stock de cada producto
+    # trazabilidad: "Validar stock"
+
+  # @direct — RF-39
+  Scenario: Validar precio al crear el pedido
+    Given que el carrito contiene productos
+    When el usuario solicita crear el pedido
+    Then el sistema valida el precio de los productos
+    # trazabilidad: "validar precio"
+
+  # @direct — RF-41
+  Scenario: Recalcular el total en servidor
+    Given que el carrito contiene productos
+    When el usuario solicita crear el pedido
+    Then el sistema recalcula el total en el servidor
+    # trazabilidad: "recalcular total en servidor"
+
+  # @direct — RF-42
+  Scenario: Descontar stock al crear el pedido
+    Given que el carrito contiene productos con stock suficiente
+    When el usuario solicita crear el pedido
+    Then el sistema descuenta el stock correspondiente
+    # trazabilidad: "descontar stock al crear pedido"
+
+  # @direct — RF-43
+  Scenario: Impedir crear un pedido con carrito vacío
+    Given que el carrito está vacío
+    When el usuario solicita crear el pedido
+    Then el sistema rechaza la creación del pedido
+    # trazabilidad: "No se crea un pedido si el carrito está vacío."
+
+  # @direct — RF-44
+  Scenario: Fallar si un producto no existe
+    Given que el carrito contiene un producto que no existe
+    When el usuario solicita crear el pedido
+    Then el sistema rechaza la creación del pedido
+    And devuelve un mensaje informativo
+    # trazabilidad: "Si un producto no existe"
+
+  # @direct — RF-45
+  Scenario: Fallar si no hay stock suficiente
+    Given que el carrito contiene un producto sin stock suficiente
+    When el usuario solicita crear el pedido
+    Then el sistema rechaza la creación del pedido
+    And devuelve un mensaje informativo
+    # trazabilidad: "no hay stock suficiente"
+
+  # @direct — RF-46
+  Scenario: No confiar en el total del cliente
+    Given que el cliente envía un total manipulado
+    When el usuario solicita crear el pedido
+    Then el sistema utiliza el total calculado en servidor
+    And no confía en el total enviado por el cliente
+    # trazabilidad: "no se confía en el cliente"
+
+  # @direct — RF-47
+  Scenario: Reducir el stock de productos tras crear el pedido
+    Given que el carrito contiene productos con stock suficiente
+    When el sistema crea el pedido
+    Then el stock de productos se reduce
+    # trazabilidad: "el stock de productos se reduce"
+
+  # @direct — RF-48
+  Scenario: Vincular el pedido al usuario
+    When el sistema crea el pedido
+    Then el pedido queda vinculado al usuario autenticado
+    # trazabilidad: "se vincula el pedido al usuario"
+
+  # @derived — cobertura adicional
+  Scenario: Rechazar createOrder sin autenticación
+    Given que el cliente no está autenticado
+    When intenta crear un pedido
+    Then el sistema rechaza la operación
+
+  Scenario: Registrar estado inicial del pedido
+    Given que el usuario solicita crear un pedido
+    When el sistema crea el pedido
+    Then el pedido queda en un estado válido del sistema
+    # trazabilidad: "Estados pending, completed, cancelled"
+
+  Scenario: Precio cambiado entre carrito y servidor
+    Given que el precio de un producto cambió en el servidor
+    And el carrito contiene el producto con el precio anterior
+    When el usuario solicita crear el pedido
+    Then el sistema valida el precio y evita inconsistencia
+    # trazabilidad: "validar precio"
+```
+
+#### Escenarios detectados
+- Crear un pedido como usuario autenticado
+- Disponibilidad de la mutation createOrder
+- Validar stock al crear el pedido
+- Validar precio al crear el pedido
+- Recalcular el total en servidor
+- Descontar stock al crear el pedido
+- Impedir crear un pedido con carrito vacío
+- Fallar si un producto no existe
+- Fallar si no hay stock suficiente
+- No confiar en el total del cliente
+- Reducir el stock de productos tras crear el pedido
+- Vincular el pedido al usuario
+- Rechazar createOrder sin autenticación
+- Registrar estado inicial del pedido
+- Precio cambiado entre carrito y servidor
 
 #### Preguntas obligatorias que Claude debe hacer al desarrollador
 - Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
