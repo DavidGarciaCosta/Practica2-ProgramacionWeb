@@ -4,8 +4,8 @@ Este archivo esta pensado para que el desarrollador lo entregue a Claude antes d
 Claude NO debe implementar a ciegas: debe hacer preguntas, cerrar ambiguedades y proponer una arquitectura mantenible antes de escribir codigo.
 
 ## Contexto
-- Generado: 2026-06-03 08:11:33 UTC
-- Casos Kiwi publicados incluidos: 6
+- Generado: 2026-06-03 08:11:36 UTC
+- Casos Kiwi publicados incluidos: 7
 - Stack objetivo: Cypress E2E
 
 ## Reglas de trabajo con Claude
@@ -35,6 +35,7 @@ Claude NO debe implementar a ciegas: debe hacer preguntas, cerrar ambiguedades y
 | KIWI-626 | UC-04 | `cypress/e2e/uc-04.cy.ts` | Pendiente de implementar |
 | KIWI-627 | UC-05 | `cypress/e2e/uc-05.cy.ts` | Pendiente de implementar |
 | KIWI-628 | UC-06 | `cypress/e2e/uc-06.cy.ts` | Pendiente de implementar |
+| KIWI-629 | UC-07 | `cypress/e2e/uc-07.cy.ts` | Pendiente de implementar |
 
 ## Guia por caso Kiwi
 
@@ -821,6 +822,111 @@ Feature: Crear pedido (usuario autenticado)
 - Rechazar createOrder sin autenticación
 - Registrar estado inicial del pedido
 - Precio cambiado entre carrito y servidor
+
+#### Preguntas obligatorias que Claude debe hacer al desarrollador
+- Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
+- Que usuario, rol, permisos y estado inicial necesita el caso?
+- Que datos deben existir antes del test y como se crean de forma determinista?
+- Que datos deben limpiarse despues para que el test sea independiente?
+- Que llamadas externas deben mockearse, interceptarse o estabilizarse?
+- Que selectores robustos existen para cada accion y assertion?
+- Que resultado visible, persistido o de API prueba realmente que el caso se satisface?
+- Que edge cases o errores estan implicitos en el caso Kiwi?
+- Como se ejecutara este test en CI y que variables necesita?
+
+#### Propuesta de implementacion Cypress
+- Crear un `describe` con referencia clara a KIWI-{case_id}.
+- Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
+- Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
+- Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
+- Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
+
+#### Criterios de aceptacion del test
+- [ ] Incluye trazabilidad KIWI-{case_id}.
+- [ ] Falla si se rompe el comportamiento funcional principal.
+- [ ] Cubre precondiciones y datos necesarios.
+- [ ] Usa selectores robustos.
+- [ ] No depende del orden de ejecucion ni de datos compartidos inestables.
+- [ ] Puede ejecutarse localmente y en CI.
+
+#### Riesgos a vigilar
+- Flakiness por esperas fijas, datos compartidos, servicios externos o fechas.
+- Falsos positivos por asserts demasiado genericos.
+- Duplicacion de helpers o comandos Cypress innecesarios.
+
+### 7. KIWI-629 - UC-07
+
+- Proyecto: `pr`
+- Categoria: `no informada`
+- Spec sugerida: `cypress/e2e/uc-07.cy.ts`
+
+#### Objetivo funcional
+El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma observable y no solo que la UI navega sin error.
+
+#### Gherkin / Caso Kiwi
+```gherkin
+Feature: Consultar pedidos propios (usuario autenticado)
+  Como usuario autenticado
+  Quiero consultar mis pedidos
+  Para ver mi histórico
+
+  Background:
+    Given que el usuario está autenticado
+
+  # @direct — RF-34
+  Scenario: Consultar el histórico de pedidos
+    When el usuario consulta sus pedidos
+    Then el sistema devuelve el histórico de pedidos del usuario
+    # trazabilidad: "consultar su histórico"
+
+  # @direct — RF-36
+  Scenario: Disponibilidad de la query myOrders
+    When el cliente ejecuta la query GraphQL "myOrders"
+    Then el sistema devuelve los pedidos del usuario
+    # trazabilidad: "Queries myOrders"
+
+  # @direct — RF-37
+  Scenario: Disponibilidad de la query order
+    When el cliente ejecuta la query GraphQL "order"
+    Then el sistema devuelve el detalle del pedido solicitado
+    # trazabilidad: "Queries myOrders, order."
+
+  # @derived — cobertura adicional
+  Scenario: Rechazar consulta de pedidos sin autenticación
+    Given que el cliente no está autenticado
+    When consulta "myOrders" o solicita un "order"
+    Then el sistema rechaza la operación
+
+  Scenario: Evitar que un usuario acceda a pedidos de otro usuario
+    Given que existe un pedido de otro usuario
+    When el usuario intenta consultar el detalle del pedido ajeno
+    Then el sistema rechaza la consulta por permisos
+
+  Scenario: Histórico vacío
+    Given que el usuario no tiene pedidos
+    When consulta "myOrders"
+    Then el sistema devuelve una lista vacía
+
+  Scenario: Consultar un pedido inexistente
+    Given que no existe el pedido solicitado
+    When el usuario consulta "order"
+    Then el sistema informa que el pedido no existe
+
+  Scenario: Consultar pedidos tras crear uno
+    Given que el usuario creó un pedido previamente
+    When consulta "myOrders"
+    Then el pedido aparece en el histórico
+```
+
+#### Escenarios detectados
+- Consultar el histórico de pedidos
+- Disponibilidad de la query myOrders
+- Disponibilidad de la query order
+- Rechazar consulta de pedidos sin autenticación
+- Evitar que un usuario acceda a pedidos de otro usuario
+- Histórico vacío
+- Consultar un pedido inexistente
+- Consultar pedidos tras crear uno
 
 #### Preguntas obligatorias que Claude debe hacer al desarrollador
 - Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
