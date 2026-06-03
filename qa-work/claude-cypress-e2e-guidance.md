@@ -4,8 +4,8 @@ Este archivo esta pensado para que el desarrollador lo entregue a Claude antes d
 Claude NO debe implementar a ciegas: debe hacer preguntas, cerrar ambiguedades y proponer una arquitectura mantenible antes de escribir codigo.
 
 ## Contexto
-- Generado: 2026-06-03 08:11:38 UTC
-- Casos Kiwi publicados incluidos: 8
+- Generado: 2026-06-03 08:11:40 UTC
+- Casos Kiwi publicados incluidos: 9
 - Stack objetivo: Cypress E2E
 
 ## Reglas de trabajo con Claude
@@ -37,6 +37,7 @@ Claude NO debe implementar a ciegas: debe hacer preguntas, cerrar ambiguedades y
 | KIWI-628 | UC-06 | `cypress/e2e/uc-06.cy.ts` | Pendiente de implementar |
 | KIWI-629 | UC-07 | `cypress/e2e/uc-07.cy.ts` | Pendiente de implementar |
 | KIWI-630 | UC-08 | `cypress/e2e/uc-08.cy.ts` | Pendiente de implementar |
+| KIWI-631 | UC-09 | `cypress/e2e/uc-09.cy.ts` | Pendiente de implementar |
 
 ## Guia por caso Kiwi
 
@@ -1054,6 +1055,140 @@ Feature: Administrar usuarios (administrador)
 - Denegar administración de usuarios a no-admin
 - Cambiar rol a un valor no permitido
 - Eliminar usuario inexistente
+
+#### Preguntas obligatorias que Claude debe hacer al desarrollador
+- Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
+- Que usuario, rol, permisos y estado inicial necesita el caso?
+- Que datos deben existir antes del test y como se crean de forma determinista?
+- Que datos deben limpiarse despues para que el test sea independiente?
+- Que llamadas externas deben mockearse, interceptarse o estabilizarse?
+- Que selectores robustos existen para cada accion y assertion?
+- Que resultado visible, persistido o de API prueba realmente que el caso se satisface?
+- Que edge cases o errores estan implicitos en el caso Kiwi?
+- Como se ejecutara este test en CI y que variables necesita?
+
+#### Propuesta de implementacion Cypress
+- Crear un `describe` con referencia clara a KIWI-{case_id}.
+- Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
+- Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
+- Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
+- Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
+
+#### Criterios de aceptacion del test
+- [ ] Incluye trazabilidad KIWI-{case_id}.
+- [ ] Falla si se rompe el comportamiento funcional principal.
+- [ ] Cubre precondiciones y datos necesarios.
+- [ ] Usa selectores robustos.
+- [ ] No depende del orden de ejecucion ni de datos compartidos inestables.
+- [ ] Puede ejecutarse localmente y en CI.
+
+#### Riesgos a vigilar
+- Flakiness por esperas fijas, datos compartidos, servicios externos o fechas.
+- Falsos positivos por asserts demasiado genericos.
+- Duplicacion de helpers o comandos Cypress innecesarios.
+
+### 9. KIWI-631 - UC-09
+
+- Proyecto: `pr`
+- Categoria: `no informada`
+- Spec sugerida: `cypress/e2e/uc-09.cy.ts`
+
+#### Objetivo funcional
+El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma observable y no solo que la UI navega sin error.
+
+#### Gherkin / Caso Kiwi
+```gherkin
+Feature: Administrar pedidos y estadísticas (administrador)
+  Como administrador
+  Quiero gestionar pedidos y ver estadísticas
+  Para controlar el estado de las ventas
+
+  Background:
+    Given que el usuario autenticado tiene rol admin
+
+  # @direct — RF-56
+  Scenario: Listar pedidos con filtro por estado
+    When el administrador solicita listar pedidos con un filtro de estado
+    Then el sistema devuelve los pedidos filtrados por estado
+    # trazabilidad: "Listar pedidos (con filtro por estado)"
+
+  # @direct — RF-57
+  Scenario: Ver detalle de un pedido
+    Given que existe un pedido
+    When el administrador solicita ver el detalle
+    Then el sistema devuelve el detalle del pedido
+    # trazabilidad: "ver detalle"
+
+  # @direct — RF-58
+  Scenario: Actualizar estado de un pedido
+    Given que existe un pedido
+    When el administrador solicita actualizar su estado
+    Then el sistema actualiza el estado del pedido
+    # trazabilidad: "actualizar estado"
+
+  # @direct — RF-59
+  Scenario: Consultar estadísticas agregadas
+    When el administrador consulta estadísticas de pedidos
+    Then el sistema devuelve estadísticas agregadas
+    And las estadísticas incluyen total, por estado e ingresos
+    # trazabilidad: "estadísticas (total, por estado, ingresos)"
+
+  # @direct — RF-60
+  Scenario: Disponibilidad de queries orders, order y orderStats
+    When el cliente ejecuta la query GraphQL "orders"
+    Then el sistema devuelve la lista de pedidos
+    When el cliente ejecuta la query GraphQL "order"
+    Then el sistema devuelve el detalle de un pedido
+    When el cliente ejecuta la query GraphQL "orderStats"
+    Then el sistema devuelve estadísticas
+    # trazabilidad: "Query orders/order/orderStats"
+
+  # @direct — RF-61
+  Scenario: Disponibilidad de mutation updateOrderStatus
+    When el cliente ejecuta la mutation GraphQL "updateOrderStatus"
+    Then el sistema procesa la actualización de estado
+    # trazabilidad: "Mutation updateOrderStatus"
+
+  # @direct — RF-62
+  Scenario: Disponibilidad de mutation cancelOrder
+    When el cliente ejecuta la mutation GraphQL "cancelOrder"
+    Then el sistema procesa la cancelación del pedido
+    # trazabilidad: "cancelOrder"
+
+  # @derived — cobertura adicional
+  Scenario: Denegar acceso a administración de pedidos a no-admin
+    Given que el usuario tiene rol user
+    When intenta listar pedidos o ver detalle o actualizar estado o consultar estadísticas
+    Then el sistema rechaza la operación por permisos
+
+  Scenario: Filtrar por un estado sin resultados
+    Given que no existen pedidos con el estado solicitado
+    When el administrador lista pedidos filtrando por ese estado
+    Then el sistema devuelve una lista vacía
+
+  Scenario: Actualizar estado a un valor no permitido
+    Given que el administrador intenta asignar un estado no contemplado
+    When solicita la actualización
+    Then el sistema rechaza la solicitud
+
+  Scenario: Cancelar un pedido
+    Given que existe un pedido
+    When el administrador solicita cancelarlo
+    Then el pedido queda en estado cancelado o equivalente funcional
+```
+
+#### Escenarios detectados
+- Listar pedidos con filtro por estado
+- Ver detalle de un pedido
+- Actualizar estado de un pedido
+- Consultar estadísticas agregadas
+- Disponibilidad de queries orders, order y orderStats
+- Disponibilidad de mutation updateOrderStatus
+- Disponibilidad de mutation cancelOrder
+- Denegar acceso a administración de pedidos a no-admin
+- Filtrar por un estado sin resultados
+- Actualizar estado a un valor no permitido
+- Cancelar un pedido
 
 #### Preguntas obligatorias que Claude debe hacer al desarrollador
 - Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
