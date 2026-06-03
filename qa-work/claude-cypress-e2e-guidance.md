@@ -4,8 +4,8 @@ Este archivo esta pensado para que el desarrollador lo entregue a Claude antes d
 Claude NO debe implementar a ciegas: debe hacer preguntas, cerrar ambiguedades y proponer una arquitectura mantenible antes de escribir codigo.
 
 ## Contexto
-- Generado: 2026-06-03 08:11:22 UTC
-- Casos Kiwi publicados incluidos: 1
+- Generado: 2026-06-03 08:11:24 UTC
+- Casos Kiwi publicados incluidos: 2
 - Stack objetivo: Cypress E2E
 
 ## Reglas de trabajo con Claude
@@ -30,6 +30,7 @@ Claude NO debe implementar a ciegas: debe hacer preguntas, cerrar ambiguedades y
 | Kiwi ID | Caso | Spec sugerida | Estado |
 |---|---|---|---|
 | KIWI-623 | UC-01 | `cypress/e2e/uc-01.cy.ts` | Pendiente de implementar |
+| KIWI-624 | UC-02 | `cypress/e2e/uc-02.cy.ts` | Pendiente de implementar |
 
 ## Guia por caso Kiwi
 
@@ -170,6 +171,108 @@ Feature: Registro y autenticación de usuarios (JWT)
 - Verificación de token ausente
 - Rechazar esquema Authorization distinto de Bearer
 - Registro con campos obligatorios incompletos
+
+#### Preguntas obligatorias que Claude debe hacer al desarrollador
+- Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
+- Que usuario, rol, permisos y estado inicial necesita el caso?
+- Que datos deben existir antes del test y como se crean de forma determinista?
+- Que datos deben limpiarse despues para que el test sea independiente?
+- Que llamadas externas deben mockearse, interceptarse o estabilizarse?
+- Que selectores robustos existen para cada accion y assertion?
+- Que resultado visible, persistido o de API prueba realmente que el caso se satisface?
+- Que edge cases o errores estan implicitos en el caso Kiwi?
+- Como se ejecutara este test en CI y que variables necesita?
+
+#### Propuesta de implementacion Cypress
+- Crear un `describe` con referencia clara a KIWI-{case_id}.
+- Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
+- Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
+- Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
+- Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
+
+#### Criterios de aceptacion del test
+- [ ] Incluye trazabilidad KIWI-{case_id}.
+- [ ] Falla si se rompe el comportamiento funcional principal.
+- [ ] Cubre precondiciones y datos necesarios.
+- [ ] Usa selectores robustos.
+- [ ] No depende del orden de ejecucion ni de datos compartidos inestables.
+- [ ] Puede ejecutarse localmente y en CI.
+
+#### Riesgos a vigilar
+- Flakiness por esperas fijas, datos compartidos, servicios externos o fechas.
+- Falsos positivos por asserts demasiado genericos.
+- Duplicacion de helpers o comandos Cypress innecesarios.
+
+### 2. KIWI-624 - UC-02
+
+- Proyecto: `pr`
+- Categoria: `no informada`
+- Spec sugerida: `cypress/e2e/uc-02.cy.ts`
+
+#### Objetivo funcional
+El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma observable y no solo que la UI navega sin error.
+
+#### Gherkin / Caso Kiwi
+```gherkin
+Feature: Autorización por roles (usuario/administrador)
+  Como sistema
+  Quiero restringir operaciones administrativas
+  Para que solo usuarios con rol admin puedan ejecutarlas
+
+  Background:
+    Given que el sistema obtiene el rol del usuario desde el token en el contexto
+
+  # @direct — RF-12
+  Scenario: Requerir rol admin en operaciones administrativas
+    Given que una operación es administrativa
+    When un usuario intenta ejecutarla
+    Then el sistema requiere que el rol del usuario sea admin
+    # trazabilidad: "Las operaciones administrativas requieren rol admin."
+
+  # @direct — RF-13
+  Scenario: Bloquear accesos admin a usuarios no admin
+    Given que un usuario no tiene rol admin
+    When intenta acceder a un endpoint o resolver administrativo
+    Then el backend impide el acceso
+    # trazabilidad: "impedir accesos a endpoints/resolvers admin a usuarios no admin"
+
+  # @direct — RF-14
+  Scenario: Autorizar resolvers usando el contexto (token)
+    Given que el cliente ejecuta una operación GraphQL
+    When el backend construye el contexto con el token
+    Then la autorización de resolvers se decide usando ese contexto
+    # trazabilidad: "se usa el contexto (token) para autorizar resolvers"
+
+  # @derived — cobertura adicional
+  Scenario: Denegar operación administrativa sin token
+    Given que el cliente no envía token
+    When intenta ejecutar una operación administrativa
+    Then el sistema rechaza la operación
+
+  Scenario: Permitir operación administrativa a admin
+    Given que el usuario tiene rol admin
+    When ejecuta una operación administrativa
+    Then el sistema permite la operación
+
+  Scenario: Permitir operación no administrativa a usuario autenticado
+    Given que el usuario está autenticado y tiene rol user
+    When ejecuta una operación no administrativa
+    Then el sistema permite la operación
+
+  Scenario: Denegar operación administrativa con token válido pero rol user
+    Given que el usuario presenta un token válido con rol user
+    When intenta ejecutar una operación administrativa
+    Then el sistema rechaza la operación por falta de permisos
+```
+
+#### Escenarios detectados
+- Requerir rol admin en operaciones administrativas
+- Bloquear accesos admin a usuarios no admin
+- Autorizar resolvers usando el contexto (token)
+- Denegar operación administrativa sin token
+- Permitir operación administrativa a admin
+- Permitir operación no administrativa a usuario autenticado
+- Denegar operación administrativa con token válido pero rol user
 
 #### Preguntas obligatorias que Claude debe hacer al desarrollador
 - Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
