@@ -4,8 +4,8 @@ Este archivo esta pensado para que el desarrollador lo entregue a Claude antes d
 Claude NO debe implementar a ciegas: debe hacer preguntas, cerrar ambiguedades y proponer una arquitectura mantenible antes de escribir codigo.
 
 ## Contexto
-- Generado: 2026-06-03 08:11:24 UTC
-- Casos Kiwi publicados incluidos: 2
+- Generado: 2026-06-03 08:11:26 UTC
+- Casos Kiwi publicados incluidos: 3
 - Stack objetivo: Cypress E2E
 
 ## Reglas de trabajo con Claude
@@ -31,6 +31,7 @@ Claude NO debe implementar a ciegas: debe hacer preguntas, cerrar ambiguedades y
 |---|---|---|---|
 | KIWI-623 | UC-01 | `cypress/e2e/uc-01.cy.ts` | Pendiente de implementar |
 | KIWI-624 | UC-02 | `cypress/e2e/uc-02.cy.ts` | Pendiente de implementar |
+| KIWI-625 | UC-03 | `cypress/e2e/uc-03.cy.ts` | Pendiente de implementar |
 
 ## Guia por caso Kiwi
 
@@ -273,6 +274,133 @@ Feature: Autorización por roles (usuario/administrador)
 - Permitir operación administrativa a admin
 - Permitir operación no administrativa a usuario autenticado
 - Denegar operación administrativa con token válido pero rol user
+
+#### Preguntas obligatorias que Claude debe hacer al desarrollador
+- Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
+- Que usuario, rol, permisos y estado inicial necesita el caso?
+- Que datos deben existir antes del test y como se crean de forma determinista?
+- Que datos deben limpiarse despues para que el test sea independiente?
+- Que llamadas externas deben mockearse, interceptarse o estabilizarse?
+- Que selectores robustos existen para cada accion y assertion?
+- Que resultado visible, persistido o de API prueba realmente que el caso se satisface?
+- Que edge cases o errores estan implicitos en el caso Kiwi?
+- Como se ejecutara este test en CI y que variables necesita?
+
+#### Propuesta de implementacion Cypress
+- Crear un `describe` con referencia clara a KIWI-{case_id}.
+- Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
+- Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
+- Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
+- Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
+
+#### Criterios de aceptacion del test
+- [ ] Incluye trazabilidad KIWI-{case_id}.
+- [ ] Falla si se rompe el comportamiento funcional principal.
+- [ ] Cubre precondiciones y datos necesarios.
+- [ ] Usa selectores robustos.
+- [ ] No depende del orden de ejecucion ni de datos compartidos inestables.
+- [ ] Puede ejecutarse localmente y en CI.
+
+#### Riesgos a vigilar
+- Flakiness por esperas fijas, datos compartidos, servicios externos o fechas.
+- Falsos positivos por asserts demasiado genericos.
+- Duplicacion de helpers o comandos Cypress innecesarios.
+
+### 3. KIWI-625 - UC-03
+
+- Proyecto: `pr`
+- Categoria: `no informada`
+- Spec sugerida: `cypress/e2e/uc-03.cy.ts`
+
+#### Objetivo funcional
+El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma observable y no solo que la UI navega sin error.
+
+#### Gherkin / Caso Kiwi
+```gherkin
+Feature: Consultar catálogo de productos (público)
+  Como visitante
+  Quiero consultar el catálogo
+  Para explorar productos antes de comprar
+
+  Background:
+    Given que el sistema expone queries GraphQL para catálogo
+
+  # @direct — RF-15
+  Scenario: Listar productos con paginación
+    When el cliente consulta el listado de productos
+    Then el sistema permite paginar los resultados
+    # trazabilidad: "Listar productos con paginación"
+
+  # @direct — RF-16
+  Scenario: Listar productos con búsqueda
+    When el cliente consulta el listado de productos con un criterio de búsqueda
+    Then el sistema filtra los productos por el criterio de búsqueda
+    # trazabilidad: "búsqueda"
+
+  # @direct — RF-17
+  Scenario: Listar productos con filtro por categoría
+    When el cliente consulta el listado de productos indicando una categoría
+    Then el sistema filtra los productos por categoría
+    # trazabilidad: "filtro por categoría"
+
+  # @direct — RF-18
+  Scenario: Ver detalle de un producto
+    When el cliente consulta el detalle de un producto
+    Then el sistema devuelve la información del producto
+    # trazabilidad: "ver detalle de producto"
+
+  # @direct — RF-19
+  Scenario: Soportar page/limit y búsqueda por nombre/descr y filtro por categoría
+    When el cliente consulta productos con page y limit
+    And aporta criterios de búsqueda por nombre o descripción
+    And aporta filtro por categoría
+    Then el sistema aplica paginación
+    And aplica búsqueda
+    And aplica filtro por categoría
+    # trazabilidad: "page/limit, búsqueda por nombre/descr y filtro por categoría"
+
+  # @direct — RF-20
+  Scenario: Disponibilidad de queries products y product
+    When el cliente ejecuta la query GraphQL "products"
+    Then el sistema devuelve una lista de productos
+    And la query está disponible
+    When el cliente ejecuta la query GraphQL "product"
+    Then el sistema devuelve el detalle de un producto
+    And la query está disponible
+    # trazabilidad: "Query products/product"
+
+  # @derived — cobertura adicional
+  Scenario: Consultar un producto inexistente
+    Given que no existe un producto con el identificador solicitado
+    When el cliente consulta el detalle del producto
+    Then el sistema informa que el producto no existe
+
+  Scenario: Solicitar una página sin resultados
+    Given que el cliente solicita una página fuera de rango
+    When consulta el listado de productos
+    Then el sistema devuelve una lista vacía
+
+  Scenario: Búsqueda sin coincidencias
+    When el cliente consulta el listado con un término sin coincidencias
+    Then el sistema devuelve una lista vacía
+
+  Scenario: Listado público sin autenticación
+    Given que el cliente no está autenticado
+    When consulta products o product
+    Then el sistema permite la consulta pública del catálogo
+```
+
+#### Escenarios detectados
+- Listar productos con paginación
+- Listar productos con búsqueda
+- Listar productos con filtro por categoría
+- Ver detalle de un producto
+- Soportar page/limit y búsqueda por nombre/descr y filtro por categoría
+- Disponibilidad de queries products y product
+- Consultar un producto inexistente
+- Solicitar una página sin resultados
+- Búsqueda sin coincidencias
+- Listado público sin autenticación
 
 #### Preguntas obligatorias que Claude debe hacer al desarrollador
 - Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
