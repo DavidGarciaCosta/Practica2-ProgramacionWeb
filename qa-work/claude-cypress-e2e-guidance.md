@@ -4,8 +4,8 @@ Este archivo esta pensado para que el desarrollador lo entregue a Claude antes d
 Claude NO debe implementar a ciegas: debe hacer preguntas, cerrar ambiguedades y proponer una arquitectura mantenible antes de escribir codigo.
 
 ## Contexto
-- Generado: 2026-06-03 08:11:36 UTC
-- Casos Kiwi publicados incluidos: 7
+- Generado: 2026-06-03 08:11:38 UTC
+- Casos Kiwi publicados incluidos: 8
 - Stack objetivo: Cypress E2E
 
 ## Reglas de trabajo con Claude
@@ -36,6 +36,7 @@ Claude NO debe implementar a ciegas: debe hacer preguntas, cerrar ambiguedades y
 | KIWI-627 | UC-05 | `cypress/e2e/uc-05.cy.ts` | Pendiente de implementar |
 | KIWI-628 | UC-06 | `cypress/e2e/uc-06.cy.ts` | Pendiente de implementar |
 | KIWI-629 | UC-07 | `cypress/e2e/uc-07.cy.ts` | Pendiente de implementar |
+| KIWI-630 | UC-08 | `cypress/e2e/uc-08.cy.ts` | Pendiente de implementar |
 
 ## Guia por caso Kiwi
 
@@ -927,6 +928,132 @@ Feature: Consultar pedidos propios (usuario autenticado)
 - Histórico vacío
 - Consultar un pedido inexistente
 - Consultar pedidos tras crear uno
+
+#### Preguntas obligatorias que Claude debe hacer al desarrollador
+- Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
+- Que usuario, rol, permisos y estado inicial necesita el caso?
+- Que datos deben existir antes del test y como se crean de forma determinista?
+- Que datos deben limpiarse despues para que el test sea independiente?
+- Que llamadas externas deben mockearse, interceptarse o estabilizarse?
+- Que selectores robustos existen para cada accion y assertion?
+- Que resultado visible, persistido o de API prueba realmente que el caso se satisface?
+- Que edge cases o errores estan implicitos en el caso Kiwi?
+- Como se ejecutara este test en CI y que variables necesita?
+
+#### Propuesta de implementacion Cypress
+- Crear un `describe` con referencia clara a KIWI-{case_id}.
+- Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
+- Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
+- Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
+- Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
+
+#### Criterios de aceptacion del test
+- [ ] Incluye trazabilidad KIWI-{case_id}.
+- [ ] Falla si se rompe el comportamiento funcional principal.
+- [ ] Cubre precondiciones y datos necesarios.
+- [ ] Usa selectores robustos.
+- [ ] No depende del orden de ejecucion ni de datos compartidos inestables.
+- [ ] Puede ejecutarse localmente y en CI.
+
+#### Riesgos a vigilar
+- Flakiness por esperas fijas, datos compartidos, servicios externos o fechas.
+- Falsos positivos por asserts demasiado genericos.
+- Duplicacion de helpers o comandos Cypress innecesarios.
+
+### 8. KIWI-630 - UC-08
+
+- Proyecto: `pr`
+- Categoria: `no informada`
+- Spec sugerida: `cypress/e2e/uc-08.cy.ts`
+
+#### Objetivo funcional
+El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma observable y no solo que la UI navega sin error.
+
+#### Gherkin / Caso Kiwi
+```gherkin
+Feature: Administrar usuarios (administrador)
+  Como administrador
+  Quiero gestionar usuarios
+  Para mantener la seguridad y la administración del sistema
+
+  Background:
+    Given que el usuario autenticado tiene rol admin
+
+  # @direct — RF-49
+  Scenario: Listar usuarios
+    When el administrador solicita el listado de usuarios
+    Then el sistema devuelve la lista de usuarios
+    # trazabilidad: "Listar usuarios"
+
+  # @direct — RF-50
+  Scenario: Cambiar rol de usuario
+    Given que existe un usuario con rol inicial
+    When el administrador solicita cambiar su rol
+    Then el sistema actualiza el rol del usuario
+    # trazabilidad: "cambiar rol (user/admin)"
+
+  # @direct — RF-51
+  Scenario: Eliminar un usuario
+    Given que existe un usuario
+    When el administrador solicita eliminarlo
+    Then el sistema elimina el usuario
+    # trazabilidad: "eliminar usuario"
+
+  # @direct — RF-52
+  Scenario: Impedir que un admin se elimine a sí mismo
+    Given que el administrador intenta eliminar su propio usuario
+    When solicita la eliminación
+    Then el sistema rechaza la operación
+    # trazabilidad: "no permitir que un admin se elimine a sí mismo"
+
+  # @direct — RF-53
+  Scenario: Disponibilidad de la query users
+    When el cliente ejecuta la query GraphQL "users"
+    Then el sistema devuelve la lista de usuarios
+    # trazabilidad: "Query users"
+
+  # @direct — RF-54
+  Scenario: Disponibilidad de mutations updateUserRole y deleteUser
+    When el cliente ejecuta la mutation GraphQL "updateUserRole"
+    Then el sistema procesa el cambio de rol
+    When el cliente ejecuta la mutation GraphQL "deleteUser"
+    Then el sistema procesa la eliminación
+    # trazabilidad: "Mutations updateUserRole, deleteUser."
+
+  # @direct — RF-55
+  Scenario: Rutas REST de administración bajo /api/admin/* (según implementación)
+    When el cliente invoca una ruta REST bajo "/api/admin/"
+    Then el sistema atiende la solicitud de administración según implementación
+    # trazabilidad: "REST: /api/admin/* (según implementación)."
+
+  # @derived — cobertura adicional
+  Scenario: Denegar administración de usuarios a no-admin
+    Given que el usuario tiene rol user
+    When intenta listar usuarios o cambiar rol o eliminar usuario
+    Then el sistema rechaza la operación por permisos
+
+  Scenario: Cambiar rol a un valor no permitido
+    Given que el administrador intenta asignar un rol no contemplado
+    When solicita el cambio de rol
+    Then el sistema rechaza la solicitud
+
+  Scenario: Eliminar usuario inexistente
+    Given que el administrador solicita eliminar un usuario inexistente
+    When ejecuta la eliminación
+    Then el sistema informa que el usuario no existe
+```
+
+#### Escenarios detectados
+- Listar usuarios
+- Cambiar rol de usuario
+- Eliminar un usuario
+- Impedir que un admin se elimine a sí mismo
+- Disponibilidad de la query users
+- Disponibilidad de mutations updateUserRole y deleteUser
+- Rutas REST de administración bajo /api/admin/* (según implementación)
+- Denegar administración de usuarios a no-admin
+- Cambiar rol a un valor no permitido
+- Eliminar usuario inexistente
 
 #### Preguntas obligatorias que Claude debe hacer al desarrollador
 - Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
