@@ -4,8 +4,8 @@ Este archivo esta pensado para que el desarrollador lo entregue a Claude antes d
 Claude NO debe implementar a ciegas: debe hacer preguntas, cerrar ambiguedades y proponer una arquitectura mantenible antes de escribir codigo.
 
 ## Contexto
-- Generado: 2026-06-03 08:11:26 UTC
-- Casos Kiwi publicados incluidos: 3
+- Generado: 2026-06-03 08:11:29 UTC
+- Casos Kiwi publicados incluidos: 4
 - Stack objetivo: Cypress E2E
 
 ## Reglas de trabajo con Claude
@@ -32,6 +32,7 @@ Claude NO debe implementar a ciegas: debe hacer preguntas, cerrar ambiguedades y
 | KIWI-623 | UC-01 | `cypress/e2e/uc-01.cy.ts` | Pendiente de implementar |
 | KIWI-624 | UC-02 | `cypress/e2e/uc-02.cy.ts` | Pendiente de implementar |
 | KIWI-625 | UC-03 | `cypress/e2e/uc-03.cy.ts` | Pendiente de implementar |
+| KIWI-626 | UC-04 | `cypress/e2e/uc-04.cy.ts` | Pendiente de implementar |
 
 ## Guia por caso Kiwi
 
@@ -401,6 +402,132 @@ Feature: Consultar catálogo de productos (público)
 - Solicitar una página sin resultados
 - Búsqueda sin coincidencias
 - Listado público sin autenticación
+
+#### Preguntas obligatorias que Claude debe hacer al desarrollador
+- Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
+- Que usuario, rol, permisos y estado inicial necesita el caso?
+- Que datos deben existir antes del test y como se crean de forma determinista?
+- Que datos deben limpiarse despues para que el test sea independiente?
+- Que llamadas externas deben mockearse, interceptarse o estabilizarse?
+- Que selectores robustos existen para cada accion y assertion?
+- Que resultado visible, persistido o de API prueba realmente que el caso se satisface?
+- Que edge cases o errores estan implicitos en el caso Kiwi?
+- Como se ejecutara este test en CI y que variables necesita?
+
+#### Propuesta de implementacion Cypress
+- Crear un `describe` con referencia clara a KIWI-{case_id}.
+- Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
+- Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
+- Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
+- Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
+
+#### Criterios de aceptacion del test
+- [ ] Incluye trazabilidad KIWI-{case_id}.
+- [ ] Falla si se rompe el comportamiento funcional principal.
+- [ ] Cubre precondiciones y datos necesarios.
+- [ ] Usa selectores robustos.
+- [ ] No depende del orden de ejecucion ni de datos compartidos inestables.
+- [ ] Puede ejecutarse localmente y en CI.
+
+#### Riesgos a vigilar
+- Flakiness por esperas fijas, datos compartidos, servicios externos o fechas.
+- Falsos positivos por asserts demasiado genericos.
+- Duplicacion de helpers o comandos Cypress innecesarios.
+
+### 4. KIWI-626 - UC-04
+
+- Proyecto: `pr`
+- Categoria: `no informada`
+- Spec sugerida: `cypress/e2e/uc-04.cy.ts`
+
+#### Objetivo funcional
+El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma observable y no solo que la UI navega sin error.
+
+#### Gherkin / Caso Kiwi
+```gherkin
+Feature: Gestionar productos (CRUD/stock) como administrador
+  Como administrador
+  Quiero gestionar productos
+  Para mantener el catálogo actualizado y controlar el stock
+
+  Background:
+    Given que las operaciones de gestión de productos son administrativas
+
+  # @direct — RF-21
+  Scenario: Crear un producto como administrador
+    Given que el usuario tiene rol admin
+    When ejecuta la operación de crear producto
+    Then el sistema crea el producto
+    # trazabilidad: "Crear producto"
+
+  # @direct — RF-22
+  Scenario: Eliminar un producto como administrador
+    Given que el usuario tiene rol admin
+    When ejecuta la operación de eliminar producto
+    Then el sistema elimina el producto
+    # trazabilidad: "eliminar producto"
+
+  # @direct — RF-23
+  Scenario: Actualizar stock como administrador
+    Given que el usuario tiene rol admin
+    When ejecuta la operación de actualizar stock
+    Then el sistema actualiza el stock del producto
+    # trazabilidad: "actualizar stock"
+
+  # @direct — RF-24
+  Scenario: Restringir creación/eliminación/modificación de stock a admin
+    Given que el usuario no tiene rol admin
+    When intenta crear o eliminar un producto o modificar stock
+    Then el sistema rechaza la operación por permisos
+    # trazabilidad: "Solo admin puede crear/eliminar productos y modificar stock."
+
+  # @direct — RF-25
+  Scenario: Impedir stock negativo
+    Given que el usuario tiene rol admin
+    When intenta establecer un stock con valor negativo
+    Then el sistema rechaza la actualización
+    And el stock no se actualiza
+    # trazabilidad: "El stock no puede ser negativo."
+
+  # @direct — RF-26
+  Scenario: Disponibilidad de mutations createProduct, deleteProduct y updateProductStock
+    Given que el usuario tiene rol admin
+    When ejecuta la mutation GraphQL "createProduct"
+    Then el sistema procesa la creación
+    When ejecuta la mutation GraphQL "deleteProduct"
+    Then el sistema procesa la eliminación
+    When ejecuta la mutation GraphQL "updateProductStock"
+    Then el sistema procesa la actualización de stock
+    # trazabilidad: "Mutations: createProduct, deleteProduct, updateProductStock."
+
+  # @derived — cobertura adicional
+  Scenario: Eliminar un producto inexistente
+    Given que el usuario tiene rol admin
+    And no existe el producto a eliminar
+    When intenta eliminar el producto
+    Then el sistema informa que el producto no existe
+
+  Scenario: Actualizar stock a cero
+    Given que el usuario tiene rol admin
+    When establece el stock a 0
+    Then el sistema actualiza el stock a 0
+
+  Scenario: Operación administrativa sin token
+    Given que el cliente no envía token
+    When intenta crear o eliminar un producto o modificar stock
+    Then el sistema rechaza la operación
+```
+
+#### Escenarios detectados
+- Crear un producto como administrador
+- Eliminar un producto como administrador
+- Actualizar stock como administrador
+- Restringir creación/eliminación/modificación de stock a admin
+- Impedir stock negativo
+- Disponibilidad de mutations createProduct, deleteProduct y updateProductStock
+- Eliminar un producto inexistente
+- Actualizar stock a cero
+- Operación administrativa sin token
 
 #### Preguntas obligatorias que Claude debe hacer al desarrollador
 - Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
