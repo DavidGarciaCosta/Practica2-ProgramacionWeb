@@ -4,8 +4,8 @@ Este archivo esta pensado para que el desarrollador lo entregue a Claude antes d
 Claude NO debe implementar a ciegas: debe hacer preguntas, cerrar ambiguedades y proponer una arquitectura mantenible antes de escribir codigo.
 
 ## Contexto
-- Generado: 2026-06-03 08:11:40 UTC
-- Casos Kiwi publicados incluidos: 9
+- Generado: 2026-06-03 08:11:43 UTC
+- Casos Kiwi publicados incluidos: 10
 - Stack objetivo: Cypress E2E
 
 ## Reglas de trabajo con Claude
@@ -38,6 +38,7 @@ Claude NO debe implementar a ciegas: debe hacer preguntas, cerrar ambiguedades y
 | KIWI-629 | UC-07 | `cypress/e2e/uc-07.cy.ts` | Pendiente de implementar |
 | KIWI-630 | UC-08 | `cypress/e2e/uc-08.cy.ts` | Pendiente de implementar |
 | KIWI-631 | UC-09 | `cypress/e2e/uc-09.cy.ts` | Pendiente de implementar |
+| KIWI-632 | UC-10 | `cypress/e2e/uc-10.cy.ts` | Pendiente de implementar |
 
 ## Guia por caso Kiwi
 
@@ -1189,6 +1190,115 @@ Feature: Administrar pedidos y estadísticas (administrador)
 - Filtrar por un estado sin resultados
 - Actualizar estado a un valor no permitido
 - Cancelar un pedido
+
+#### Preguntas obligatorias que Claude debe hacer al desarrollador
+- Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
+- Que usuario, rol, permisos y estado inicial necesita el caso?
+- Que datos deben existir antes del test y como se crean de forma determinista?
+- Que datos deben limpiarse despues para que el test sea independiente?
+- Que llamadas externas deben mockearse, interceptarse o estabilizarse?
+- Que selectores robustos existen para cada accion y assertion?
+- Que resultado visible, persistido o de API prueba realmente que el caso se satisface?
+- Que edge cases o errores estan implicitos en el caso Kiwi?
+- Como se ejecutara este test en CI y que variables necesita?
+
+#### Propuesta de implementacion Cypress
+- Crear un `describe` con referencia clara a KIWI-{case_id}.
+- Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
+- Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
+- Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
+- Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
+
+#### Criterios de aceptacion del test
+- [ ] Incluye trazabilidad KIWI-{case_id}.
+- [ ] Falla si se rompe el comportamiento funcional principal.
+- [ ] Cubre precondiciones y datos necesarios.
+- [ ] Usa selectores robustos.
+- [ ] No depende del orden de ejecucion ni de datos compartidos inestables.
+- [ ] Puede ejecutarse localmente y en CI.
+
+#### Riesgos a vigilar
+- Flakiness por esperas fijas, datos compartidos, servicios externos o fechas.
+- Falsos positivos por asserts demasiado genericos.
+- Duplicacion de helpers o comandos Cypress innecesarios.
+
+### 10. KIWI-632 - UC-10
+
+- Proyecto: `pr`
+- Categoria: `no informada`
+- Spec sugerida: `cypress/e2e/uc-10.cy.ts`
+
+#### Objetivo funcional
+El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma observable y no solo que la UI navega sin error.
+
+#### Gherkin / Caso Kiwi
+```gherkin
+Feature: Chat en tiempo real
+  Como usuario del sistema
+  Quiero usar un chat en tiempo real
+  Para enviar y recibir mensajes
+
+  Background:
+    Given que el chat usa Socket.IO
+
+  # @direct — RF-63
+  Scenario: Soportar chat en tiempo real con Socket.IO
+    When un cliente se conecta al chat
+    Then el sistema soporta comunicación en tiempo real mediante Socket.IO
+    # trazabilidad: "Chat en tiempo real con Socket.IO"
+
+  # @direct — RF-64
+  Scenario: Usar sala por defecto 'general'
+    Given que un cliente se conecta al chat sin especificar sala
+    When se une al chat
+    Then el sistema lo conecta a la sala por defecto "general"
+    # trazabilidad: "Sala por defecto 'general'"
+
+  # @direct — RF-65
+  Scenario: Emitir mensajes en tiempo real
+    Given que un usuario está conectado al chat
+    When envía un mensaje
+    Then el sistema emite el mensaje en tiempo real a los clientes suscritos
+    # trazabilidad: "Emitir/recibir mensajes en tiempo real"
+
+  # @direct — RF-66
+  Scenario: Persistir mensajes en MongoDB
+    Given que un usuario envía un mensaje
+    When el sistema procesa el mensaje
+    Then el sistema almacena el mensaje en MongoDB
+    # trazabilidad: "almacenar mensajes en MongoDB (Message)."
+
+  # @derived — cobertura adicional
+  Scenario: Recibir mensajes en tiempo real
+    Given que dos clientes están conectados a la sala "general"
+    When un cliente envía un mensaje
+    Then el otro cliente recibe el mensaje en tiempo real
+
+  Scenario: Manejar desconexión y reconexión
+    Given que un cliente estaba conectado al chat
+    When el cliente se desconecta y se reconecta
+    Then el sistema permite retomar la comunicación en tiempo real
+
+  Scenario: Persistencia de mensajes (si aplica)
+    Given que la persistencia de mensajes está habilitada
+    When un usuario envía un mensaje
+    Then el mensaje queda disponible en almacenamiento persistente
+
+  Scenario: Validación básica de envío de mensaje
+    Given que un usuario intenta enviar un mensaje vacío
+    When envía el mensaje
+    Then el sistema rechaza el envío o no lo propaga
+```
+
+#### Escenarios detectados
+- Soportar chat en tiempo real con Socket.IO
+- Usar sala por defecto 'general'
+- Emitir mensajes en tiempo real
+- Persistir mensajes en MongoDB
+- Recibir mensajes en tiempo real
+- Manejar desconexión y reconexión
+- Persistencia de mensajes (si aplica)
+- Validación básica de envío de mensaje
 
 #### Preguntas obligatorias que Claude debe hacer al desarrollador
 - Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
