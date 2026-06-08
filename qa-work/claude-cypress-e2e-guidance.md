@@ -4,8 +4,8 @@ Este archivo esta pensado para que el desarrollador lo entregue a Claude antes d
 Claude NO debe implementar a ciegas: debe hacer preguntas, cerrar ambiguedades y proponer una arquitectura mantenible antes de escribir codigo.
 
 ## Contexto
-- Generado: 2026-06-03 08:11:43 UTC
-- Casos Kiwi publicados incluidos: 10
+- Generado: 2026-06-08 07:45:20 UTC
+- Casos Kiwi publicados incluidos: 13
 - Stack objetivo: Cypress E2E
 
 ## Reglas de trabajo con Claude
@@ -29,23 +29,26 @@ Claude NO debe implementar a ciegas: debe hacer preguntas, cerrar ambiguedades y
 
 | Kiwi ID | Caso | Spec sugerida | Estado |
 |---|---|---|---|
-| KIWI-623 | UC-01 | `cypress/e2e/uc-01.cy.ts` | Pendiente de implementar |
-| KIWI-624 | UC-02 | `cypress/e2e/uc-02.cy.ts` | Pendiente de implementar |
-| KIWI-625 | UC-03 | `cypress/e2e/uc-03.cy.ts` | Pendiente de implementar |
-| KIWI-626 | UC-04 | `cypress/e2e/uc-04.cy.ts` | Pendiente de implementar |
-| KIWI-627 | UC-05 | `cypress/e2e/uc-05.cy.ts` | Pendiente de implementar |
-| KIWI-628 | UC-06 | `cypress/e2e/uc-06.cy.ts` | Pendiente de implementar |
-| KIWI-629 | UC-07 | `cypress/e2e/uc-07.cy.ts` | Pendiente de implementar |
-| KIWI-630 | UC-08 | `cypress/e2e/uc-08.cy.ts` | Pendiente de implementar |
-| KIWI-631 | UC-09 | `cypress/e2e/uc-09.cy.ts` | Pendiente de implementar |
-| KIWI-632 | UC-10 | `cypress/e2e/uc-10.cy.ts` | Pendiente de implementar |
+| KIWI-653 | UC-01 | `cypress/e2e/uc-01.cy.ts` | Pendiente de implementar |
+| KIWI-654 | UC-02 | `cypress/e2e/uc-02.cy.ts` | Pendiente de implementar |
+| KIWI-655 | UC-03 | `cypress/e2e/uc-03.cy.ts` | Pendiente de implementar |
+| KIWI-656 | UC-04 | `cypress/e2e/uc-04.cy.ts` | Pendiente de implementar |
+| KIWI-657 | UC-05 | `cypress/e2e/uc-05.cy.ts` | Pendiente de implementar |
+| KIWI-658 | UC-06 | `cypress/e2e/uc-06.cy.ts` | Pendiente de implementar |
+| KIWI-659 | UC-07 | `cypress/e2e/uc-07.cy.ts` | Pendiente de implementar |
+| KIWI-660 | UC-08 | `cypress/e2e/uc-08.cy.ts` | Pendiente de implementar |
+| KIWI-661 | UC-09 | `cypress/e2e/uc-09.cy.ts` | Pendiente de implementar |
+| KIWI-662 | UC-10 | `cypress/e2e/uc-10.cy.ts` | Pendiente de implementar |
+| KIWI-663 | UC-11 | `cypress/e2e/uc-11.cy.ts` | Pendiente de implementar |
+| KIWI-664 | UC-12 | `cypress/e2e/uc-12.cy.ts` | Pendiente de implementar |
+| KIWI-665 | UC-13 | `cypress/e2e/uc-13.cy.ts` | Pendiente de implementar |
 
 ## Guia por caso Kiwi
 
-### 1. KIWI-623 - UC-01
+### 1. KIWI-653 - UC-01
 
-- Proyecto: `pr`
-- Categoria: `no informada`
+- Proyecto: `IdBox`
+- Categoria: `Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos`
 - Spec sugerida: `cypress/e2e/uc-01.cy.ts`
 
 #### Objetivo funcional
@@ -53,132 +56,44 @@ El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma
 
 #### Gherkin / Caso Kiwi
 ```gherkin
-Feature: Registro y autenticación de usuarios (JWT)
-  Como visitante/usuario
-  Quiero registrarme y autenticarme
-  Para obtener un token JWT y acceder a operaciones autenticadas
+Feature: UC-01 Registrar usuario
 
-  Background:
-    Given el sistema expone rutas REST de autenticación
+  # Generado automaticamente desde documentacion funcional para UC-01.
+  # Fuente: DRF Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos
 
-  # @direct — RF-01
-  Scenario: Registrar un usuario
-    Given que el usuario proporciona username, email y password
-    When el usuario solicita el registro
-    Then el sistema registra el usuario
-    And el registro queda asociado a credenciales válidas
-    # trazabilidad: "El sistema permite registrar usuarios"
+  @direct @uc_UC_01 @rf_RF_01
+  Scenario: RF-01 - El sistema debe permitir registrar usuarios con username/email únicos.
+    # Trazabilidad: Un usuario puede registrarse con username/email únicos.
+    Given existe documentacion funcional para "Registrar usuario"
+    When se ejecuta el comportamiento requerido por RF-01
+    Then El sistema debe permitir registrar usuarios con username/email únicos.
 
-  # @direct — RF-02
-  Scenario: Autenticarse y obtener un token JWT
-    Given que el usuario está registrado
-    When el usuario inicia sesión con credenciales válidas
-    Then el sistema autentica al usuario mediante un token JWT
-    # trazabilidad: "autenticarlos mediante tokens JWT"
+  @direct @uc_UC_01 @rf_RF_02
+  Scenario: RF-02 - El sistema debe exponer un endpoint REST de registro en /api/auth/register.
+    # Trazabilidad: REST: /api/auth/register
+    Given existe documentacion funcional para "Registrar usuario"
+    When se ejecuta el comportamiento requerido por RF-02
+    Then El sistema debe exponer un endpoint REST de registro en /api/auth/register.
 
-  # @direct — RF-03
-  Scenario: Almacenar contraseñas con hash usando bcrypt
-    Given que un usuario se registra con un password
-    When el sistema persiste las credenciales
-    Then el sistema almacena el password usando hash con bcrypt
-    And no almacena el password en texto plano
-    # trazabilidad: "Contraseñas almacenadas con hash (bcrypt)."
+  @direct @uc_UC_01 @rf_RF_10
+  Scenario: RF-10 - Las contraseñas deben almacenarse con hash usando bcrypt.
+    # Trazabilidad: Contraseñas almacenadas con hash (bcrypt).
+    Given existe documentacion funcional para "Registrar usuario"
+    When se ejecuta el comportamiento requerido por RF-10
+    Then Las contraseñas deben almacenarse con hash usando bcrypt.
 
-  # @direct — RF-04
-  Scenario: Enviar el token en Authorization con esquema Bearer
-    Given que el usuario tiene un token JWT emitido por el sistema
-    When el usuario solicita un recurso autenticado
-    Then el token se envía en la cabecera Authorization usando el esquema Bearer
-    # trazabilidad: "Authorization: Bearer"
-
-  # @direct — RF-05
-  Scenario: Disponibilidad del endpoint de registro
-    When el cliente invoca la ruta REST "/api/auth/register"
-    Then el sistema atiende la solicitud de registro
-    # trazabilidad: "/api/auth/register"
-
-  # @direct — RF-06
-  Scenario: Disponibilidad del endpoint de login
-    When el cliente invoca la ruta REST "/api/auth/login"
-    Then el sistema atiende la solicitud de login
-    # trazabilidad: "/api/auth/login"
-
-  # @direct — RF-07
-  Scenario: Disponibilidad del endpoint de verificación de token
-    When el cliente invoca la ruta REST "/api/auth/verify"
-    Then el sistema atiende la solicitud de verificación del token
-    # trazabilidad: "/api/auth/verify"
-
-  # @direct — RF-08
-  Scenario: Impedir registro con username o email duplicados
-    Given que ya existe un usuario con el mismo username o email
-    When un nuevo usuario intenta registrarse con ese username o email
-    Then el sistema rechaza el registro
-    And informa que username o email deben ser únicos
-    # trazabilidad: "username/email únicos"
-
-  # @direct — RF-09
-  Scenario: El login devuelve token con id y role
-    Given que el usuario inicia sesión correctamente
-    When el sistema genera la respuesta de login
-    Then la respuesta incluye un token válido
-    And el token contiene el id del usuario
-    And el token contiene el role del usuario
-    # trazabilidad: "token válido con id y role"
-
-  # @direct — RF-10
-  Scenario: Verificar token inválido o expirado
-    Given que el cliente presenta un token inválido o expirado
-    When el cliente solicita la verificación del token
-    Then el sistema indica que el token no es válido
-    # trazabilidad: "valida token expirado/inválido"
-
-  # @direct — RF-11
-  Scenario: Verificación devuelve perfil sin password
-    Given que el cliente presenta un token válido
-    When el cliente solicita la verificación del token
-    Then el sistema devuelve el perfil del usuario
-    And el perfil devuelto no incluye el password
-    # trazabilidad: "devuelve perfil sin password."
-
-  # @derived — cobertura adicional (4-8 escenarios)
-  Scenario: Fallar el login con credenciales inválidas
-    Given que el usuario proporciona credenciales inválidas
-    When el usuario intenta iniciar sesión
-    Then el sistema rechaza la autenticación
-
-  Scenario: Verificación de token ausente
-    Given que el cliente no envía token
-    When el cliente solicita la verificación del token
-    Then el sistema rechaza la solicitud por ausencia de token
-
-  Scenario: Rechazar esquema Authorization distinto de Bearer
-    Given que el cliente envía un token con un esquema de Authorization distinto de Bearer
-    When el cliente solicita un recurso autenticado
-    Then el sistema rechaza la solicitud por esquema inválido
-
-  Scenario: Registro con campos obligatorios incompletos
-    Given que el usuario omite username o email o password
-    When el usuario solicita el registro
-    Then el sistema rechaza el registro por datos incompletos
+  @derived @uc_UC_01
+  Scenario: UC-01 mantiene un resultado funcional consistente
+    Given el flujo "Registrar usuario" tiene datos validos
+    When el usuario completa el flujo principal
+    Then el resultado observable coincide con la documentacion funcional
 ```
 
 #### Escenarios detectados
-- Registrar un usuario
-- Autenticarse y obtener un token JWT
-- Almacenar contraseñas con hash usando bcrypt
-- Enviar el token en Authorization con esquema Bearer
-- Disponibilidad del endpoint de registro
-- Disponibilidad del endpoint de login
-- Disponibilidad del endpoint de verificación de token
-- Impedir registro con username o email duplicados
-- El login devuelve token con id y role
-- Verificar token inválido o expirado
-- Verificación devuelve perfil sin password
-- Fallar el login con credenciales inválidas
-- Verificación de token ausente
-- Rechazar esquema Authorization distinto de Bearer
-- Registro con campos obligatorios incompletos
+- RF-01 - El sistema debe permitir registrar usuarios con username/email únicos.
+- RF-02 - El sistema debe exponer un endpoint REST de registro en /api/auth/register.
+- RF-10 - Las contraseñas deben almacenarse con hash usando bcrypt.
+- UC-01 mantiene un resultado funcional consistente
 
 #### Preguntas obligatorias que Claude debe hacer al desarrollador
 - Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
@@ -192,14 +107,14 @@ Feature: Registro y autenticación de usuarios (JWT)
 - Como se ejecutara este test en CI y que variables necesita?
 
 #### Propuesta de implementacion Cypress
-- Crear un `describe` con referencia clara a KIWI-{case_id}.
+- Crear un `describe` con referencia clara a KIWI-653.
 - Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
 - Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
 - Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
 - Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
 
 #### Criterios de aceptacion del test
-- [ ] Incluye trazabilidad KIWI-{case_id}.
+- [ ] Incluye trazabilidad KIWI-653.
 - [ ] Falla si se rompe el comportamiento funcional principal.
 - [ ] Cubre precondiciones y datos necesarios.
 - [ ] Usa selectores robustos.
@@ -211,10 +126,10 @@ Feature: Registro y autenticación de usuarios (JWT)
 - Falsos positivos por asserts demasiado genericos.
 - Duplicacion de helpers o comandos Cypress innecesarios.
 
-### 2. KIWI-624 - UC-02
+### 2. KIWI-654 - UC-02
 
-- Proyecto: `pr`
-- Categoria: `no informada`
+- Proyecto: `IdBox`
+- Categoria: `Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos`
 - Spec sugerida: `cypress/e2e/uc-02.cy.ts`
 
 #### Objetivo funcional
@@ -222,65 +137,52 @@ El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma
 
 #### Gherkin / Caso Kiwi
 ```gherkin
-Feature: Autorización por roles (usuario/administrador)
-  Como sistema
-  Quiero restringir operaciones administrativas
-  Para que solo usuarios con rol admin puedan ejecutarlas
+Feature: UC-02 Iniciar sesión (login) y obtener JWT
 
-  Background:
-    Given que el sistema obtiene el rol del usuario desde el token en el contexto
+  # Generado automaticamente desde documentacion funcional para UC-02.
+  # Fuente: DRF Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos
 
-  # @direct — RF-12
-  Scenario: Requerir rol admin en operaciones administrativas
-    Given que una operación es administrativa
-    When un usuario intenta ejecutarla
-    Then el sistema requiere que el rol del usuario sea admin
-    # trazabilidad: "Las operaciones administrativas requieren rol admin."
+  @direct @uc_UC_02 @rf_RF_03
+  Scenario: RF-03 - El sistema debe autenticar usuarios mediante tokens JWT.
+    # Trazabilidad: autenticarlos mediante tokens JWT
+    Given existe documentacion funcional para "Iniciar sesión (login) y obtener JWT"
+    When se ejecuta el comportamiento requerido por RF-03
+    Then El sistema debe autenticar usuarios mediante tokens JWT.
 
-  # @direct — RF-13
-  Scenario: Bloquear accesos admin a usuarios no admin
-    Given que un usuario no tiene rol admin
-    When intenta acceder a un endpoint o resolver administrativo
-    Then el backend impide el acceso
-    # trazabilidad: "impedir accesos a endpoints/resolvers admin a usuarios no admin"
+  @direct @uc_UC_02 @rf_RF_04
+  Scenario: RF-04 - El sistema debe exponer un endpoint REST de login en /api/auth/login.
+    # Trazabilidad: REST: /api/auth/login
+    Given existe documentacion funcional para "Iniciar sesión (login) y obtener JWT"
+    When se ejecuta el comportamiento requerido por RF-04
+    Then El sistema debe exponer un endpoint REST de login en /api/auth/login.
 
-  # @direct — RF-14
-  Scenario: Autorizar resolvers usando el contexto (token)
-    Given que el cliente ejecuta una operación GraphQL
-    When el backend construye el contexto con el token
-    Then la autorización de resolvers se decide usando ese contexto
-    # trazabilidad: "se usa el contexto (token) para autorizar resolvers"
+  @direct @uc_UC_02 @rf_RF_05
+  Scenario: RF-05 - El login debe devolver un token válido con id y role del usuario.
+    # Trazabilidad: El login devuelve un token válido con id y role del usuario.
+    Given existe documentacion funcional para "Iniciar sesión (login) y obtener JWT"
+    When se ejecuta el comportamiento requerido por RF-05
+    Then El login debe devolver un token válido con id y role del usuario.
 
-  # @derived — cobertura adicional
-  Scenario: Denegar operación administrativa sin token
-    Given que el cliente no envía token
-    When intenta ejecutar una operación administrativa
-    Then el sistema rechaza la operación
+  @direct @uc_UC_02 @rf_RF_09
+  Scenario: RF-09 - El token JWT debe enviarse en la cabecera Authorization con formato Bearer <token>.
+    # Trazabilidad: El token debe enviarse en Authorization: Bearer <token>.
+    Given existe documentacion funcional para "Iniciar sesión (login) y obtener JWT"
+    When se ejecuta el comportamiento requerido por RF-09
+    Then El token JWT debe enviarse en la cabecera Authorization con formato Bearer <token>.
 
-  Scenario: Permitir operación administrativa a admin
-    Given que el usuario tiene rol admin
-    When ejecuta una operación administrativa
-    Then el sistema permite la operación
-
-  Scenario: Permitir operación no administrativa a usuario autenticado
-    Given que el usuario está autenticado y tiene rol user
-    When ejecuta una operación no administrativa
-    Then el sistema permite la operación
-
-  Scenario: Denegar operación administrativa con token válido pero rol user
-    Given que el usuario presenta un token válido con rol user
-    When intenta ejecutar una operación administrativa
-    Then el sistema rechaza la operación por falta de permisos
+  @derived @uc_UC_02
+  Scenario: UC-02 mantiene un resultado funcional consistente
+    Given el flujo "Iniciar sesión (login) y obtener JWT" tiene datos validos
+    When el usuario completa el flujo principal
+    Then el resultado observable coincide con la documentacion funcional
 ```
 
 #### Escenarios detectados
-- Requerir rol admin en operaciones administrativas
-- Bloquear accesos admin a usuarios no admin
-- Autorizar resolvers usando el contexto (token)
-- Denegar operación administrativa sin token
-- Permitir operación administrativa a admin
-- Permitir operación no administrativa a usuario autenticado
-- Denegar operación administrativa con token válido pero rol user
+- RF-03 - El sistema debe autenticar usuarios mediante tokens JWT.
+- RF-04 - El sistema debe exponer un endpoint REST de login en /api/auth/login.
+- RF-05 - El login debe devolver un token válido con id y role del usuario.
+- RF-09 - El token JWT debe enviarse en la cabecera Authorization con formato Bearer <token>.
+- UC-02 mantiene un resultado funcional consistente
 
 #### Preguntas obligatorias que Claude debe hacer al desarrollador
 - Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
@@ -294,14 +196,14 @@ Feature: Autorización por roles (usuario/administrador)
 - Como se ejecutara este test en CI y que variables necesita?
 
 #### Propuesta de implementacion Cypress
-- Crear un `describe` con referencia clara a KIWI-{case_id}.
+- Crear un `describe` con referencia clara a KIWI-654.
 - Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
 - Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
 - Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
 - Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
 
 #### Criterios de aceptacion del test
-- [ ] Incluye trazabilidad KIWI-{case_id}.
+- [ ] Incluye trazabilidad KIWI-654.
 - [ ] Falla si se rompe el comportamiento funcional principal.
 - [ ] Cubre precondiciones y datos necesarios.
 - [ ] Usa selectores robustos.
@@ -313,10 +215,10 @@ Feature: Autorización por roles (usuario/administrador)
 - Falsos positivos por asserts demasiado genericos.
 - Duplicacion de helpers o comandos Cypress innecesarios.
 
-### 3. KIWI-625 - UC-03
+### 3. KIWI-655 - UC-03
 
-- Proyecto: `pr`
-- Categoria: `no informada`
+- Proyecto: `IdBox`
+- Categoria: `Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos`
 - Spec sugerida: `cypress/e2e/uc-03.cy.ts`
 
 #### Objetivo funcional
@@ -324,90 +226,44 @@ El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma
 
 #### Gherkin / Caso Kiwi
 ```gherkin
-Feature: Consultar catálogo de productos (público)
-  Como visitante
-  Quiero consultar el catálogo
-  Para explorar productos antes de comprar
+Feature: UC-03 Verificar token JWT y obtener perfil
 
-  Background:
-    Given que el sistema expone queries GraphQL para catálogo
+  # Generado automaticamente desde documentacion funcional para UC-03.
+  # Fuente: DRF Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos
 
-  # @direct — RF-15
-  Scenario: Listar productos con paginación
-    When el cliente consulta el listado de productos
-    Then el sistema permite paginar los resultados
-    # trazabilidad: "Listar productos con paginación"
+  @direct @uc_UC_03 @rf_RF_06
+  Scenario: RF-06 - El sistema debe exponer un endpoint REST de verificación en /api/auth/verify.
+    # Trazabilidad: REST: /api/auth/verify
+    Given existe documentacion funcional para "Verificar token JWT y obtener perfil"
+    When se ejecuta el comportamiento requerido por RF-06
+    Then El sistema debe exponer un endpoint REST de verificación en /api/auth/verify.
 
-  # @direct — RF-16
-  Scenario: Listar productos con búsqueda
-    When el cliente consulta el listado de productos con un criterio de búsqueda
-    Then el sistema filtra los productos por el criterio de búsqueda
-    # trazabilidad: "búsqueda"
+  @direct @uc_UC_03 @rf_RF_07
+  Scenario: RF-07 - El endpoint de verificación debe validar token expirado o inválido.
+    # Trazabilidad: valida token expirado/inválido
+    Given existe documentacion funcional para "Verificar token JWT y obtener perfil"
+    When se ejecuta el comportamiento requerido por RF-07
+    Then El endpoint de verificación debe validar token expirado o inválido.
 
-  # @direct — RF-17
-  Scenario: Listar productos con filtro por categoría
-    When el cliente consulta el listado de productos indicando una categoría
-    Then el sistema filtra los productos por categoría
-    # trazabilidad: "filtro por categoría"
+  @direct @uc_UC_03 @rf_RF_08
+  Scenario: RF-08 - El endpoint de verificación debe devolver el perfil sin password.
+    # Trazabilidad: devuelve perfil sin password
+    Given existe documentacion funcional para "Verificar token JWT y obtener perfil"
+    When se ejecuta el comportamiento requerido por RF-08
+    Then El endpoint de verificación debe devolver el perfil sin password.
 
-  # @direct — RF-18
-  Scenario: Ver detalle de un producto
-    When el cliente consulta el detalle de un producto
-    Then el sistema devuelve la información del producto
-    # trazabilidad: "ver detalle de producto"
-
-  # @direct — RF-19
-  Scenario: Soportar page/limit y búsqueda por nombre/descr y filtro por categoría
-    When el cliente consulta productos con page y limit
-    And aporta criterios de búsqueda por nombre o descripción
-    And aporta filtro por categoría
-    Then el sistema aplica paginación
-    And aplica búsqueda
-    And aplica filtro por categoría
-    # trazabilidad: "page/limit, búsqueda por nombre/descr y filtro por categoría"
-
-  # @direct — RF-20
-  Scenario: Disponibilidad de queries products y product
-    When el cliente ejecuta la query GraphQL "products"
-    Then el sistema devuelve una lista de productos
-    And la query está disponible
-    When el cliente ejecuta la query GraphQL "product"
-    Then el sistema devuelve el detalle de un producto
-    And la query está disponible
-    # trazabilidad: "Query products/product"
-
-  # @derived — cobertura adicional
-  Scenario: Consultar un producto inexistente
-    Given que no existe un producto con el identificador solicitado
-    When el cliente consulta el detalle del producto
-    Then el sistema informa que el producto no existe
-
-  Scenario: Solicitar una página sin resultados
-    Given que el cliente solicita una página fuera de rango
-    When consulta el listado de productos
-    Then el sistema devuelve una lista vacía
-
-  Scenario: Búsqueda sin coincidencias
-    When el cliente consulta el listado con un término sin coincidencias
-    Then el sistema devuelve una lista vacía
-
-  Scenario: Listado público sin autenticación
-    Given que el cliente no está autenticado
-    When consulta products o product
-    Then el sistema permite la consulta pública del catálogo
+  @derived @uc_UC_03
+  Scenario: UC-03 mantiene un resultado funcional consistente
+    Given el flujo "Verificar token JWT y obtener perfil" tiene datos validos
+    When el usuario completa el flujo principal
+    Then el resultado observable coincide con la documentacion funcional
 ```
 
 #### Escenarios detectados
-- Listar productos con paginación
-- Listar productos con búsqueda
-- Listar productos con filtro por categoría
-- Ver detalle de un producto
-- Soportar page/limit y búsqueda por nombre/descr y filtro por categoría
-- Disponibilidad de queries products y product
-- Consultar un producto inexistente
-- Solicitar una página sin resultados
-- Búsqueda sin coincidencias
-- Listado público sin autenticación
+- RF-06 - El sistema debe exponer un endpoint REST de verificación en /api/auth/verify.
+- RF-07 - El endpoint de verificación debe validar token expirado o inválido.
+- RF-08 - El endpoint de verificación debe devolver el perfil sin password.
+- UC-03 mantiene un resultado funcional consistente
 
 #### Preguntas obligatorias que Claude debe hacer al desarrollador
 - Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
@@ -421,14 +277,14 @@ Feature: Consultar catálogo de productos (público)
 - Como se ejecutara este test en CI y que variables necesita?
 
 #### Propuesta de implementacion Cypress
-- Crear un `describe` con referencia clara a KIWI-{case_id}.
+- Crear un `describe` con referencia clara a KIWI-655.
 - Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
 - Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
 - Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
 - Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
 
 #### Criterios de aceptacion del test
-- [ ] Incluye trazabilidad KIWI-{case_id}.
+- [ ] Incluye trazabilidad KIWI-655.
 - [ ] Falla si se rompe el comportamiento funcional principal.
 - [ ] Cubre precondiciones y datos necesarios.
 - [ ] Usa selectores robustos.
@@ -440,10 +296,10 @@ Feature: Consultar catálogo de productos (público)
 - Falsos positivos por asserts demasiado genericos.
 - Duplicacion de helpers o comandos Cypress innecesarios.
 
-### 4. KIWI-626 - UC-04
+### 4. KIWI-656 - UC-04
 
-- Proyecto: `pr`
-- Categoria: `no informada`
+- Proyecto: `IdBox`
+- Categoria: `Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos`
 - Spec sugerida: `cypress/e2e/uc-04.cy.ts`
 
 #### Objetivo funcional
@@ -451,89 +307,44 @@ El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma
 
 #### Gherkin / Caso Kiwi
 ```gherkin
-Feature: Gestionar productos (CRUD/stock) como administrador
-  Como administrador
-  Quiero gestionar productos
-  Para mantener el catálogo actualizado y controlar el stock
+Feature: UC-04 Autorizar operaciones por rol (user/admin)
 
-  Background:
-    Given que las operaciones de gestión de productos son administrativas
+  # Generado automaticamente desde documentacion funcional para UC-04.
+  # Fuente: DRF Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos
 
-  # @direct — RF-21
-  Scenario: Crear un producto como administrador
-    Given que el usuario tiene rol admin
-    When ejecuta la operación de crear producto
-    Then el sistema crea el producto
-    # trazabilidad: "Crear producto"
+  @direct @uc_UC_04 @rf_RF_11
+  Scenario: RF-11 - Las operaciones administrativas deben requerir rol admin.
+    # Trazabilidad: Las operaciones administrativas requieren rol admin.
+    Given existe documentacion funcional para "Autorizar operaciones por rol (user/admin)"
+    When se ejecuta el comportamiento requerido por RF-11
+    Then Las operaciones administrativas deben requerir rol admin.
 
-  # @direct — RF-22
-  Scenario: Eliminar un producto como administrador
-    Given que el usuario tiene rol admin
-    When ejecuta la operación de eliminar producto
-    Then el sistema elimina el producto
-    # trazabilidad: "eliminar producto"
+  @direct @uc_UC_04 @rf_RF_12
+  Scenario: RF-12 - El backend debe impedir accesos a endpoints/resolvers admin a usuarios no admin.
+    # Trazabilidad: El backend debe impedir accesos a endpoints/resolvers admin a usuarios no admin.
+    Given existe documentacion funcional para "Autorizar operaciones por rol (user/admin)"
+    When se ejecuta el comportamiento requerido por RF-12
+    Then El backend debe impedir accesos a endpoints/resolvers admin a usuarios no admin.
 
-  # @direct — RF-23
-  Scenario: Actualizar stock como administrador
-    Given que el usuario tiene rol admin
-    When ejecuta la operación de actualizar stock
-    Then el sistema actualiza el stock del producto
-    # trazabilidad: "actualizar stock"
+  @direct @uc_UC_04 @rf_RF_13
+  Scenario: RF-13 - En GraphQL, el sistema debe usar el contexto (token) para autorizar resolvers.
+    # Trazabilidad: En GraphQL, se usa el contexto (token) para autorizar resolvers.
+    Given existe documentacion funcional para "Autorizar operaciones por rol (user/admin)"
+    When se ejecuta el comportamiento requerido por RF-13
+    Then En GraphQL, el sistema debe usar el contexto (token) para autorizar resolvers.
 
-  # @direct — RF-24
-  Scenario: Restringir creación/eliminación/modificación de stock a admin
-    Given que el usuario no tiene rol admin
-    When intenta crear o eliminar un producto o modificar stock
-    Then el sistema rechaza la operación por permisos
-    # trazabilidad: "Solo admin puede crear/eliminar productos y modificar stock."
-
-  # @direct — RF-25
-  Scenario: Impedir stock negativo
-    Given que el usuario tiene rol admin
-    When intenta establecer un stock con valor negativo
-    Then el sistema rechaza la actualización
-    And el stock no se actualiza
-    # trazabilidad: "El stock no puede ser negativo."
-
-  # @direct — RF-26
-  Scenario: Disponibilidad de mutations createProduct, deleteProduct y updateProductStock
-    Given que el usuario tiene rol admin
-    When ejecuta la mutation GraphQL "createProduct"
-    Then el sistema procesa la creación
-    When ejecuta la mutation GraphQL "deleteProduct"
-    Then el sistema procesa la eliminación
-    When ejecuta la mutation GraphQL "updateProductStock"
-    Then el sistema procesa la actualización de stock
-    # trazabilidad: "Mutations: createProduct, deleteProduct, updateProductStock."
-
-  # @derived — cobertura adicional
-  Scenario: Eliminar un producto inexistente
-    Given que el usuario tiene rol admin
-    And no existe el producto a eliminar
-    When intenta eliminar el producto
-    Then el sistema informa que el producto no existe
-
-  Scenario: Actualizar stock a cero
-    Given que el usuario tiene rol admin
-    When establece el stock a 0
-    Then el sistema actualiza el stock a 0
-
-  Scenario: Operación administrativa sin token
-    Given que el cliente no envía token
-    When intenta crear o eliminar un producto o modificar stock
-    Then el sistema rechaza la operación
+  @derived @uc_UC_04
+  Scenario: UC-04 mantiene un resultado funcional consistente
+    Given el flujo "Autorizar operaciones por rol (user/admin)" tiene datos validos
+    When el usuario completa el flujo principal
+    Then el resultado observable coincide con la documentacion funcional
 ```
 
 #### Escenarios detectados
-- Crear un producto como administrador
-- Eliminar un producto como administrador
-- Actualizar stock como administrador
-- Restringir creación/eliminación/modificación de stock a admin
-- Impedir stock negativo
-- Disponibilidad de mutations createProduct, deleteProduct y updateProductStock
-- Eliminar un producto inexistente
-- Actualizar stock a cero
-- Operación administrativa sin token
+- RF-11 - Las operaciones administrativas deben requerir rol admin.
+- RF-12 - El backend debe impedir accesos a endpoints/resolvers admin a usuarios no admin.
+- RF-13 - En GraphQL, el sistema debe usar el contexto (token) para autorizar resolvers.
+- UC-04 mantiene un resultado funcional consistente
 
 #### Preguntas obligatorias que Claude debe hacer al desarrollador
 - Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
@@ -547,14 +358,14 @@ Feature: Gestionar productos (CRUD/stock) como administrador
 - Como se ejecutara este test en CI y que variables necesita?
 
 #### Propuesta de implementacion Cypress
-- Crear un `describe` con referencia clara a KIWI-{case_id}.
+- Crear un `describe` con referencia clara a KIWI-656.
 - Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
 - Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
 - Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
 - Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
 
 #### Criterios de aceptacion del test
-- [ ] Incluye trazabilidad KIWI-{case_id}.
+- [ ] Incluye trazabilidad KIWI-656.
 - [ ] Falla si se rompe el comportamiento funcional principal.
 - [ ] Cubre precondiciones y datos necesarios.
 - [ ] Usa selectores robustos.
@@ -566,10 +377,10 @@ Feature: Gestionar productos (CRUD/stock) como administrador
 - Falsos positivos por asserts demasiado genericos.
 - Duplicacion de helpers o comandos Cypress innecesarios.
 
-### 5. KIWI-627 - UC-05
+### 5. KIWI-657 - UC-05
 
-- Proyecto: `pr`
-- Categoria: `no informada`
+- Proyecto: `IdBox`
+- Categoria: `Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos`
 - Spec sugerida: `cypress/e2e/uc-05.cy.ts`
 
 #### Objetivo funcional
@@ -577,82 +388,68 @@ El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma
 
 #### Gherkin / Caso Kiwi
 ```gherkin
-Feature: Gestionar carrito de compra en el navegador
-  Como visitante/usuario
-  Quiero gestionar un carrito en el navegador
-  Para preparar un pedido
+Feature: UC-05 Consultar catálogo de productos (listar con paginación/búsqueda/filtro)
 
-  Background:
-    Given que el carrito se gestiona en el navegador
+  # Generado automaticamente desde documentacion funcional para UC-05.
+  # Fuente: DRF Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos
 
-  # @direct — RF-27
-  Scenario: Carrito con persistencia en LocalStorage
-    When el usuario añade productos al carrito
-    Then el carrito se persiste en LocalStorage
-    # trazabilidad: "carrito ... persistencia en LocalStorage"
+  @direct @uc_UC_05 @rf_RF_14
+  Scenario: RF-14 - El sistema debe permitir listar productos con paginación.
+    # Trazabilidad: Listar productos con paginación
+    Given existe documentacion funcional para "Consultar catálogo de productos (listar con paginación/búsqueda/filtro)"
+    When se ejecuta el comportamiento requerido por RF-14
+    Then El sistema debe permitir listar productos con paginación.
 
-  # @direct — RF-28
-  Scenario: Mantener carrito entre sesiones
-    Given que el usuario ha guardado un carrito en LocalStorage
-    When el usuario vuelve a abrir la aplicación en otra sesión
-    Then el carrito se recupera desde LocalStorage
-    # trazabilidad: "mantener entre sesiones"
+  @direct @uc_UC_05 @rf_RF_15
+  Scenario: RF-15 - El sistema debe permitir listar productos con búsqueda.
+    # Trazabilidad: Listar productos con ... búsqueda
+    Given existe documentacion funcional para "Consultar catálogo de productos (listar con paginación/búsqueda/filtro)"
+    When se ejecuta el comportamiento requerido por RF-15
+    Then El sistema debe permitir listar productos con búsqueda.
 
-  # @direct — RF-29
-  Scenario: Añadir ítems al carrito
-    When el usuario añade un ítem al carrito
-    Then el carrito contiene el ítem añadido
-    # trazabilidad: "Añadir"
+  @direct @uc_UC_05 @rf_RF_16
+  Scenario: RF-16 - El sistema debe permitir listar productos con filtro por categoría.
+    # Trazabilidad: filtro por categoría
+    Given existe documentacion funcional para "Consultar catálogo de productos (listar con paginación/búsqueda/filtro)"
+    When se ejecuta el comportamiento requerido por RF-16
+    Then El sistema debe permitir listar productos con filtro por categoría.
 
-  # @direct — RF-30
-  Scenario: Modificar cantidades de ítems
-    Given que el carrito contiene un ítem
-    When el usuario modifica la cantidad del ítem
-    Then el carrito refleja la nueva cantidad
-    # trazabilidad: "modificar cantidades"
+  @direct @uc_UC_05 @rf_RF_18
+  Scenario: RF-18 - El listado de productos debe soportar page/limit.
+    # Trazabilidad: El listado soporta page/limit
+    Given existe documentacion funcional para "Consultar catálogo de productos (listar con paginación/búsqueda/filtro)"
+    When se ejecuta el comportamiento requerido por RF-18
+    Then El listado de productos debe soportar page/limit.
 
-  # @direct — RF-31
-  Scenario: Eliminar ítems del carrito
-    Given que el carrito contiene un ítem
-    When el usuario elimina el ítem
-    Then el carrito ya no contiene el ítem
-    # trazabilidad: "eliminar ítems"
+  @direct @uc_UC_05 @rf_RF_19
+  Scenario: RF-19 - El listado de productos debe soportar búsqueda por nombre o descripción.
+    # Trazabilidad: búsqueda por nombre/descr
+    Given existe documentacion funcional para "Consultar catálogo de productos (listar con paginación/búsqueda/filtro)"
+    When se ejecuta el comportamiento requerido por RF-19
+    Then El listado de productos debe soportar búsqueda por nombre o descripción.
 
-  # @direct — RF-32
-  Scenario: Calcular subtotal y total
-    Given que el carrito contiene uno o más ítems
-    When el usuario consulta el resumen del carrito
-    Then el sistema calcula el subtotal
-    And el sistema calcula el total
-    # trazabilidad: "calcular subtotal/total"
+  @direct @uc_UC_05 @rf_RF_20
+  Scenario: RF-20 - El listado de productos debe soportar filtro por categoría.
+    # Trazabilidad: filtro por categoría
+    Given existe documentacion funcional para "Consultar catálogo de productos (listar con paginación/búsqueda/filtro)"
+    When se ejecuta el comportamiento requerido por RF-20
+    Then El listado de productos debe soportar filtro por categoría.
 
-  # @derived — cobertura adicional
-  Scenario: Persistencia tras modificar cantidades
-    Given que el carrito está persistido en LocalStorage
-    When el usuario cambia cantidades
-    Then el carrito actualizado se vuelve a persistir en LocalStorage
-
-  Scenario: Vaciar el carrito eliminando todos los ítems
-    Given que el carrito contiene múltiples ítems
-    When el usuario elimina todos los ítems
-    Then el carrito queda vacío
-
-  Scenario: Total con carrito vacío
-    Given que el carrito está vacío
-    When el usuario consulta el total
-    Then el total es 0 o equivalente funcional
+  @derived @uc_UC_05
+  Scenario: UC-05 mantiene un resultado funcional consistente
+    Given el flujo "Consultar catálogo de productos (listar con paginación/búsqueda/filtro)" tiene datos validos
+    When el usuario completa el flujo principal
+    Then el resultado observable coincide con la documentacion funcional
 ```
 
 #### Escenarios detectados
-- Carrito con persistencia en LocalStorage
-- Mantener carrito entre sesiones
-- Añadir ítems al carrito
-- Modificar cantidades de ítems
-- Eliminar ítems del carrito
-- Calcular subtotal y total
-- Persistencia tras modificar cantidades
-- Vaciar el carrito eliminando todos los ítems
-- Total con carrito vacío
+- RF-14 - El sistema debe permitir listar productos con paginación.
+- RF-15 - El sistema debe permitir listar productos con búsqueda.
+- RF-16 - El sistema debe permitir listar productos con filtro por categoría.
+- RF-18 - El listado de productos debe soportar page/limit.
+- RF-19 - El listado de productos debe soportar búsqueda por nombre o descripción.
+- RF-20 - El listado de productos debe soportar filtro por categoría.
+- UC-05 mantiene un resultado funcional consistente
 
 #### Preguntas obligatorias que Claude debe hacer al desarrollador
 - Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
@@ -666,14 +463,14 @@ Feature: Gestionar carrito de compra en el navegador
 - Como se ejecutara este test en CI y que variables necesita?
 
 #### Propuesta de implementacion Cypress
-- Crear un `describe` con referencia clara a KIWI-{case_id}.
+- Crear un `describe` con referencia clara a KIWI-657.
 - Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
 - Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
 - Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
 - Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
 
 #### Criterios de aceptacion del test
-- [ ] Incluye trazabilidad KIWI-{case_id}.
+- [ ] Incluye trazabilidad KIWI-657.
 - [ ] Falla si se rompe el comportamiento funcional principal.
 - [ ] Cubre precondiciones y datos necesarios.
 - [ ] Usa selectores robustos.
@@ -685,10 +482,10 @@ Feature: Gestionar carrito de compra en el navegador
 - Falsos positivos por asserts demasiado genericos.
 - Duplicacion de helpers o comandos Cypress innecesarios.
 
-### 6. KIWI-628 - UC-06
+### 6. KIWI-658 - UC-06
 
-- Proyecto: `pr`
-- Categoria: `no informada`
+- Proyecto: `IdBox`
+- Categoria: `Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos`
 - Spec sugerida: `cypress/e2e/uc-06.cy.ts`
 
 #### Objetivo funcional
@@ -696,135 +493,28 @@ El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma
 
 #### Gherkin / Caso Kiwi
 ```gherkin
-Feature: Crear pedido (usuario autenticado)
-  Como usuario autenticado
-  Quiero crear un pedido
-  Para comprar los productos del carrito
+Feature: UC-06 Ver detalle de producto
 
-  Background:
-    Given que el usuario está autenticado
+  # Generado automaticamente desde documentacion funcional para UC-06.
+  # Fuente: DRF Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos
 
-  # @direct — RF-33
-  Scenario: Crear un pedido como usuario autenticado
-    Given que el usuario tiene un carrito con productos
-    When el usuario solicita crear el pedido
-    Then el sistema crea el pedido
-    # trazabilidad: "puede crear pedidos"
+  @direct @uc_UC_06 @rf_RF_17
+  Scenario: RF-17 - El sistema debe permitir ver el detalle de un producto.
+    # Trazabilidad: ver detalle de producto
+    Given existe documentacion funcional para "Ver detalle de producto"
+    When se ejecuta el comportamiento requerido por RF-17
+    Then El sistema debe permitir ver el detalle de un producto.
 
-  # @direct — RF-35
-  Scenario: Disponibilidad de la mutation createOrder
-    When el cliente ejecuta la mutation GraphQL "createOrder"
-    Then el sistema procesa la creación del pedido
-    # trazabilidad: "Mutation createOrder"
-
-  # @direct — RF-38
-  Scenario: Validar stock al crear el pedido
-    Given que el carrito contiene productos
-    When el usuario solicita crear el pedido
-    Then el sistema valida el stock de cada producto
-    # trazabilidad: "Validar stock"
-
-  # @direct — RF-39
-  Scenario: Validar precio al crear el pedido
-    Given que el carrito contiene productos
-    When el usuario solicita crear el pedido
-    Then el sistema valida el precio de los productos
-    # trazabilidad: "validar precio"
-
-  # @direct — RF-41
-  Scenario: Recalcular el total en servidor
-    Given que el carrito contiene productos
-    When el usuario solicita crear el pedido
-    Then el sistema recalcula el total en el servidor
-    # trazabilidad: "recalcular total en servidor"
-
-  # @direct — RF-42
-  Scenario: Descontar stock al crear el pedido
-    Given que el carrito contiene productos con stock suficiente
-    When el usuario solicita crear el pedido
-    Then el sistema descuenta el stock correspondiente
-    # trazabilidad: "descontar stock al crear pedido"
-
-  # @direct — RF-43
-  Scenario: Impedir crear un pedido con carrito vacío
-    Given que el carrito está vacío
-    When el usuario solicita crear el pedido
-    Then el sistema rechaza la creación del pedido
-    # trazabilidad: "No se crea un pedido si el carrito está vacío."
-
-  # @direct — RF-44
-  Scenario: Fallar si un producto no existe
-    Given que el carrito contiene un producto que no existe
-    When el usuario solicita crear el pedido
-    Then el sistema rechaza la creación del pedido
-    And devuelve un mensaje informativo
-    # trazabilidad: "Si un producto no existe"
-
-  # @direct — RF-45
-  Scenario: Fallar si no hay stock suficiente
-    Given que el carrito contiene un producto sin stock suficiente
-    When el usuario solicita crear el pedido
-    Then el sistema rechaza la creación del pedido
-    And devuelve un mensaje informativo
-    # trazabilidad: "no hay stock suficiente"
-
-  # @direct — RF-46
-  Scenario: No confiar en el total del cliente
-    Given que el cliente envía un total manipulado
-    When el usuario solicita crear el pedido
-    Then el sistema utiliza el total calculado en servidor
-    And no confía en el total enviado por el cliente
-    # trazabilidad: "no se confía en el cliente"
-
-  # @direct — RF-47
-  Scenario: Reducir el stock de productos tras crear el pedido
-    Given que el carrito contiene productos con stock suficiente
-    When el sistema crea el pedido
-    Then el stock de productos se reduce
-    # trazabilidad: "el stock de productos se reduce"
-
-  # @direct — RF-48
-  Scenario: Vincular el pedido al usuario
-    When el sistema crea el pedido
-    Then el pedido queda vinculado al usuario autenticado
-    # trazabilidad: "se vincula el pedido al usuario"
-
-  # @derived — cobertura adicional
-  Scenario: Rechazar createOrder sin autenticación
-    Given que el cliente no está autenticado
-    When intenta crear un pedido
-    Then el sistema rechaza la operación
-
-  Scenario: Registrar estado inicial del pedido
-    Given que el usuario solicita crear un pedido
-    When el sistema crea el pedido
-    Then el pedido queda en un estado válido del sistema
-    # trazabilidad: "Estados pending, completed, cancelled"
-
-  Scenario: Precio cambiado entre carrito y servidor
-    Given que el precio de un producto cambió en el servidor
-    And el carrito contiene el producto con el precio anterior
-    When el usuario solicita crear el pedido
-    Then el sistema valida el precio y evita inconsistencia
-    # trazabilidad: "validar precio"
+  @derived @uc_UC_06
+  Scenario: UC-06 mantiene un resultado funcional consistente
+    Given el flujo "Ver detalle de producto" tiene datos validos
+    When el usuario completa el flujo principal
+    Then el resultado observable coincide con la documentacion funcional
 ```
 
 #### Escenarios detectados
-- Crear un pedido como usuario autenticado
-- Disponibilidad de la mutation createOrder
-- Validar stock al crear el pedido
-- Validar precio al crear el pedido
-- Recalcular el total en servidor
-- Descontar stock al crear el pedido
-- Impedir crear un pedido con carrito vacío
-- Fallar si un producto no existe
-- Fallar si no hay stock suficiente
-- No confiar en el total del cliente
-- Reducir el stock de productos tras crear el pedido
-- Vincular el pedido al usuario
-- Rechazar createOrder sin autenticación
-- Registrar estado inicial del pedido
-- Precio cambiado entre carrito y servidor
+- RF-17 - El sistema debe permitir ver el detalle de un producto.
+- UC-06 mantiene un resultado funcional consistente
 
 #### Preguntas obligatorias que Claude debe hacer al desarrollador
 - Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
@@ -838,14 +528,14 @@ Feature: Crear pedido (usuario autenticado)
 - Como se ejecutara este test en CI y que variables necesita?
 
 #### Propuesta de implementacion Cypress
-- Crear un `describe` con referencia clara a KIWI-{case_id}.
+- Crear un `describe` con referencia clara a KIWI-658.
 - Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
 - Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
 - Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
 - Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
 
 #### Criterios de aceptacion del test
-- [ ] Incluye trazabilidad KIWI-{case_id}.
+- [ ] Incluye trazabilidad KIWI-658.
 - [ ] Falla si se rompe el comportamiento funcional principal.
 - [ ] Cubre precondiciones y datos necesarios.
 - [ ] Usa selectores robustos.
@@ -857,10 +547,10 @@ Feature: Crear pedido (usuario autenticado)
 - Falsos positivos por asserts demasiado genericos.
 - Duplicacion de helpers o comandos Cypress innecesarios.
 
-### 7. KIWI-629 - UC-07
+### 7. KIWI-659 - UC-07
 
-- Proyecto: `pr`
-- Categoria: `no informada`
+- Proyecto: `IdBox`
+- Categoria: `Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos`
 - Spec sugerida: `cypress/e2e/uc-07.cy.ts`
 
 #### Objetivo funcional
@@ -868,68 +558,68 @@ El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma
 
 #### Gherkin / Caso Kiwi
 ```gherkin
-Feature: Consultar pedidos propios (usuario autenticado)
-  Como usuario autenticado
-  Quiero consultar mis pedidos
-  Para ver mi histórico
+Feature: UC-07 Administrar productos (crear/eliminar/actualizar stock)
 
-  Background:
-    Given que el usuario está autenticado
+  # Generado automaticamente desde documentacion funcional para UC-07.
+  # Fuente: DRF Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos
 
-  # @direct — RF-34
-  Scenario: Consultar el histórico de pedidos
-    When el usuario consulta sus pedidos
-    Then el sistema devuelve el histórico de pedidos del usuario
-    # trazabilidad: "consultar su histórico"
+  @direct @uc_UC_07 @rf_RF_21
+  Scenario: RF-21 - Solo admin debe poder crear productos.
+    # Trazabilidad: Solo admin puede crear
+    Given existe documentacion funcional para "Administrar productos (crear/eliminar/actualizar stock)"
+    When se ejecuta el comportamiento requerido por RF-21
+    Then Solo admin debe poder crear productos.
 
-  # @direct — RF-36
-  Scenario: Disponibilidad de la query myOrders
-    When el cliente ejecuta la query GraphQL "myOrders"
-    Then el sistema devuelve los pedidos del usuario
-    # trazabilidad: "Queries myOrders"
+  @direct @uc_UC_07 @rf_RF_22
+  Scenario: RF-22 - Solo admin debe poder eliminar productos.
+    # Trazabilidad: Solo admin puede ... eliminar productos
+    Given existe documentacion funcional para "Administrar productos (crear/eliminar/actualizar stock)"
+    When se ejecuta el comportamiento requerido por RF-22
+    Then Solo admin debe poder eliminar productos.
 
-  # @direct — RF-37
-  Scenario: Disponibilidad de la query order
-    When el cliente ejecuta la query GraphQL "order"
-    Then el sistema devuelve el detalle del pedido solicitado
-    # trazabilidad: "Queries myOrders, order."
+  @direct @uc_UC_07 @rf_RF_23
+  Scenario: RF-23 - Solo admin debe poder modificar stock.
+    # Trazabilidad: Solo admin puede ... modificar stock.
+    Given existe documentacion funcional para "Administrar productos (crear/eliminar/actualizar stock)"
+    When se ejecuta el comportamiento requerido por RF-23
+    Then Solo admin debe poder modificar stock.
 
-  # @derived — cobertura adicional
-  Scenario: Rechazar consulta de pedidos sin autenticación
-    Given que el cliente no está autenticado
-    When consulta "myOrders" o solicita un "order"
-    Then el sistema rechaza la operación
+  @direct @uc_UC_07 @rf_RF_24
+  Scenario: RF-24 - El stock no debe poder ser negativo.
+    # Trazabilidad: El stock no puede ser negativo.
+    Given existe documentacion funcional para "Administrar productos (crear/eliminar/actualizar stock)"
+    When se ejecuta el comportamiento requerido por RF-24
+    Then El stock no debe poder ser negativo.
 
-  Scenario: Evitar que un usuario acceda a pedidos de otro usuario
-    Given que existe un pedido de otro usuario
-    When el usuario intenta consultar el detalle del pedido ajeno
-    Then el sistema rechaza la consulta por permisos
+  @direct @uc_UC_07 @rf_RF_25
+  Scenario: RF-25 - La API GraphQL debe exponer las queries products y product.
+    # Trazabilidad: GraphQL: Query products/product.
+    Given existe documentacion funcional para "Administrar productos (crear/eliminar/actualizar stock)"
+    When se ejecuta el comportamiento requerido por RF-25
+    Then La API GraphQL debe exponer las queries products y product.
 
-  Scenario: Histórico vacío
-    Given que el usuario no tiene pedidos
-    When consulta "myOrders"
-    Then el sistema devuelve una lista vacía
+  @direct @uc_UC_07 @rf_RF_26
+  Scenario: RF-26 - La API GraphQL debe exponer las mutaciones createProduct, deleteProduct y updateProductStock.
+    # Trazabilidad: Mutations: createProduct, deleteProduct, updateProductStock.
+    Given existe documentacion funcional para "Administrar productos (crear/eliminar/actualizar stock)"
+    When se ejecuta el comportamiento requerido por RF-26
+    Then La API GraphQL debe exponer las mutaciones createProduct, deleteProduct y updateProductStock.
 
-  Scenario: Consultar un pedido inexistente
-    Given que no existe el pedido solicitado
-    When el usuario consulta "order"
-    Then el sistema informa que el pedido no existe
-
-  Scenario: Consultar pedidos tras crear uno
-    Given que el usuario creó un pedido previamente
-    When consulta "myOrders"
-    Then el pedido aparece en el histórico
+  @derived @uc_UC_07
+  Scenario: UC-07 mantiene un resultado funcional consistente
+    Given el flujo "Administrar productos (crear/eliminar/actualizar stock)" tiene datos validos
+    When el usuario completa el flujo principal
+    Then el resultado observable coincide con la documentacion funcional
 ```
 
 #### Escenarios detectados
-- Consultar el histórico de pedidos
-- Disponibilidad de la query myOrders
-- Disponibilidad de la query order
-- Rechazar consulta de pedidos sin autenticación
-- Evitar que un usuario acceda a pedidos de otro usuario
-- Histórico vacío
-- Consultar un pedido inexistente
-- Consultar pedidos tras crear uno
+- RF-21 - Solo admin debe poder crear productos.
+- RF-22 - Solo admin debe poder eliminar productos.
+- RF-23 - Solo admin debe poder modificar stock.
+- RF-24 - El stock no debe poder ser negativo.
+- RF-25 - La API GraphQL debe exponer las queries products y product.
+- RF-26 - La API GraphQL debe exponer las mutaciones createProduct, deleteProduct y updateProductStock.
+- UC-07 mantiene un resultado funcional consistente
 
 #### Preguntas obligatorias que Claude debe hacer al desarrollador
 - Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
@@ -943,14 +633,14 @@ Feature: Consultar pedidos propios (usuario autenticado)
 - Como se ejecutara este test en CI y que variables necesita?
 
 #### Propuesta de implementacion Cypress
-- Crear un `describe` con referencia clara a KIWI-{case_id}.
+- Crear un `describe` con referencia clara a KIWI-659.
 - Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
 - Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
 - Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
 - Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
 
 #### Criterios de aceptacion del test
-- [ ] Incluye trazabilidad KIWI-{case_id}.
+- [ ] Incluye trazabilidad KIWI-659.
 - [ ] Falla si se rompe el comportamiento funcional principal.
 - [ ] Cubre precondiciones y datos necesarios.
 - [ ] Usa selectores robustos.
@@ -962,10 +652,10 @@ Feature: Consultar pedidos propios (usuario autenticado)
 - Falsos positivos por asserts demasiado genericos.
 - Duplicacion de helpers o comandos Cypress innecesarios.
 
-### 8. KIWI-630 - UC-08
+### 8. KIWI-660 - UC-08
 
-- Proyecto: `pr`
-- Categoria: `no informada`
+- Proyecto: `IdBox`
+- Categoria: `Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos`
 - Spec sugerida: `cypress/e2e/uc-08.cy.ts`
 
 #### Objetivo funcional
@@ -973,89 +663,68 @@ El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma
 
 #### Gherkin / Caso Kiwi
 ```gherkin
-Feature: Administrar usuarios (administrador)
-  Como administrador
-  Quiero gestionar usuarios
-  Para mantener la seguridad y la administración del sistema
+Feature: UC-08 Gestionar carrito de compra en el navegador
 
-  Background:
-    Given que el usuario autenticado tiene rol admin
+  # Generado automaticamente desde documentacion funcional para UC-08.
+  # Fuente: DRF Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos
 
-  # @direct — RF-49
-  Scenario: Listar usuarios
-    When el administrador solicita el listado de usuarios
-    Then el sistema devuelve la lista de usuarios
-    # trazabilidad: "Listar usuarios"
+  @direct @uc_UC_08 @rf_RF_27
+  Scenario: RF-27 - El usuario debe gestionar un carrito en el navegador con persistencia en LocalStorage.
+    # Trazabilidad: gestiona un carrito en el navegador con persistencia en LocalStorage
+    Given existe documentacion funcional para "Gestionar carrito de compra en el navegador"
+    When se ejecuta el comportamiento requerido por RF-27
+    Then El usuario debe gestionar un carrito en el navegador con persistencia en LocalStorage.
 
-  # @direct — RF-50
-  Scenario: Cambiar rol de usuario
-    Given que existe un usuario con rol inicial
-    When el administrador solicita cambiar su rol
-    Then el sistema actualiza el rol del usuario
-    # trazabilidad: "cambiar rol (user/admin)"
+  @direct @uc_UC_08 @rf_RF_28
+  Scenario: RF-28 - El carrito debe mantenerse entre sesiones usando LocalStorage.
+    # Trazabilidad: LocalStorage (mantener entre sesiones)
+    Given existe documentacion funcional para "Gestionar carrito de compra en el navegador"
+    When se ejecuta el comportamiento requerido por RF-28
+    Then El carrito debe mantenerse entre sesiones usando LocalStorage.
 
-  # @direct — RF-51
-  Scenario: Eliminar un usuario
-    Given que existe un usuario
-    When el administrador solicita eliminarlo
-    Then el sistema elimina el usuario
-    # trazabilidad: "eliminar usuario"
+  @direct @uc_UC_08 @rf_RF_29
+  Scenario: RF-29 - El carrito debe permitir añadir ítems.
+    # Trazabilidad: Operaciones Añadir
+    Given existe documentacion funcional para "Gestionar carrito de compra en el navegador"
+    When se ejecuta el comportamiento requerido por RF-29
+    Then El carrito debe permitir añadir ítems.
 
-  # @direct — RF-52
-  Scenario: Impedir que un admin se elimine a sí mismo
-    Given que el administrador intenta eliminar su propio usuario
-    When solicita la eliminación
-    Then el sistema rechaza la operación
-    # trazabilidad: "no permitir que un admin se elimine a sí mismo"
+  @direct @uc_UC_08 @rf_RF_30
+  Scenario: RF-30 - El carrito debe permitir modificar cantidades.
+    # Trazabilidad: modificar cantidades
+    Given existe documentacion funcional para "Gestionar carrito de compra en el navegador"
+    When se ejecuta el comportamiento requerido por RF-30
+    Then El carrito debe permitir modificar cantidades.
 
-  # @direct — RF-53
-  Scenario: Disponibilidad de la query users
-    When el cliente ejecuta la query GraphQL "users"
-    Then el sistema devuelve la lista de usuarios
-    # trazabilidad: "Query users"
+  @direct @uc_UC_08 @rf_RF_31
+  Scenario: RF-31 - El carrito debe permitir eliminar ítems.
+    # Trazabilidad: eliminar ítems
+    Given existe documentacion funcional para "Gestionar carrito de compra en el navegador"
+    When se ejecuta el comportamiento requerido por RF-31
+    Then El carrito debe permitir eliminar ítems.
 
-  # @direct — RF-54
-  Scenario: Disponibilidad de mutations updateUserRole y deleteUser
-    When el cliente ejecuta la mutation GraphQL "updateUserRole"
-    Then el sistema procesa el cambio de rol
-    When el cliente ejecuta la mutation GraphQL "deleteUser"
-    Then el sistema procesa la eliminación
-    # trazabilidad: "Mutations updateUserRole, deleteUser."
+  @direct @uc_UC_08 @rf_RF_32
+  Scenario: RF-32 - El carrito debe permitir calcular subtotal y total.
+    # Trazabilidad: calcular subtotal/total
+    Given existe documentacion funcional para "Gestionar carrito de compra en el navegador"
+    When se ejecuta el comportamiento requerido por RF-32
+    Then El carrito debe permitir calcular subtotal y total.
 
-  # @direct — RF-55
-  Scenario: Rutas REST de administración bajo /api/admin/* (según implementación)
-    When el cliente invoca una ruta REST bajo "/api/admin/"
-    Then el sistema atiende la solicitud de administración según implementación
-    # trazabilidad: "REST: /api/admin/* (según implementación)."
-
-  # @derived — cobertura adicional
-  Scenario: Denegar administración de usuarios a no-admin
-    Given que el usuario tiene rol user
-    When intenta listar usuarios o cambiar rol o eliminar usuario
-    Then el sistema rechaza la operación por permisos
-
-  Scenario: Cambiar rol a un valor no permitido
-    Given que el administrador intenta asignar un rol no contemplado
-    When solicita el cambio de rol
-    Then el sistema rechaza la solicitud
-
-  Scenario: Eliminar usuario inexistente
-    Given que el administrador solicita eliminar un usuario inexistente
-    When ejecuta la eliminación
-    Then el sistema informa que el usuario no existe
+  @derived @uc_UC_08
+  Scenario: UC-08 mantiene un resultado funcional consistente
+    Given el flujo "Gestionar carrito de compra en el navegador" tiene datos validos
+    When el usuario completa el flujo principal
+    Then el resultado observable coincide con la documentacion funcional
 ```
 
 #### Escenarios detectados
-- Listar usuarios
-- Cambiar rol de usuario
-- Eliminar un usuario
-- Impedir que un admin se elimine a sí mismo
-- Disponibilidad de la query users
-- Disponibilidad de mutations updateUserRole y deleteUser
-- Rutas REST de administración bajo /api/admin/* (según implementación)
-- Denegar administración de usuarios a no-admin
-- Cambiar rol a un valor no permitido
-- Eliminar usuario inexistente
+- RF-27 - El usuario debe gestionar un carrito en el navegador con persistencia en LocalStorage.
+- RF-28 - El carrito debe mantenerse entre sesiones usando LocalStorage.
+- RF-29 - El carrito debe permitir añadir ítems.
+- RF-30 - El carrito debe permitir modificar cantidades.
+- RF-31 - El carrito debe permitir eliminar ítems.
+- RF-32 - El carrito debe permitir calcular subtotal y total.
+- UC-08 mantiene un resultado funcional consistente
 
 #### Preguntas obligatorias que Claude debe hacer al desarrollador
 - Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
@@ -1069,14 +738,14 @@ Feature: Administrar usuarios (administrador)
 - Como se ejecutara este test en CI y que variables necesita?
 
 #### Propuesta de implementacion Cypress
-- Crear un `describe` con referencia clara a KIWI-{case_id}.
+- Crear un `describe` con referencia clara a KIWI-660.
 - Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
 - Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
 - Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
 - Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
 
 #### Criterios de aceptacion del test
-- [ ] Incluye trazabilidad KIWI-{case_id}.
+- [ ] Incluye trazabilidad KIWI-660.
 - [ ] Falla si se rompe el comportamiento funcional principal.
 - [ ] Cubre precondiciones y datos necesarios.
 - [ ] Usa selectores robustos.
@@ -1088,10 +757,10 @@ Feature: Administrar usuarios (administrador)
 - Falsos positivos por asserts demasiado genericos.
 - Duplicacion de helpers o comandos Cypress innecesarios.
 
-### 9. KIWI-631 - UC-09
+### 9. KIWI-661 - UC-09
 
-- Proyecto: `pr`
-- Categoria: `no informada`
+- Proyecto: `IdBox`
+- Categoria: `Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos`
 - Spec sugerida: `cypress/e2e/uc-09.cy.ts`
 
 #### Objetivo funcional
@@ -1099,97 +768,108 @@ El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma
 
 #### Gherkin / Caso Kiwi
 ```gherkin
-Feature: Administrar pedidos y estadísticas (administrador)
-  Como administrador
-  Quiero gestionar pedidos y ver estadísticas
-  Para controlar el estado de las ventas
+Feature: UC-09 Crear pedido
 
-  Background:
-    Given que el usuario autenticado tiene rol admin
+  # Generado automaticamente desde documentacion funcional para UC-09.
+  # Fuente: DRF Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos
 
-  # @direct — RF-56
-  Scenario: Listar pedidos con filtro por estado
-    When el administrador solicita listar pedidos con un filtro de estado
-    Then el sistema devuelve los pedidos filtrados por estado
-    # trazabilidad: "Listar pedidos (con filtro por estado)"
+  @direct @uc_UC_09 @rf_RF_33
+  Scenario: RF-33 - Un usuario autenticado debe poder crear pedidos.
+    # Trazabilidad: Un usuario autenticado puede crear pedidos
+    Given existe documentacion funcional para "Crear pedido"
+    When se ejecuta el comportamiento requerido por RF-33
+    Then Un usuario autenticado debe poder crear pedidos.
 
-  # @direct — RF-57
-  Scenario: Ver detalle de un pedido
-    Given que existe un pedido
-    When el administrador solicita ver el detalle
-    Then el sistema devuelve el detalle del pedido
-    # trazabilidad: "ver detalle"
+  @direct @uc_UC_09 @rf_RF_35
+  Scenario: RF-35 - La API GraphQL debe exponer la mutación createOrder.
+    # Trazabilidad: GraphQL Mutation createOrder
+    Given existe documentacion funcional para "Crear pedido"
+    When se ejecuta el comportamiento requerido por RF-35
+    Then La API GraphQL debe exponer la mutación createOrder.
 
-  # @direct — RF-58
-  Scenario: Actualizar estado de un pedido
-    Given que existe un pedido
-    When el administrador solicita actualizar su estado
-    Then el sistema actualiza el estado del pedido
-    # trazabilidad: "actualizar estado"
+  @direct @uc_UC_09 @rf_RF_38
+  Scenario: RF-38 - Los pedidos deben contemplar estados pending, completed y cancelled.
+    # Trazabilidad: Estados pending, completed, cancelled
+    Given existe documentacion funcional para "Crear pedido"
+    When se ejecuta el comportamiento requerido por RF-38
+    Then Los pedidos deben contemplar estados pending, completed y cancelled.
 
-  # @direct — RF-59
-  Scenario: Consultar estadísticas agregadas
-    When el administrador consulta estadísticas de pedidos
-    Then el sistema devuelve estadísticas agregadas
-    And las estadísticas incluyen total, por estado e ingresos
-    # trazabilidad: "estadísticas (total, por estado, ingresos)"
+  @direct @uc_UC_09 @rf_RF_39
+  Scenario: RF-39 - El sistema debe validar stock al crear pedido.
+    # Trazabilidad: Validar stock
+    Given existe documentacion funcional para "Crear pedido"
+    When se ejecuta el comportamiento requerido por RF-39
+    Then El sistema debe validar stock al crear pedido.
 
-  # @direct — RF-60
-  Scenario: Disponibilidad de queries orders, order y orderStats
-    When el cliente ejecuta la query GraphQL "orders"
-    Then el sistema devuelve la lista de pedidos
-    When el cliente ejecuta la query GraphQL "order"
-    Then el sistema devuelve el detalle de un pedido
-    When el cliente ejecuta la query GraphQL "orderStats"
-    Then el sistema devuelve estadísticas
-    # trazabilidad: "Query orders/order/orderStats"
+  @direct @uc_UC_09 @rf_RF_40
+  Scenario: RF-40 - El sistema debe validar precio al crear pedido.
+    # Trazabilidad: validar precio
+    Given existe documentacion funcional para "Crear pedido"
+    When se ejecuta el comportamiento requerido por RF-40
+    Then El sistema debe validar precio al crear pedido.
 
-  # @direct — RF-61
-  Scenario: Disponibilidad de mutation updateOrderStatus
-    When el cliente ejecuta la mutation GraphQL "updateOrderStatus"
-    Then el sistema procesa la actualización de estado
-    # trazabilidad: "Mutation updateOrderStatus"
+  @direct @uc_UC_09 @rf_RF_41
+  Scenario: RF-41 - El sistema debe recalcular el total en servidor al crear pedido.
+    # Trazabilidad: recalcular total en servidor
+    Given existe documentacion funcional para "Crear pedido"
+    When se ejecuta el comportamiento requerido por RF-41
+    Then El sistema debe recalcular el total en servidor al crear pedido.
 
-  # @direct — RF-62
-  Scenario: Disponibilidad de mutation cancelOrder
-    When el cliente ejecuta la mutation GraphQL "cancelOrder"
-    Then el sistema procesa la cancelación del pedido
-    # trazabilidad: "cancelOrder"
+  @direct @uc_UC_09 @rf_RF_42
+  Scenario: RF-42 - El sistema debe descontar stock al crear pedido.
+    # Trazabilidad: descontar stock al crear pedido
+    Given existe documentacion funcional para "Crear pedido"
+    When se ejecuta el comportamiento requerido por RF-42
+    Then El sistema debe descontar stock al crear pedido.
 
-  # @derived — cobertura adicional
-  Scenario: Denegar acceso a administración de pedidos a no-admin
-    Given que el usuario tiene rol user
-    When intenta listar pedidos o ver detalle o actualizar estado o consultar estadísticas
-    Then el sistema rechaza la operación por permisos
+  @direct @uc_UC_09 @rf_RF_43
+  Scenario: RF-43 - No se debe crear un pedido si el carrito está vacío.
+    # Trazabilidad: No se crea un pedido si el carrito está vacío.
+    Given existe documentacion funcional para "Crear pedido"
+    When se ejecuta el comportamiento requerido por RF-43
+    Then No se debe crear un pedido si el carrito está vacío.
 
-  Scenario: Filtrar por un estado sin resultados
-    Given que no existen pedidos con el estado solicitado
-    When el administrador lista pedidos filtrando por ese estado
-    Then el sistema devuelve una lista vacía
+  @direct @uc_UC_09 @rf_RF_44
+  Scenario: RF-44 - Si un producto no existe o no hay stock suficiente, el pedido debe fallar con mensaje informativo.
+    # Trazabilidad: Si un producto no existe o no hay stock suficiente, el pedido falla con mensaje informativo.
+    Given existe documentacion funcional para "Crear pedido"
+    When se ejecuta el comportamiento requerido por RF-44
+    Then Si un producto no existe o no hay stock suficiente, el pedido debe fallar con mensaje informativo.
 
-  Scenario: Actualizar estado a un valor no permitido
-    Given que el administrador intenta asignar un estado no contemplado
-    When solicita la actualización
-    Then el sistema rechaza la solicitud
+  @direct @uc_UC_09 @rf_RF_45
+  Scenario: RF-45 - El total usado para el pedido debe calcularse en servidor y no confiar en el cliente.
+    # Trazabilidad: El total usado para el pedido se calcula en servidor (no se confía en el cliente).
+    Given existe documentacion funcional para "Crear pedido"
+    When se ejecuta el comportamiento requerido por RF-45
+    Then El total usado para el pedido debe calcularse en servidor y no confiar en el cliente.
 
-  Scenario: Cancelar un pedido
-    Given que existe un pedido
-    When el administrador solicita cancelarlo
-    Then el pedido queda en estado cancelado o equivalente funcional
+  @direct @uc_UC_09 @rf_RF_46
+  Scenario: RF-46 - Al crear el pedido, el sistema debe reducir el stock de productos y vincular el pedido al usuario.
+    # Trazabilidad: Al crear el pedido, el stock de productos se reduce y se vincula el pedido al usuario.
+    Given existe documentacion funcional para "Crear pedido"
+    When se ejecuta el comportamiento requerido por RF-46
+    Then Al crear el pedido, el sistema debe reducir el stock de productos y vincular el pedido al usuario.
+
+  @derived @uc_UC_09
+  Scenario: UC-09 mantiene un resultado funcional consistente
+    Given el flujo "Crear pedido" tiene datos validos
+    When el usuario completa el flujo principal
+    Then el resultado observable coincide con la documentacion funcional
 ```
 
 #### Escenarios detectados
-- Listar pedidos con filtro por estado
-- Ver detalle de un pedido
-- Actualizar estado de un pedido
-- Consultar estadísticas agregadas
-- Disponibilidad de queries orders, order y orderStats
-- Disponibilidad de mutation updateOrderStatus
-- Disponibilidad de mutation cancelOrder
-- Denegar acceso a administración de pedidos a no-admin
-- Filtrar por un estado sin resultados
-- Actualizar estado a un valor no permitido
-- Cancelar un pedido
+- RF-33 - Un usuario autenticado debe poder crear pedidos.
+- RF-35 - La API GraphQL debe exponer la mutación createOrder.
+- RF-38 - Los pedidos deben contemplar estados pending, completed y cancelled.
+- RF-39 - El sistema debe validar stock al crear pedido.
+- RF-40 - El sistema debe validar precio al crear pedido.
+- RF-41 - El sistema debe recalcular el total en servidor al crear pedido.
+- RF-42 - El sistema debe descontar stock al crear pedido.
+- RF-43 - No se debe crear un pedido si el carrito está vacío.
+- RF-44 - Si un producto no existe o no hay stock suficiente, el pedido debe fallar con mensaje informativo.
+- RF-45 - El total usado para el pedido debe calcularse en servidor y no confiar en el cliente.
+- RF-46 - Al crear el pedido, el sistema debe reducir el stock de productos y vincular el pedido al usuario.
+- UC-09 mantiene un resultado funcional consistente
 
 #### Preguntas obligatorias que Claude debe hacer al desarrollador
 - Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
@@ -1203,14 +883,14 @@ Feature: Administrar pedidos y estadísticas (administrador)
 - Como se ejecutara este test en CI y que variables necesita?
 
 #### Propuesta de implementacion Cypress
-- Crear un `describe` con referencia clara a KIWI-{case_id}.
+- Crear un `describe` con referencia clara a KIWI-661.
 - Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
 - Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
 - Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
 - Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
 
 #### Criterios de aceptacion del test
-- [ ] Incluye trazabilidad KIWI-{case_id}.
+- [ ] Incluye trazabilidad KIWI-661.
 - [ ] Falla si se rompe el comportamiento funcional principal.
 - [ ] Cubre precondiciones y datos necesarios.
 - [ ] Usa selectores robustos.
@@ -1222,10 +902,10 @@ Feature: Administrar pedidos y estadísticas (administrador)
 - Falsos positivos por asserts demasiado genericos.
 - Duplicacion de helpers o comandos Cypress innecesarios.
 
-### 10. KIWI-632 - UC-10
+### 10. KIWI-662 - UC-10
 
-- Proyecto: `pr`
-- Categoria: `no informada`
+- Proyecto: `IdBox`
+- Categoria: `Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos`
 - Spec sugerida: `cypress/e2e/uc-10.cy.ts`
 
 #### Objetivo funcional
@@ -1233,72 +913,44 @@ El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma
 
 #### Gherkin / Caso Kiwi
 ```gherkin
-Feature: Chat en tiempo real
-  Como usuario del sistema
-  Quiero usar un chat en tiempo real
-  Para enviar y recibir mensajes
+Feature: UC-10 Consultar pedidos del usuario (histórico)
 
-  Background:
-    Given que el chat usa Socket.IO
+  # Generado automaticamente desde documentacion funcional para UC-10.
+  # Fuente: DRF Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos
 
-  # @direct — RF-63
-  Scenario: Soportar chat en tiempo real con Socket.IO
-    When un cliente se conecta al chat
-    Then el sistema soporta comunicación en tiempo real mediante Socket.IO
-    # trazabilidad: "Chat en tiempo real con Socket.IO"
+  @direct @uc_UC_10 @rf_RF_34
+  Scenario: RF-34 - Un usuario autenticado debe poder consultar su histórico de pedidos.
+    # Trazabilidad: consultar su histórico
+    Given existe documentacion funcional para "Consultar pedidos del usuario (histórico)"
+    When se ejecuta el comportamiento requerido por RF-34
+    Then Un usuario autenticado debe poder consultar su histórico de pedidos.
 
-  # @direct — RF-64
-  Scenario: Usar sala por defecto 'general'
-    Given que un cliente se conecta al chat sin especificar sala
-    When se une al chat
-    Then el sistema lo conecta a la sala por defecto "general"
-    # trazabilidad: "Sala por defecto 'general'"
+  @direct @uc_UC_10 @rf_RF_36
+  Scenario: RF-36 - La API GraphQL debe exponer la query myOrders.
+    # Trazabilidad: Queries myOrders
+    Given existe documentacion funcional para "Consultar pedidos del usuario (histórico)"
+    When se ejecuta el comportamiento requerido por RF-36
+    Then La API GraphQL debe exponer la query myOrders.
 
-  # @direct — RF-65
-  Scenario: Emitir mensajes en tiempo real
-    Given que un usuario está conectado al chat
-    When envía un mensaje
-    Then el sistema emite el mensaje en tiempo real a los clientes suscritos
-    # trazabilidad: "Emitir/recibir mensajes en tiempo real"
+  @direct @uc_UC_10 @rf_RF_37
+  Scenario: RF-37 - La API GraphQL debe exponer la query order.
+    # Trazabilidad: Queries ... order.
+    Given existe documentacion funcional para "Consultar pedidos del usuario (histórico)"
+    When se ejecuta el comportamiento requerido por RF-37
+    Then La API GraphQL debe exponer la query order.
 
-  # @direct — RF-66
-  Scenario: Persistir mensajes en MongoDB
-    Given que un usuario envía un mensaje
-    When el sistema procesa el mensaje
-    Then el sistema almacena el mensaje en MongoDB
-    # trazabilidad: "almacenar mensajes en MongoDB (Message)."
-
-  # @derived — cobertura adicional
-  Scenario: Recibir mensajes en tiempo real
-    Given que dos clientes están conectados a la sala "general"
-    When un cliente envía un mensaje
-    Then el otro cliente recibe el mensaje en tiempo real
-
-  Scenario: Manejar desconexión y reconexión
-    Given que un cliente estaba conectado al chat
-    When el cliente se desconecta y se reconecta
-    Then el sistema permite retomar la comunicación en tiempo real
-
-  Scenario: Persistencia de mensajes (si aplica)
-    Given que la persistencia de mensajes está habilitada
-    When un usuario envía un mensaje
-    Then el mensaje queda disponible en almacenamiento persistente
-
-  Scenario: Validación básica de envío de mensaje
-    Given que un usuario intenta enviar un mensaje vacío
-    When envía el mensaje
-    Then el sistema rechaza el envío o no lo propaga
+  @derived @uc_UC_10
+  Scenario: UC-10 mantiene un resultado funcional consistente
+    Given el flujo "Consultar pedidos del usuario (histórico)" tiene datos validos
+    When el usuario completa el flujo principal
+    Then el resultado observable coincide con la documentacion funcional
 ```
 
 #### Escenarios detectados
-- Soportar chat en tiempo real con Socket.IO
-- Usar sala por defecto 'general'
-- Emitir mensajes en tiempo real
-- Persistir mensajes en MongoDB
-- Recibir mensajes en tiempo real
-- Manejar desconexión y reconexión
-- Persistencia de mensajes (si aplica)
-- Validación básica de envío de mensaje
+- RF-34 - Un usuario autenticado debe poder consultar su histórico de pedidos.
+- RF-36 - La API GraphQL debe exponer la query myOrders.
+- RF-37 - La API GraphQL debe exponer la query order.
+- UC-10 mantiene un resultado funcional consistente
 
 #### Preguntas obligatorias que Claude debe hacer al desarrollador
 - Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
@@ -1312,14 +964,345 @@ Feature: Chat en tiempo real
 - Como se ejecutara este test en CI y que variables necesita?
 
 #### Propuesta de implementacion Cypress
-- Crear un `describe` con referencia clara a KIWI-{case_id}.
+- Crear un `describe` con referencia clara a KIWI-662.
 - Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
 - Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
 - Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
 - Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
 
 #### Criterios de aceptacion del test
-- [ ] Incluye trazabilidad KIWI-{case_id}.
+- [ ] Incluye trazabilidad KIWI-662.
+- [ ] Falla si se rompe el comportamiento funcional principal.
+- [ ] Cubre precondiciones y datos necesarios.
+- [ ] Usa selectores robustos.
+- [ ] No depende del orden de ejecucion ni de datos compartidos inestables.
+- [ ] Puede ejecutarse localmente y en CI.
+
+#### Riesgos a vigilar
+- Flakiness por esperas fijas, datos compartidos, servicios externos o fechas.
+- Falsos positivos por asserts demasiado genericos.
+- Duplicacion de helpers o comandos Cypress innecesarios.
+
+### 11. KIWI-663 - UC-11
+
+- Proyecto: `IdBox`
+- Categoria: `Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos`
+- Spec sugerida: `cypress/e2e/uc-11.cy.ts`
+
+#### Objetivo funcional
+El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma observable y no solo que la UI navega sin error.
+
+#### Gherkin / Caso Kiwi
+```gherkin
+Feature: UC-11 Administrar usuarios (listar/cambiar rol/eliminar)
+
+  # Generado automaticamente desde documentacion funcional para UC-11.
+  # Fuente: DRF Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos
+
+  @direct @uc_UC_11 @rf_RF_47
+  Scenario: RF-47 - El administrador debe poder listar usuarios.
+    # Trazabilidad: Operaciones Listar usuarios
+    Given existe documentacion funcional para "Administrar usuarios (listar/cambiar rol/eliminar)"
+    When se ejecuta el comportamiento requerido por RF-47
+    Then El administrador debe poder listar usuarios.
+
+  @direct @uc_UC_11 @rf_RF_48
+  Scenario: RF-48 - El administrador debe poder cambiar rol (user/admin).
+    # Trazabilidad: cambiar rol (user/admin)
+    Given existe documentacion funcional para "Administrar usuarios (listar/cambiar rol/eliminar)"
+    When se ejecuta el comportamiento requerido por RF-48
+    Then El administrador debe poder cambiar rol (user/admin).
+
+  @direct @uc_UC_11 @rf_RF_49
+  Scenario: RF-49 - El administrador debe poder eliminar usuario.
+    # Trazabilidad: eliminar usuario
+    Given existe documentacion funcional para "Administrar usuarios (listar/cambiar rol/eliminar)"
+    When se ejecuta el comportamiento requerido por RF-49
+    Then El administrador debe poder eliminar usuario.
+
+  @direct @uc_UC_11 @rf_RF_50
+  Scenario: RF-50 - El sistema no debe permitir que un admin se elimine a sí mismo.
+    # Trazabilidad: no permitir que un admin se elimine a sí mismo
+    Given existe documentacion funcional para "Administrar usuarios (listar/cambiar rol/eliminar)"
+    When se ejecuta el comportamiento requerido por RF-50
+    Then El sistema no debe permitir que un admin se elimine a sí mismo.
+
+  @direct @uc_UC_11 @rf_RF_51
+  Scenario: RF-51 - La API GraphQL debe exponer la query users.
+    # Trazabilidad: GraphQL Query users
+    Given existe documentacion funcional para "Administrar usuarios (listar/cambiar rol/eliminar)"
+    When se ejecuta el comportamiento requerido por RF-51
+    Then La API GraphQL debe exponer la query users.
+
+  @direct @uc_UC_11 @rf_RF_52
+  Scenario: RF-52 - La API GraphQL debe exponer la mutación updateUserRole.
+    # Trazabilidad: Mutations updateUserRole
+    Given existe documentacion funcional para "Administrar usuarios (listar/cambiar rol/eliminar)"
+    When se ejecuta el comportamiento requerido por RF-52
+    Then La API GraphQL debe exponer la mutación updateUserRole.
+
+  @direct @uc_UC_11 @rf_RF_53
+  Scenario: RF-53 - La API GraphQL debe exponer la mutación deleteUser.
+    # Trazabilidad: Mutations ... deleteUser.
+    Given existe documentacion funcional para "Administrar usuarios (listar/cambiar rol/eliminar)"
+    When se ejecuta el comportamiento requerido por RF-53
+    Then La API GraphQL debe exponer la mutación deleteUser.
+
+  @direct @uc_UC_11 @rf_RF_54
+  Scenario: RF-54 - La API debe incluir rutas REST /api/admin/* según implementación.
+    # Trazabilidad: REST: /api/admin/* (según implementación).
+    Given existe documentacion funcional para "Administrar usuarios (listar/cambiar rol/eliminar)"
+    When se ejecuta el comportamiento requerido por RF-54
+    Then La API debe incluir rutas REST /api/admin/* según implementación.
+
+  @derived @uc_UC_11
+  Scenario: UC-11 mantiene un resultado funcional consistente
+    Given el flujo "Administrar usuarios (listar/cambiar rol/eliminar)" tiene datos validos
+    When el usuario completa el flujo principal
+    Then el resultado observable coincide con la documentacion funcional
+```
+
+#### Escenarios detectados
+- RF-47 - El administrador debe poder listar usuarios.
+- RF-48 - El administrador debe poder cambiar rol (user/admin).
+- RF-49 - El administrador debe poder eliminar usuario.
+- RF-50 - El sistema no debe permitir que un admin se elimine a sí mismo.
+- RF-51 - La API GraphQL debe exponer la query users.
+- RF-52 - La API GraphQL debe exponer la mutación updateUserRole.
+- RF-53 - La API GraphQL debe exponer la mutación deleteUser.
+- RF-54 - La API debe incluir rutas REST /api/admin/* según implementación.
+- UC-11 mantiene un resultado funcional consistente
+
+#### Preguntas obligatorias que Claude debe hacer al desarrollador
+- Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
+- Que usuario, rol, permisos y estado inicial necesita el caso?
+- Que datos deben existir antes del test y como se crean de forma determinista?
+- Que datos deben limpiarse despues para que el test sea independiente?
+- Que llamadas externas deben mockearse, interceptarse o estabilizarse?
+- Que selectores robustos existen para cada accion y assertion?
+- Que resultado visible, persistido o de API prueba realmente que el caso se satisface?
+- Que edge cases o errores estan implicitos en el caso Kiwi?
+- Como se ejecutara este test en CI y que variables necesita?
+
+#### Propuesta de implementacion Cypress
+- Crear un `describe` con referencia clara a KIWI-663.
+- Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
+- Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
+- Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
+- Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
+
+#### Criterios de aceptacion del test
+- [ ] Incluye trazabilidad KIWI-663.
+- [ ] Falla si se rompe el comportamiento funcional principal.
+- [ ] Cubre precondiciones y datos necesarios.
+- [ ] Usa selectores robustos.
+- [ ] No depende del orden de ejecucion ni de datos compartidos inestables.
+- [ ] Puede ejecutarse localmente y en CI.
+
+#### Riesgos a vigilar
+- Flakiness por esperas fijas, datos compartidos, servicios externos o fechas.
+- Falsos positivos por asserts demasiado genericos.
+- Duplicacion de helpers o comandos Cypress innecesarios.
+
+### 12. KIWI-664 - UC-12
+
+- Proyecto: `IdBox`
+- Categoria: `Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos`
+- Spec sugerida: `cypress/e2e/uc-12.cy.ts`
+
+#### Objetivo funcional
+El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma observable y no solo que la UI navega sin error.
+
+#### Gherkin / Caso Kiwi
+```gherkin
+Feature: UC-12 Administrar pedidos y estadísticas (listar/ver detalle/actualizar estado/cancelar/estadísticas)
+
+  # Generado automaticamente desde documentacion funcional para UC-12.
+  # Fuente: DRF Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos
+
+  @direct @uc_UC_12 @rf_RF_55
+  Scenario: RF-55 - El administrador debe poder listar pedidos con filtro por estado.
+    # Trazabilidad: Listar pedidos (con filtro por estado)
+    Given existe documentacion funcional para "Administrar pedidos y estadísticas (listar/ver detalle/actualizar estado/cancelar/estadísticas)"
+    When se ejecuta el comportamiento requerido por RF-55
+    Then El administrador debe poder listar pedidos con filtro por estado.
+
+  @direct @uc_UC_12 @rf_RF_56
+  Scenario: RF-56 - El administrador debe poder ver el detalle de un pedido.
+    # Trazabilidad: ver detalle
+    Given existe documentacion funcional para "Administrar pedidos y estadísticas (listar/ver detalle/actualizar estado/cancelar/estadísticas)"
+    When se ejecuta el comportamiento requerido por RF-56
+    Then El administrador debe poder ver el detalle de un pedido.
+
+  @direct @uc_UC_12 @rf_RF_57
+  Scenario: RF-57 - El administrador debe poder actualizar el estado del pedido.
+    # Trazabilidad: actualizar estado
+    Given existe documentacion funcional para "Administrar pedidos y estadísticas (listar/ver detalle/actualizar estado/cancelar/estadísticas)"
+    When se ejecuta el comportamiento requerido por RF-57
+    Then El administrador debe poder actualizar el estado del pedido.
+
+  @direct @uc_UC_12 @rf_RF_58
+  Scenario: RF-58 - El administrador debe poder consultar estadísticas: total, por estado e ingresos.
+    # Trazabilidad: estadísticas (total, por estado, ingresos)
+    Given existe documentacion funcional para "Administrar pedidos y estadísticas (listar/ver detalle/actualizar estado/cancelar/estadísticas)"
+    When se ejecuta el comportamiento requerido por RF-58
+    Then El administrador debe poder consultar estadísticas: total, por estado e ingresos.
+
+  @direct @uc_UC_12 @rf_RF_59
+  Scenario: RF-59 - La API GraphQL debe exponer las queries orders, order y orderStats.
+    # Trazabilidad: GraphQL Query orders/order/orderStats
+    Given existe documentacion funcional para "Administrar pedidos y estadísticas (listar/ver detalle/actualizar estado/cancelar/estadísticas)"
+    When se ejecuta el comportamiento requerido por RF-59
+    Then La API GraphQL debe exponer las queries orders, order y orderStats.
+
+  @direct @uc_UC_12 @rf_RF_60
+  Scenario: RF-60 - La API GraphQL debe exponer la mutación updateOrderStatus.
+    # Trazabilidad: Mutation updateOrderStatus
+    Given existe documentacion funcional para "Administrar pedidos y estadísticas (listar/ver detalle/actualizar estado/cancelar/estadísticas)"
+    When se ejecuta el comportamiento requerido por RF-60
+    Then La API GraphQL debe exponer la mutación updateOrderStatus.
+
+  @direct @uc_UC_12 @rf_RF_61
+  Scenario: RF-61 - La API GraphQL debe exponer la mutación cancelOrder.
+    # Trazabilidad: Mutation ... cancelOrder.
+    Given existe documentacion funcional para "Administrar pedidos y estadísticas (listar/ver detalle/actualizar estado/cancelar/estadísticas)"
+    When se ejecuta el comportamiento requerido por RF-61
+    Then La API GraphQL debe exponer la mutación cancelOrder.
+
+  @derived @uc_UC_12
+  Scenario: UC-12 mantiene un resultado funcional consistente
+    Given el flujo "Administrar pedidos y estadísticas (listar/ver detalle/actualizar estado/cancelar/estadísticas)" tiene datos validos
+    When el usuario completa el flujo principal
+    Then el resultado observable coincide con la documentacion funcional
+```
+
+#### Escenarios detectados
+- RF-55 - El administrador debe poder listar pedidos con filtro por estado.
+- RF-56 - El administrador debe poder ver el detalle de un pedido.
+- RF-57 - El administrador debe poder actualizar el estado del pedido.
+- RF-58 - El administrador debe poder consultar estadísticas: total, por estado e ingresos.
+- RF-59 - La API GraphQL debe exponer las queries orders, order y orderStats.
+- RF-60 - La API GraphQL debe exponer la mutación updateOrderStatus.
+- RF-61 - La API GraphQL debe exponer la mutación cancelOrder.
+- UC-12 mantiene un resultado funcional consistente
+
+#### Preguntas obligatorias que Claude debe hacer al desarrollador
+- Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
+- Que usuario, rol, permisos y estado inicial necesita el caso?
+- Que datos deben existir antes del test y como se crean de forma determinista?
+- Que datos deben limpiarse despues para que el test sea independiente?
+- Que llamadas externas deben mockearse, interceptarse o estabilizarse?
+- Que selectores robustos existen para cada accion y assertion?
+- Que resultado visible, persistido o de API prueba realmente que el caso se satisface?
+- Que edge cases o errores estan implicitos en el caso Kiwi?
+- Como se ejecutara este test en CI y que variables necesita?
+
+#### Propuesta de implementacion Cypress
+- Crear un `describe` con referencia clara a KIWI-664.
+- Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
+- Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
+- Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
+- Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
+
+#### Criterios de aceptacion del test
+- [ ] Incluye trazabilidad KIWI-664.
+- [ ] Falla si se rompe el comportamiento funcional principal.
+- [ ] Cubre precondiciones y datos necesarios.
+- [ ] Usa selectores robustos.
+- [ ] No depende del orden de ejecucion ni de datos compartidos inestables.
+- [ ] Puede ejecutarse localmente y en CI.
+
+#### Riesgos a vigilar
+- Flakiness por esperas fijas, datos compartidos, servicios externos o fechas.
+- Falsos positivos por asserts demasiado genericos.
+- Duplicacion de helpers o comandos Cypress innecesarios.
+
+### 13. KIWI-665 - UC-13
+
+- Proyecto: `IdBox`
+- Categoria: `Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos`
+- Spec sugerida: `cypress/e2e/uc-13.cy.ts`
+
+#### Objetivo funcional
+El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma observable y no solo que la UI navega sin error.
+
+#### Gherkin / Caso Kiwi
+```gherkin
+Feature: UC-13 Chat en tiempo real (enviar/recibir mensajes y persistencia opcional)
+
+  # Generado automaticamente desde documentacion funcional para UC-13.
+  # Fuente: DRF Práctica 2 - E-commerce con GraphQL y Gestión de Pedidos
+
+  @direct @uc_UC_13 @rf_RF_62
+  Scenario: RF-62 - El sistema debe soportar chat en tiempo real con Socket.IO.
+    # Trazabilidad: Chat en tiempo real (Socket.IO).
+    Given existe documentacion funcional para "Chat en tiempo real (enviar/recibir mensajes y persistencia opcional)"
+    When se ejecuta el comportamiento requerido por RF-62
+    Then El sistema debe soportar chat en tiempo real con Socket.IO.
+
+  @direct @uc_UC_13 @rf_RF_63
+  Scenario: RF-63 - El chat debe usar una sala por defecto 'general'.
+    # Trazabilidad: Sala por defecto 'general'
+    Given existe documentacion funcional para "Chat en tiempo real (enviar/recibir mensajes y persistencia opcional)"
+    When se ejecuta el comportamiento requerido por RF-63
+    Then El chat debe usar una sala por defecto 'general'.
+
+  @direct @uc_UC_13 @rf_RF_64
+  Scenario: RF-64 - El sistema debe permitir emitir mensajes en tiempo real.
+    # Trazabilidad: Emitir/recibir mensajes en tiempo real
+    Given existe documentacion funcional para "Chat en tiempo real (enviar/recibir mensajes y persistencia opcional)"
+    When se ejecuta el comportamiento requerido por RF-64
+    Then El sistema debe permitir emitir mensajes en tiempo real.
+
+  @direct @uc_UC_13 @rf_RF_65
+  Scenario: RF-65 - El sistema debe permitir recibir mensajes en tiempo real.
+    # Trazabilidad: Emitir/recibir mensajes en tiempo real
+    Given existe documentacion funcional para "Chat en tiempo real (enviar/recibir mensajes y persistencia opcional)"
+    When se ejecuta el comportamiento requerido por RF-65
+    Then El sistema debe permitir recibir mensajes en tiempo real.
+
+  @direct @uc_UC_13 @rf_RF_66
+  Scenario: RF-66 - El sistema debe poder almacenar mensajes en MongoDB (Message).
+    # Trazabilidad: almacenar mensajes en MongoDB (Message).
+    Given existe documentacion funcional para "Chat en tiempo real (enviar/recibir mensajes y persistencia opcional)"
+    When se ejecuta el comportamiento requerido por RF-66
+    Then El sistema debe poder almacenar mensajes en MongoDB (Message).
+
+  @derived @uc_UC_13
+  Scenario: UC-13 mantiene un resultado funcional consistente
+    Given el flujo "Chat en tiempo real (enviar/recibir mensajes y persistencia opcional)" tiene datos validos
+    When el usuario completa el flujo principal
+    Then el resultado observable coincide con la documentacion funcional
+```
+
+#### Escenarios detectados
+- RF-62 - El sistema debe soportar chat en tiempo real con Socket.IO.
+- RF-63 - El chat debe usar una sala por defecto 'general'.
+- RF-64 - El sistema debe permitir emitir mensajes en tiempo real.
+- RF-65 - El sistema debe permitir recibir mensajes en tiempo real.
+- RF-66 - El sistema debe poder almacenar mensajes en MongoDB (Message).
+- UC-13 mantiene un resultado funcional consistente
+
+#### Preguntas obligatorias que Claude debe hacer al desarrollador
+- Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
+- Que usuario, rol, permisos y estado inicial necesita el caso?
+- Que datos deben existir antes del test y como se crean de forma determinista?
+- Que datos deben limpiarse despues para que el test sea independiente?
+- Que llamadas externas deben mockearse, interceptarse o estabilizarse?
+- Que selectores robustos existen para cada accion y assertion?
+- Que resultado visible, persistido o de API prueba realmente que el caso se satisface?
+- Que edge cases o errores estan implicitos en el caso Kiwi?
+- Como se ejecutara este test en CI y que variables necesita?
+
+#### Propuesta de implementacion Cypress
+- Crear un `describe` con referencia clara a KIWI-665.
+- Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
+- Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
+- Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
+- Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
+
+#### Criterios de aceptacion del test
+- [ ] Incluye trazabilidad KIWI-665.
 - [ ] Falla si se rompe el comportamiento funcional principal.
 - [ ] Cubre precondiciones y datos necesarios.
 - [ ] Usa selectores robustos.
