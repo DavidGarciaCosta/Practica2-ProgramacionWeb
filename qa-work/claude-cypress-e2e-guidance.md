@@ -4,8 +4,8 @@ Este archivo esta pensado para que el desarrollador lo entregue a Claude antes d
 Claude NO debe implementar a ciegas: debe hacer preguntas, cerrar ambiguedades y proponer una arquitectura mantenible antes de escribir codigo.
 
 ## Contexto
-- Generado: 2026-06-08 07:45:20 UTC
-- Casos Kiwi publicados incluidos: 13
+- Generado: 2026-06-08 08:23:22 UTC
+- Casos Kiwi publicados incluidos: 20
 - Stack objetivo: Cypress E2E
 
 ## Reglas de trabajo con Claude
@@ -42,6 +42,13 @@ Claude NO debe implementar a ciegas: debe hacer preguntas, cerrar ambiguedades y
 | KIWI-663 | UC-11 | `cypress/e2e/uc-11.cy.ts` | Pendiente de implementar |
 | KIWI-664 | UC-12 | `cypress/e2e/uc-12.cy.ts` | Pendiente de implementar |
 | KIWI-665 | UC-13 | `cypress/e2e/uc-13.cy.ts` | Pendiente de implementar |
+| KIWI-666 | UC-01 | `cypress/e2e/uc-01.cy.ts` | Pendiente de implementar |
+| KIWI-667 | UC-02 | `cypress/e2e/uc-02.cy.ts` | Pendiente de implementar |
+| KIWI-668 | UC-03 | `cypress/e2e/uc-03.cy.ts` | Pendiente de implementar |
+| KIWI-669 | UC-04 | `cypress/e2e/uc-04.cy.ts` | Pendiente de implementar |
+| KIWI-670 | UC-05 | `cypress/e2e/uc-05.cy.ts` | Pendiente de implementar |
+| KIWI-671 | UC-06 | `cypress/e2e/uc-06.cy.ts` | Pendiente de implementar |
+| KIWI-672 | UC-07 | `cypress/e2e/uc-07.cy.ts` | Pendiente de implementar |
 
 ## Guia por caso Kiwi
 
@@ -1303,6 +1310,572 @@ Feature: UC-13 Chat en tiempo real (enviar/recibir mensajes y persistencia opcio
 
 #### Criterios de aceptacion del test
 - [ ] Incluye trazabilidad KIWI-665.
+- [ ] Falla si se rompe el comportamiento funcional principal.
+- [ ] Cubre precondiciones y datos necesarios.
+- [ ] Usa selectores robustos.
+- [ ] No depende del orden de ejecucion ni de datos compartidos inestables.
+- [ ] Puede ejecutarse localmente y en CI.
+
+#### Riesgos a vigilar
+- Flakiness por esperas fijas, datos compartidos, servicios externos o fechas.
+- Falsos positivos por asserts demasiado genericos.
+- Duplicacion de helpers o comandos Cypress innecesarios.
+
+### 14. KIWI-666 - UC-01
+
+- Proyecto: `Prorrateos`
+- Categoria: `Prorrateos`
+- Spec sugerida: `cypress/e2e/uc-01.cy.ts`
+
+#### Objetivo funcional
+El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma observable y no solo que la UI navega sin error.
+
+#### Gherkin / Caso Kiwi
+```gherkin
+Feature: UC-01 Configurar prorrateo sobre señales/plantillas
+
+  # Generado automaticamente desde documentacion funcional para UC-01.
+  # Fuente: DRF Prorrateos
+
+  @direct @uc_UC_01 @rf_RF_01
+  Scenario: RF-01 - El sistema deberá permitir prorratear datos únicamente si son de tipo entero o real.
+    # Trazabilidad: Los datos a prorratear deberán ser de tipo entero o real.
+    Given existe documentacion funcional para "Configurar prorrateo sobre señales/plantillas"
+    When se ejecuta el comportamiento requerido por RF-01
+    Then El sistema deberá permitir prorratear datos únicamente si son de tipo entero o real.
+
+  @direct @uc_UC_01 @rf_RF_02
+  Scenario: RF-02 - En contadores, el tipo de prorrateo deberá ajustarse según atributos del contador (Acumulado y Medic
+    # Trazabilidad: el tipo de prorrateo se ajustará en función de los atributos seleccionados en el contador
+    Given existe documentacion funcional para "Configurar prorrateo sobre señales/plantillas"
+    When se ejecuta el comportamiento requerido por RF-02
+    Then En contadores, el tipo de prorrateo deberá ajustarse según atributos del contador (Acumulado y Medición Estándar/Tradicional), modificando el algoritmo de cálculo en base a dichos atributos.
+
+  @direct @uc_UC_01 @rf_RF_03
+  Scenario: RF-03 - Para realizar un prorrateo, la granularidad de la señal Raw a prorratear deberá ser mayor que la gra
+    # Trazabilidad: Será condición esencial ... que la granularidad de la señal ... (Raw) sea mayor que la granulometría seleccionada.
+    Given existe documentacion funcional para "Configurar prorrateo sobre señales/plantillas"
+    When se ejecuta el comportamiento requerido por RF-03
+    Then Para realizar un prorrateo, la granularidad de la señal Raw a prorratear deberá ser mayor que la granulometría seleccionada.
+
+  @direct @uc_UC_01 @rf_RF_04
+  Scenario: RF-04 - El sistema deberá permitir seleccionar la granularidad de salida entre: cuarto horaria y diaria.
+    # Trazabilidad: Se podrá seleccionar la granularidad de salida ... cuarto horaria ... diaria
+    Given existe documentacion funcional para "Configurar prorrateo sobre señales/plantillas"
+    When se ejecuta el comportamiento requerido por RF-04
+    Then El sistema deberá permitir seleccionar la granularidad de salida entre: cuarto horaria y diaria.
+
+  @direct @uc_UC_01 @rf_RF_05
+  Scenario: RF-05 - El frontend deberá incluir un check que permita activar o desactivar el prorrateo sobre una señal.
+    # Trazabilidad: Se contará con un check en el frontend que permita la activación/desactivación del prorrateo sobre una señal.
+    Given existe documentacion funcional para "Configurar prorrateo sobre señales/plantillas"
+    When se ejecuta el comportamiento requerido por RF-05
+    Then El frontend deberá incluir un check que permita activar o desactivar el prorrateo sobre una señal.
+
+  @direct @uc_UC_01 @rf_RF_06
+  Scenario: RF-06 - La aplicación deberá permitir configurar la aplicación de un prorrateo a nivel de señal (individual)
+    # Trazabilidad: se podrá configurar a nivel de señal ... o a nivel de plantilla
+    Given existe documentacion funcional para "Configurar prorrateo sobre señales/plantillas"
+    When se ejecuta el comportamiento requerido por RF-06
+    Then La aplicación deberá permitir configurar la aplicación de un prorrateo a nivel de señal (individual) o a nivel de plantilla (masiva).
+
+  @derived @uc_UC_01
+  Scenario: UC-01 mantiene un resultado funcional consistente
+    Given el flujo "Configurar prorrateo sobre señales/plantillas" tiene datos validos
+    When el usuario completa el flujo principal
+    Then el resultado observable coincide con la documentacion funcional
+```
+
+#### Escenarios detectados
+- RF-01 - El sistema deberá permitir prorratear datos únicamente si son de tipo entero o real.
+- RF-02 - En contadores, el tipo de prorrateo deberá ajustarse según atributos del contador (Acumulado y Medic
+- RF-03 - Para realizar un prorrateo, la granularidad de la señal Raw a prorratear deberá ser mayor que la gra
+- RF-04 - El sistema deberá permitir seleccionar la granularidad de salida entre: cuarto horaria y diaria.
+- RF-05 - El frontend deberá incluir un check que permita activar o desactivar el prorrateo sobre una señal.
+- RF-06 - La aplicación deberá permitir configurar la aplicación de un prorrateo a nivel de señal (individual)
+- UC-01 mantiene un resultado funcional consistente
+
+#### Preguntas obligatorias que Claude debe hacer al desarrollador
+- Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
+- Que usuario, rol, permisos y estado inicial necesita el caso?
+- Que datos deben existir antes del test y como se crean de forma determinista?
+- Que datos deben limpiarse despues para que el test sea independiente?
+- Que llamadas externas deben mockearse, interceptarse o estabilizarse?
+- Que selectores robustos existen para cada accion y assertion?
+- Que resultado visible, persistido o de API prueba realmente que el caso se satisface?
+- Que edge cases o errores estan implicitos en el caso Kiwi?
+- Como se ejecutara este test en CI y que variables necesita?
+
+#### Propuesta de implementacion Cypress
+- Crear un `describe` con referencia clara a KIWI-666.
+- Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
+- Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
+- Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
+- Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
+
+#### Criterios de aceptacion del test
+- [ ] Incluye trazabilidad KIWI-666.
+- [ ] Falla si se rompe el comportamiento funcional principal.
+- [ ] Cubre precondiciones y datos necesarios.
+- [ ] Usa selectores robustos.
+- [ ] No depende del orden de ejecucion ni de datos compartidos inestables.
+- [ ] Puede ejecutarse localmente y en CI.
+
+#### Riesgos a vigilar
+- Flakiness por esperas fijas, datos compartidos, servicios externos o fechas.
+- Falsos positivos por asserts demasiado genericos.
+- Duplicacion de helpers o comandos Cypress innecesarios.
+
+### 15. KIWI-667 - UC-02
+
+- Proyecto: `Prorrateos`
+- Categoria: `Prorrateos`
+- Spec sugerida: `cypress/e2e/uc-02.cy.ts`
+
+#### Objetivo funcional
+El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma observable y no solo que la UI navega sin error.
+
+#### Gherkin / Caso Kiwi
+```gherkin
+Feature: UC-02 Ejecutar prorrateo (manual, periódico, automatizado por eventos)
+
+  # Generado automaticamente desde documentacion funcional para UC-02.
+  # Fuente: DRF Prorrateos
+
+  @direct @uc_UC_02 @rf_RF_20
+  Scenario: RF-20 - El sistema deberá soportar la ejecución de prorrateos de forma manual, periódica o automatizada por 
+    # Trazabilidad: Soportará ejecución manual, periódica o automatizada por eventos.
+    Given existe documentacion funcional para "Ejecutar prorrateo (manual, periódico, automatizado por eventos)"
+    When se ejecuta el comportamiento requerido por RF-20
+    Then El sistema deberá soportar la ejecución de prorrateos de forma manual, periódica o automatizada por eventos.
+
+  @derived @uc_UC_02
+  Scenario: UC-02 mantiene un resultado funcional consistente
+    Given el flujo "Ejecutar prorrateo (manual, periódico, automatizado por eventos)" tiene datos validos
+    When el usuario completa el flujo principal
+    Then el resultado observable coincide con la documentacion funcional
+```
+
+#### Escenarios detectados
+- RF-20 - El sistema deberá soportar la ejecución de prorrateos de forma manual, periódica o automatizada por
+- UC-02 mantiene un resultado funcional consistente
+
+#### Preguntas obligatorias que Claude debe hacer al desarrollador
+- Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
+- Que usuario, rol, permisos y estado inicial necesita el caso?
+- Que datos deben existir antes del test y como se crean de forma determinista?
+- Que datos deben limpiarse despues para que el test sea independiente?
+- Que llamadas externas deben mockearse, interceptarse o estabilizarse?
+- Que selectores robustos existen para cada accion y assertion?
+- Que resultado visible, persistido o de API prueba realmente que el caso se satisface?
+- Que edge cases o errores estan implicitos en el caso Kiwi?
+- Como se ejecutara este test en CI y que variables necesita?
+
+#### Propuesta de implementacion Cypress
+- Crear un `describe` con referencia clara a KIWI-667.
+- Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
+- Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
+- Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
+- Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
+
+#### Criterios de aceptacion del test
+- [ ] Incluye trazabilidad KIWI-667.
+- [ ] Falla si se rompe el comportamiento funcional principal.
+- [ ] Cubre precondiciones y datos necesarios.
+- [ ] Usa selectores robustos.
+- [ ] No depende del orden de ejecucion ni de datos compartidos inestables.
+- [ ] Puede ejecutarse localmente y en CI.
+
+#### Riesgos a vigilar
+- Flakiness por esperas fijas, datos compartidos, servicios externos o fechas.
+- Falsos positivos por asserts demasiado genericos.
+- Duplicacion de helpers o comandos Cypress innecesarios.
+
+### 16. KIWI-668 - UC-03
+
+- Proyecto: `Prorrateos`
+- Categoria: `Prorrateos`
+- Spec sugerida: `cypress/e2e/uc-03.cy.ts`
+
+#### Objetivo funcional
+El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma observable y no solo que la UI navega sin error.
+
+#### Gherkin / Caso Kiwi
+```gherkin
+Feature: UC-03 Registrar y consultar metadatos del proceso de prorrateo
+
+  # Generado automaticamente desde documentacion funcional para UC-03.
+  # Fuente: DRF Prorrateos
+
+  @direct @uc_UC_03 @rf_RF_07
+  Scenario: RF-07 - El proceso de prorrateo deberá registrar metadatos incluyendo algoritmo empleado, intervalo prorrate
+    # Trazabilidad: deberá contar un registro de metadatos ... algoritmo ... intervalo ... granularidad ... fecha ... automático o ... manual
+    Given existe documentacion funcional para "Registrar y consultar metadatos del proceso de prorrateo"
+    When se ejecuta el comportamiento requerido por RF-07
+    Then El proceso de prorrateo deberá registrar metadatos incluyendo algoritmo empleado, intervalo prorrateado (fecha inicio-fin), granularidad del prorrateo, fecha de generación y si fue automático o manual.
+
+  @derived @uc_UC_03
+  Scenario: UC-03 mantiene un resultado funcional consistente
+    Given el flujo "Registrar y consultar metadatos del proceso de prorrateo" tiene datos validos
+    When el usuario completa el flujo principal
+    Then el resultado observable coincide con la documentacion funcional
+```
+
+#### Escenarios detectados
+- RF-07 - El proceso de prorrateo deberá registrar metadatos incluyendo algoritmo empleado, intervalo prorrate
+- UC-03 mantiene un resultado funcional consistente
+
+#### Preguntas obligatorias que Claude debe hacer al desarrollador
+- Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
+- Que usuario, rol, permisos y estado inicial necesita el caso?
+- Que datos deben existir antes del test y como se crean de forma determinista?
+- Que datos deben limpiarse despues para que el test sea independiente?
+- Que llamadas externas deben mockearse, interceptarse o estabilizarse?
+- Que selectores robustos existen para cada accion y assertion?
+- Que resultado visible, persistido o de API prueba realmente que el caso se satisface?
+- Que edge cases o errores estan implicitos en el caso Kiwi?
+- Como se ejecutara este test en CI y que variables necesita?
+
+#### Propuesta de implementacion Cypress
+- Crear un `describe` con referencia clara a KIWI-668.
+- Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
+- Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
+- Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
+- Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
+
+#### Criterios de aceptacion del test
+- [ ] Incluye trazabilidad KIWI-668.
+- [ ] Falla si se rompe el comportamiento funcional principal.
+- [ ] Cubre precondiciones y datos necesarios.
+- [ ] Usa selectores robustos.
+- [ ] No depende del orden de ejecucion ni de datos compartidos inestables.
+- [ ] Puede ejecutarse localmente y en CI.
+
+#### Riesgos a vigilar
+- Flakiness por esperas fijas, datos compartidos, servicios externos o fechas.
+- Falsos positivos por asserts demasiado genericos.
+- Duplicacion de helpers o comandos Cypress innecesarios.
+
+### 17. KIWI-669 - UC-04
+
+- Proyecto: `Prorrateos`
+- Categoria: `Prorrateos`
+- Spec sugerida: `cypress/e2e/uc-04.cy.ts`
+
+#### Objetivo funcional
+El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma observable y no solo que la UI navega sin error.
+
+#### Gherkin / Caso Kiwi
+```gherkin
+Feature: UC-04 Integrar el prorrateo en IDboxRT (ETL y señales Raw/Acumulated)
+
+  # Generado automaticamente desde documentacion funcional para UC-04.
+  # Fuente: DRF Prorrateos
+
+  @direct @uc_UC_04 @rf_RF_11
+  Scenario: RF-11 - La funcionalidad de prorrateo deberá incluirse como parte del proceso ETL.
+    # Trazabilidad: La funcionalidad se incluirá como parte del proceso ETL.
+    Given existe documentacion funcional para "Integrar el prorrateo en IDboxRT (ETL y señales Raw/Acumulated)"
+    When se ejecuta el comportamiento requerido por RF-11
+    Then La funcionalidad de prorrateo deberá incluirse como parte del proceso ETL.
+
+  @direct @uc_UC_04 @rf_RF_12
+  Scenario: RF-12 - En contadores, el prorrateo deberá realizarse sobre la señal Raw y registrar el resultado en la seña
+    # Trazabilidad: se realizarán sobre la señal de bruto (Raw) ... en la señal acumulada (Acumulated).
+    Given existe documentacion funcional para "Integrar el prorrateo en IDboxRT (ETL y señales Raw/Acumulated)"
+    When se ejecuta el comportamiento requerido por RF-12
+    Then En contadores, el prorrateo deberá realizarse sobre la señal Raw y registrar el resultado en la señal Acumulated.
+
+  @direct @uc_UC_04 @rf_RF_13
+  Scenario: RF-13 - En activos que no son contadores, el usuario deberá poder configurar el nombre y la descripción de l
+    # Trazabilidad: en activos que no son contadores, el usuario podrá configurar el nombre y descripción de la señal prorrateada.
+    Given existe documentacion funcional para "Integrar el prorrateo en IDboxRT (ETL y señales Raw/Acumulated)"
+    When se ejecuta el comportamiento requerido por RF-13
+    Then En activos que no son contadores, el usuario deberá poder configurar el nombre y la descripción de la señal prorrateada.
+
+  @direct @uc_UC_04 @rf_RF_14
+  Scenario: RF-14 - Las series auxiliares generadas por el prorrateo deberán tratarse como una señal más, con las mismas
+    # Trazabilidad: Las series auxiliares ... se tratarán como una señal más, teniendo las mismas propiedades
+    Given existe documentacion funcional para "Integrar el prorrateo en IDboxRT (ETL y señales Raw/Acumulated)"
+    When se ejecuta el comportamiento requerido por RF-14
+    Then Las series auxiliares generadas por el prorrateo deberán tratarse como una señal más, con las mismas propiedades que las señales estándar adquiridas.
+
+  @direct @uc_UC_04 @rf_RF_16
+  Scenario: RF-16 - Las series de datos usadas para realizar el prorrateo deberán tener como máximo 3.000 registros.
+    # Trazabilidad: tendrán como máximo 3.000 registros.
+    Given existe documentacion funcional para "Integrar el prorrateo en IDboxRT (ETL y señales Raw/Acumulated)"
+    When se ejecuta el comportamiento requerido por RF-16
+    Then Las series de datos usadas para realizar el prorrateo deberán tener como máximo 3.000 registros.
+
+  @direct @uc_UC_04 @rf_RF_21
+  Scenario: RF-21 - El sistema deberá soportar distintos tipos de variables para prorrateo: energía térmica, eléctrica, 
+    # Trazabilidad: Soportará distintos tipos de variables: energía térmica, eléctrica, agua, gases u otras.
+    Given existe documentacion funcional para "Integrar el prorrateo en IDboxRT (ETL y señales Raw/Acumulated)"
+    When se ejecuta el comportamiento requerido por RF-21
+    Then El sistema deberá soportar distintos tipos de variables para prorrateo: energía térmica, eléctrica, agua, gases u otras.
+
+  @derived @uc_UC_04
+  Scenario: UC-04 mantiene un resultado funcional consistente
+    Given el flujo "Integrar el prorrateo en IDboxRT (ETL y señales Raw/Acumulated)" tiene datos validos
+    When el usuario completa el flujo principal
+    Then el resultado observable coincide con la documentacion funcional
+```
+
+#### Escenarios detectados
+- RF-11 - La funcionalidad de prorrateo deberá incluirse como parte del proceso ETL.
+- RF-12 - En contadores, el prorrateo deberá realizarse sobre la señal Raw y registrar el resultado en la seña
+- RF-13 - En activos que no son contadores, el usuario deberá poder configurar el nombre y la descripción de l
+- RF-14 - Las series auxiliares generadas por el prorrateo deberán tratarse como una señal más, con las mismas
+- RF-16 - Las series de datos usadas para realizar el prorrateo deberán tener como máximo 3.000 registros.
+- RF-21 - El sistema deberá soportar distintos tipos de variables para prorrateo: energía térmica, eléctrica,
+- UC-04 mantiene un resultado funcional consistente
+
+#### Preguntas obligatorias que Claude debe hacer al desarrollador
+- Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
+- Que usuario, rol, permisos y estado inicial necesita el caso?
+- Que datos deben existir antes del test y como se crean de forma determinista?
+- Que datos deben limpiarse despues para que el test sea independiente?
+- Que llamadas externas deben mockearse, interceptarse o estabilizarse?
+- Que selectores robustos existen para cada accion y assertion?
+- Que resultado visible, persistido o de API prueba realmente que el caso se satisface?
+- Que edge cases o errores estan implicitos en el caso Kiwi?
+- Como se ejecutara este test en CI y que variables necesita?
+
+#### Propuesta de implementacion Cypress
+- Crear un `describe` con referencia clara a KIWI-669.
+- Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
+- Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
+- Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
+- Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
+
+#### Criterios de aceptacion del test
+- [ ] Incluye trazabilidad KIWI-669.
+- [ ] Falla si se rompe el comportamiento funcional principal.
+- [ ] Cubre precondiciones y datos necesarios.
+- [ ] Usa selectores robustos.
+- [ ] No depende del orden de ejecucion ni de datos compartidos inestables.
+- [ ] Puede ejecutarse localmente y en CI.
+
+#### Riesgos a vigilar
+- Flakiness por esperas fijas, datos compartidos, servicios externos o fechas.
+- Falsos positivos por asserts demasiado genericos.
+- Duplicacion de helpers o comandos Cypress innecesarios.
+
+### 18. KIWI-670 - UC-05
+
+- Proyecto: `Prorrateos`
+- Categoria: `Prorrateos`
+- Spec sugerida: `cypress/e2e/uc-05.cy.ts`
+
+#### Objetivo funcional
+El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma observable y no solo que la UI navega sin error.
+
+#### Gherkin / Caso Kiwi
+```gherkin
+Feature: UC-05 Rehacer prorrateos históricos (refilling) sobre variables agregadas a pasado
+
+  # Generado automaticamente desde documentacion funcional para UC-05.
+  # Fuente: DRF Prorrateos
+  @derived
+  Scenario: Validar comportamiento funcional de UC-05
+    Given existe documentacion funcional para "Rehacer prorrateos históricos (refilling) sobre variables agregadas a pasado"
+    When se ejecuta el flujo asociado a UC-05
+    Then el sistema cumple el comportamiento descrito sin errores funcionales
+```
+
+#### Escenarios detectados
+- Validar comportamiento funcional de UC-05
+
+#### Preguntas obligatorias que Claude debe hacer al desarrollador
+- Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
+- Que usuario, rol, permisos y estado inicial necesita el caso?
+- Que datos deben existir antes del test y como se crean de forma determinista?
+- Que datos deben limpiarse despues para que el test sea independiente?
+- Que llamadas externas deben mockearse, interceptarse o estabilizarse?
+- Que selectores robustos existen para cada accion y assertion?
+- Que resultado visible, persistido o de API prueba realmente que el caso se satisface?
+- Que edge cases o errores estan implicitos en el caso Kiwi?
+- Como se ejecutara este test en CI y que variables necesita?
+
+#### Propuesta de implementacion Cypress
+- Crear un `describe` con referencia clara a KIWI-670.
+- Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
+- Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
+- Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
+- Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
+
+#### Criterios de aceptacion del test
+- [ ] Incluye trazabilidad KIWI-670.
+- [ ] Falla si se rompe el comportamiento funcional principal.
+- [ ] Cubre precondiciones y datos necesarios.
+- [ ] Usa selectores robustos.
+- [ ] No depende del orden de ejecucion ni de datos compartidos inestables.
+- [ ] Puede ejecutarse localmente y en CI.
+
+#### Riesgos a vigilar
+- Flakiness por esperas fijas, datos compartidos, servicios externos o fechas.
+- Falsos positivos por asserts demasiado genericos.
+- Duplicacion de helpers o comandos Cypress innecesarios.
+
+### 19. KIWI-671 - UC-06
+
+- Proyecto: `Prorrateos`
+- Categoria: `Prorrateos`
+- Spec sugerida: `cypress/e2e/uc-06.cy.ts`
+
+#### Objetivo funcional
+El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma observable y no solo que la UI navega sin error.
+
+#### Gherkin / Caso Kiwi
+```gherkin
+Feature: UC-06 Invocar prorrateo vía API desde aplicaciones externas
+
+  # Generado automaticamente desde documentacion funcional para UC-06.
+  # Fuente: DRF Prorrateos
+
+  @direct @uc_UC_06 @rf_RF_15
+  Scenario: RF-15 - El algoritmo de prorrateo deberá poder ser invocado vía API para ejecución desde otras aplicaciones,
+    # Trazabilidad: podrá ser invocado vía API ... parámetros ... Valor ... Intervalo ... Tipo ... Por defecto lineal
+    Given existe documentacion funcional para "Invocar prorrateo vía API desde aplicaciones externas"
+    When se ejecuta el comportamiento requerido por RF-15
+    Then El algoritmo de prorrateo deberá poder ser invocado vía API para ejecución desde otras aplicaciones, enviando como parámetros valor a prorratear, intervalo de fechas inicial/final y tipo de prorrateo (por defecto lineal).
+
+  @derived @uc_UC_06
+  Scenario: UC-06 mantiene un resultado funcional consistente
+    Given el flujo "Invocar prorrateo vía API desde aplicaciones externas" tiene datos validos
+    When el usuario completa el flujo principal
+    Then el resultado observable coincide con la documentacion funcional
+```
+
+#### Escenarios detectados
+- RF-15 - El algoritmo de prorrateo deberá poder ser invocado vía API para ejecución desde otras aplicaciones,
+- UC-06 mantiene un resultado funcional consistente
+
+#### Preguntas obligatorias que Claude debe hacer al desarrollador
+- Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
+- Que usuario, rol, permisos y estado inicial necesita el caso?
+- Que datos deben existir antes del test y como se crean de forma determinista?
+- Que datos deben limpiarse despues para que el test sea independiente?
+- Que llamadas externas deben mockearse, interceptarse o estabilizarse?
+- Que selectores robustos existen para cada accion y assertion?
+- Que resultado visible, persistido o de API prueba realmente que el caso se satisface?
+- Que edge cases o errores estan implicitos en el caso Kiwi?
+- Como se ejecutara este test en CI y que variables necesita?
+
+#### Propuesta de implementacion Cypress
+- Crear un `describe` con referencia clara a KIWI-671.
+- Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
+- Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
+- Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
+- Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
+
+#### Criterios de aceptacion del test
+- [ ] Incluye trazabilidad KIWI-671.
+- [ ] Falla si se rompe el comportamiento funcional principal.
+- [ ] Cubre precondiciones y datos necesarios.
+- [ ] Usa selectores robustos.
+- [ ] No depende del orden de ejecucion ni de datos compartidos inestables.
+- [ ] Puede ejecutarse localmente y en CI.
+
+#### Riesgos a vigilar
+- Flakiness por esperas fijas, datos compartidos, servicios externos o fechas.
+- Falsos positivos por asserts demasiado genericos.
+- Duplicacion de helpers o comandos Cypress innecesarios.
+
+### 20. KIWI-672 - UC-07
+
+- Proyecto: `Prorrateos`
+- Categoria: `Prorrateos`
+- Spec sugerida: `cypress/e2e/uc-07.cy.ts`
+
+#### Objetivo funcional
+El test debe demostrar que el comportamiento descrito en Kiwi se cumple de forma observable y no solo que la UI navega sin error.
+
+#### Gherkin / Caso Kiwi
+```gherkin
+Feature: UC-07 Seleccionar algoritmos de prorrateo (MVP lineal y futuros propuestos)
+
+  # Generado automaticamente desde documentacion funcional para UC-07.
+  # Fuente: DRF Prorrateos
+
+  @direct @uc_UC_07 @rf_RF_08
+  Scenario: RF-08 - Para la prueba MVP, el sistema deberá aplicar el algoritmo de 'Prorrateo lineal' que distribuya el v
+    # Trazabilidad: El algoritmo ... para la prueba MVP será: Prorrateo lineal: Distribuye el valor total en partes iguales
+    Given existe documentacion funcional para "Seleccionar algoritmos de prorrateo (MVP lineal y futuros propuestos)"
+    When se ejecuta el comportamiento requerido por RF-08
+    Then Para la prueba MVP, el sistema deberá aplicar el algoritmo de 'Prorrateo lineal' que distribuya el valor total en partes iguales entre todos los subintervalos.
+
+  @direct @uc_UC_07 @rf_RF_09
+  Scenario: RF-09 - El prorrateo lineal no deberá requerir datos auxiliares.
+    # Trazabilidad: No requiere datos auxiliares.
+    Given existe documentacion funcional para "Seleccionar algoritmos de prorrateo (MVP lineal y futuros propuestos)"
+    When se ejecuta el comportamiento requerido por RF-09
+    Then El prorrateo lineal no deberá requerir datos auxiliares.
+
+  @direct @uc_UC_07 @rf_RF_10
+  Scenario: RF-10 - El prorrateo lineal deberá realizar el prorrateo entre dos fechas (siempre a pasado).
+    # Trazabilidad: Realiza el prorrateo entre dos fechas (siempre a pasado).
+    Given existe documentacion funcional para "Seleccionar algoritmos de prorrateo (MVP lineal y futuros propuestos)"
+    When se ejecuta el comportamiento requerido por RF-10
+    Then El prorrateo lineal deberá realizar el prorrateo entre dos fechas (siempre a pasado).
+
+  @direct @uc_UC_07 @rf_RF_17
+  Scenario: RF-17 - El usuario deberá poder seleccionar el tipo de algoritmo de prorrateo a aplicar.
+    # Trazabilidad: El usuario podrá seleccionar el tipo de algoritmo de prorrateo a aplicar.
+    Given existe documentacion funcional para "Seleccionar algoritmos de prorrateo (MVP lineal y futuros propuestos)"
+    When se ejecuta el comportamiento requerido por RF-17
+    Then El usuario deberá poder seleccionar el tipo de algoritmo de prorrateo a aplicar.
+
+  @direct @uc_UC_07 @rf_RF_18
+  Scenario: RF-18 - El sistema deberá permitir configurar un calendario laboral para ajustar pesos en base a días hábile
+    # Trazabilidad: Se podrá configurar un calendario laboral para ajustar pesos en base a días hábiles o fines de semana.
+    Given existe documentacion funcional para "Seleccionar algoritmos de prorrateo (MVP lineal y futuros propuestos)"
+    When se ejecuta el comportamiento requerido por RF-18
+    Then El sistema deberá permitir configurar un calendario laboral para ajustar pesos en base a días hábiles o fines de semana.
+
+  @direct @uc_UC_07 @rf_RF_19
+  Scenario: RF-19 - El sistema deberá permitir seleccionar fuentes auxiliares de datos para algoritmos ponderados y dich
+    # Trazabilidad: Se permitirá seleccionar fuentes auxiliares ... Las series deberán carecer de huecos.
+    Given existe documentacion funcional para "Seleccionar algoritmos de prorrateo (MVP lineal y futuros propuestos)"
+    When se ejecuta el comportamiento requerido por RF-19
+    Then El sistema deberá permitir seleccionar fuentes auxiliares de datos para algoritmos ponderados y dichas series deberán carecer de huecos.
+
+  @derived @uc_UC_07
+  Scenario: UC-07 mantiene un resultado funcional consistente
+    Given el flujo "Seleccionar algoritmos de prorrateo (MVP lineal y futuros propuestos)" tiene datos validos
+    When el usuario completa el flujo principal
+    Then el resultado observable coincide con la documentacion funcional
+```
+
+#### Escenarios detectados
+- RF-08 - Para la prueba MVP, el sistema deberá aplicar el algoritmo de 'Prorrateo lineal' que distribuya el v
+- RF-09 - El prorrateo lineal no deberá requerir datos auxiliares.
+- RF-10 - El prorrateo lineal deberá realizar el prorrateo entre dos fechas (siempre a pasado).
+- RF-17 - El usuario deberá poder seleccionar el tipo de algoritmo de prorrateo a aplicar.
+- RF-18 - El sistema deberá permitir configurar un calendario laboral para ajustar pesos en base a días hábile
+- RF-19 - El sistema deberá permitir seleccionar fuentes auxiliares de datos para algoritmos ponderados y dich
+- UC-07 mantiene un resultado funcional consistente
+
+#### Preguntas obligatorias que Claude debe hacer al desarrollador
+- Cual es la ruta exacta y minima para ejecutar este flujo en la aplicacion?
+- Que usuario, rol, permisos y estado inicial necesita el caso?
+- Que datos deben existir antes del test y como se crean de forma determinista?
+- Que datos deben limpiarse despues para que el test sea independiente?
+- Que llamadas externas deben mockearse, interceptarse o estabilizarse?
+- Que selectores robustos existen para cada accion y assertion?
+- Que resultado visible, persistido o de API prueba realmente que el caso se satisface?
+- Que edge cases o errores estan implicitos en el caso Kiwi?
+- Como se ejecutara este test en CI y que variables necesita?
+
+#### Propuesta de implementacion Cypress
+- Crear un `describe` con referencia clara a KIWI-672.
+- Preparar datos en `beforeEach` mediante API/fixture/factory, no manualmente por UI salvo que el caso lo exija.
+- Ejecutar solo las acciones de usuario necesarias para satisfacer el caso.
+- Validar resultado funcional con asserts fuertes: estado visible, mensaje exacto, cambio de datos o respuesta API relevante.
+- Evitar `cy.wait(ms)`; usar intercepts, assertions retryables o esperas a estados observables.
+
+#### Criterios de aceptacion del test
+- [ ] Incluye trazabilidad KIWI-672.
 - [ ] Falla si se rompe el comportamiento funcional principal.
 - [ ] Cubre precondiciones y datos necesarios.
 - [ ] Usa selectores robustos.
